@@ -3,6 +3,10 @@ import { orange, teal, deepOrange, cyan } from '@mui/material/colors'
 
 // Create a theme instance.
 const theme = extendTheme({
+    taskify:{
+        appBarHeight: '48px',
+        boardBarHeight: '58px'
+    },
     colorSchemes: {
         light: {
             palette: {
