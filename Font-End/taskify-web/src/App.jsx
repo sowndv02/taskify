@@ -1,4 +1,4 @@
-import Board from './pages/Board/_id'
+import Board from '~/pages/Boards/_id'
 
 
 
