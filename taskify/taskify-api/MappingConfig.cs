@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using taskify_api.Models.DTO;
 
 namespace taskify_api
 {
@@ -6,7 +8,7 @@ namespace taskify_api
     {
         public MappingConfig()
         {
-
+            CreateMap<RoleDTO, IdentityRole>().ReverseMap();
         }
     }
 }

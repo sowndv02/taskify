@@ -10,6 +10,8 @@ using System.Text;
 using taskify_api;
 using taskify_api.Data;
 using taskify_api.Models;
+using taskify_api.Repository;
+using taskify_api.Repository.IRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +28,7 @@ Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
 
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddResponseCaching();
-
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
