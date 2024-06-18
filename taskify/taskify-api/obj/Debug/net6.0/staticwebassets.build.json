@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "OCI44kXgppqhj67pEK4ibPoy30QYjDYZGPWlgg24ecs=",
+  "Source": "taskify-api",
+  "BasePath": "_content/taskify-api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
