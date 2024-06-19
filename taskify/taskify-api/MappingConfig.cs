@@ -12,6 +12,12 @@ namespace taskify_api
             CreateMap<RoleDTO, IdentityRole>().ReverseMap();
             CreateMap<UserDTO, User>().ReverseMap();
             CreateMap<ColorDTO, Color>().ReverseMap();
+            CreateMap<ActivityDTO, Activity>().ReverseMap();
+            CreateMap<ActivityLogDTO, ActivityLog>().ReverseMap();
+            CreateMap<WorkspaceDTO, Workspace>().ReverseMap();
+            CreateMap<ActivityTypeDTO, ActivityType>().ReverseMap();
+            CreateMap<StatusDTO, Status>().ReverseMap();
+            CreateMap<TagDTO, Tag>().ReverseMap();
         }
     }
 }

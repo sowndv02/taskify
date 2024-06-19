@@ -6,22 +6,20 @@ using taskify_api.Models;
 using taskify_api.Models.DTO;
 using taskify_api.Repository.IRepository;
 
-namespace taskify_api.Controllers
+namespace taskify_api.Controllers.v1
 {
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [ApiVersionNeutral]
+    [ApiVersion("1.0")]
     public class RoleController : ControllerBase
     {
         private readonly IRoleRepository _roleRepository;
         protected APIResponse _response;
-        private readonly ILogger<RoleController> _logger;
         private readonly IMapper _mapper;
 
-        public RoleController(IRoleRepository roleRepository, IMapper mapper, ILogger<RoleController> logger)
+        public RoleController(IRoleRepository roleRepository, IMapper mapper)
         {
             _response = new();
-            _logger = logger;
             _mapper = mapper;
             _roleRepository = roleRepository;
         }
@@ -38,7 +36,6 @@ namespace taskify_api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
@@ -64,7 +61,6 @@ namespace taskify_api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
@@ -93,7 +89,6 @@ namespace taskify_api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };

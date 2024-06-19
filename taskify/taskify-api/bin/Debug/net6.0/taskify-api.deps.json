@@ -21,7 +21,8 @@
           "Microsoft.EntityFrameworkCore.Tools": "6.0.28",
           "Serilog.AspNetCore": "8.0.1",
           "Serilog.Sinks.File": "5.0.0",
-          "Swashbuckle.AspNetCore": "6.5.0"
+          "Swashbuckle.AspNetCore": "6.5.0",
+          "taskify-utility": "1.0.0"
         },
         "runtime": {
           "taskify-api.dll": {}
@@ -927,6 +928,11 @@
             "fileVersion": "4.700.19.56404"
           }
         }
+      },
+      "taskify-utility/1.0.0": {
+        "runtime": {
+          "taskify-utility.dll": {}
+        }
       }
     }
   },
@@ -1516,6 +1522,11 @@
       "sha512": "sha512-CeWTdRNfRaSh0pm2gDTJFwVaXfTq6Xwv/sA887iwPTneW7oMtMlpvDIO+U60+3GWTB7Aom6oQwv5VZVUhQRdPQ==",
       "path": "system.windows.extensions/4.7.0",
       "hashPath": "system.windows.extensions.4.7.0.nupkg.sha512"
+    },
+    "taskify-utility/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

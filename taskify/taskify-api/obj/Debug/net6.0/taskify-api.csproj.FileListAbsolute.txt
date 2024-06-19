@@ -210,3 +210,5 @@ D:\Learning\Semester8\PRN231\taskify\taskify\taskify-api\obj\Debug\net6.0\refint
 D:\Learning\Semester8\PRN231\taskify\taskify\taskify-api\obj\Debug\net6.0\taskify-api.pdb
 D:\Learning\Semester8\PRN231\taskify\taskify\taskify-api\obj\Debug\net6.0\taskify-api.genruntimeconfig.cache
 D:\Learning\Semester8\PRN231\taskify\taskify\taskify-api\obj\Debug\net6.0\ref\taskify-api.dll
+H:\PRN231\Taskify\taskify\taskify-api\bin\Debug\net6.0\taskify-utility.dll
+H:\PRN231\Taskify\taskify\taskify-api\bin\Debug\net6.0\taskify-utility.pdb

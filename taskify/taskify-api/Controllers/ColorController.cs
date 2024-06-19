@@ -7,19 +7,17 @@ using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [ApiVersionNeutral]
     public class ColorController : ControllerBase
     {
         private readonly IColorRepository _colorRepository;
         protected APIResponse _response;
-        private readonly ILogger<ColorController> _logger;
         private readonly IMapper _mapper;
-        public ColorController(IColorRepository colorRepository, ILogger<ColorController> logger, IMapper mapper)
+        public ColorController(IColorRepository colorRepository, IMapper mapper)
         {
             _colorRepository = colorRepository;
-            _logger = logger;
             _mapper = mapper;
             _response = new();
         }
@@ -37,7 +35,6 @@ namespace taskify_api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
@@ -63,7 +60,6 @@ namespace taskify_api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
@@ -90,7 +86,6 @@ namespace taskify_api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
@@ -113,7 +108,6 @@ namespace taskify_api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
@@ -143,7 +137,6 @@ namespace taskify_api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };

@@ -7,18 +7,17 @@ using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [ApiVersionNeutral]
     public class ActivityTypeController : ControllerBase
     {
         private readonly IActivityTypeRepository _activityTypeRepository;
         protected APIResponse _response;
-        private readonly ILogger<ColorController> _logger;
         private readonly IMapper _mapper;
-        public ActivityTypeController(IActivityTypeRepository activityTypeRepository, ILogger<ColorController> logger, IMapper mapper)
+        public ActivityTypeController(IActivityTypeRepository activityTypeRepository, IMapper mapper)
         {
             _activityTypeRepository = activityTypeRepository;
-            _logger = logger;
             _mapper = mapper;
             _response = new();
         }
@@ -36,33 +35,6 @@ namespace taskify_api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
-                _response.IsSuccess = false;
-                _response.StatusCode = HttpStatusCode.InternalServerError;
-                _response.ErrorMessages = new List<string>() { ex.ToString() };
-                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
-            }
-        }
-
-        [HttpGet("{code}", Name = "GetByTitle")]
-        public async Task<ActionResult<APIResponse>> GetByTitleAsync(string code)
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(code))
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages = new List<string> { $"{code} is null or empty!" };
-                    return BadRequest(_response);
-                }
-                List<ActivityType> model = await _activityTypeRepository.GetAllAsync(x => x.Title.Equals(code));
-                _response.Result = _mapper.Map<List<ActivityTypeDTO>>(model);
-                return Ok(_response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
@@ -71,7 +43,7 @@ namespace taskify_api.Controllers
         }
 
 
-        [HttpGet("{id:int}", Name = "GetById")]
+        [HttpGet("{id:int}", Name = "GetActivityTypeById")]
         public async Task<ActionResult<APIResponse>> GetByIdAsync(int id)
         {
             try
@@ -89,7 +61,6 @@ namespace taskify_api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
@@ -108,11 +79,10 @@ namespace taskify_api.Controllers
                 await _activityTypeRepository.CreateAsync(model);
                 _response.Result = _mapper.Map<ColorDTO>(model);
                 _response.StatusCode = HttpStatusCode.Created;
-                return CreatedAtRoute("GetById", new { model.Id }, _response);
+                return CreatedAtRoute("GetActivityTypeById", new { model.Id }, _response);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
@@ -142,7 +112,6 @@ namespace taskify_api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
