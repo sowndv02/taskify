@@ -1,0 +1,11 @@
+H:\PRN231\Taskify\taskify\taskify-utility\bin\Debug\net6.0\taskify-utility.deps.json
+H:\PRN231\Taskify\taskify\taskify-utility\bin\Debug\net6.0\taskify-utility.dll
+H:\PRN231\Taskify\taskify\taskify-utility\bin\Debug\net6.0\taskify-utility.pdb
+H:\PRN231\Taskify\taskify\taskify-utility\obj\Debug\net6.0\taskify-utility.GeneratedMSBuildEditorConfig.editorconfig
+H:\PRN231\Taskify\taskify\taskify-utility\obj\Debug\net6.0\taskify-utility.AssemblyInfoInputs.cache
+H:\PRN231\Taskify\taskify\taskify-utility\obj\Debug\net6.0\taskify-utility.AssemblyInfo.cs
+H:\PRN231\Taskify\taskify\taskify-utility\obj\Debug\net6.0\taskify-utility.csproj.CoreCompileInputs.cache
+H:\PRN231\Taskify\taskify\taskify-utility\obj\Debug\net6.0\taskify-utility.dll
+H:\PRN231\Taskify\taskify\taskify-utility\obj\Debug\net6.0\refint\taskify-utility.dll
+H:\PRN231\Taskify\taskify\taskify-utility\obj\Debug\net6.0\taskify-utility.pdb
+H:\PRN231\Taskify\taskify\taskify-utility\obj\Debug\net6.0\ref\taskify-utility.dll
