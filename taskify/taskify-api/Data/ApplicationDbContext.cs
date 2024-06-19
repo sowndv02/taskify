@@ -10,6 +10,9 @@ namespace taskify_api.Data
            : base(options) { }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Color> Colors { get; set; }
+        public DbSet<Status> Status { get; set; }
+        public DbSet<ActivityType> ActivityTypes { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

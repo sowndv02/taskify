@@ -26,7 +26,7 @@ namespace taskify_api.Repository
             _mapper = mapper;
             _userManager = userManager;
             _db = db;
-            secretKey = configuration.GetValue<string>("ApiSettings.Secret");
+            secretKey = configuration.GetValue<string>("ApiSettings:Secret");
         }
 
         public bool IsUniqueUser(string username)
@@ -94,9 +94,9 @@ namespace taskify_api.Repository
             }
             catch (Exception ex)
             {
-
+                throw new Exception(ex.Message);
             }
-            return new UserDTO();
+            return null;
         }
 
         private async Task<string> GetAccessToken(User user, string jwtTokenId)
@@ -113,9 +113,9 @@ namespace taskify_api.Repository
                     new Claim(ClaimTypes.Role, roles.FirstOrDefault()),
                     new Claim(JwtRegisteredClaimNames.Jti, jwtTokenId),
                     new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                    new Claim(JwtRegisteredClaimNames.Aud, "dotnetmastery.com")
+                    new Claim(JwtRegisteredClaimNames.Aud, "sonwdv02.com")
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(60),
+                Expires = DateTime.UtcNow.AddMinutes(1),
                 Issuer = "https://taskify-sondv.com",
                 Audience = "https://test-taskify-api.com",
                 SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

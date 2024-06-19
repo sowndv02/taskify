@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -11,7 +10,7 @@ namespace taskify_api.Controllers
 {
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [ApiVersion("1.0")]
+    [ApiVersionNeutral]
     public class RoleController : ControllerBase
     {
         private readonly IRoleRepository _roleRepository;
@@ -28,7 +27,7 @@ namespace taskify_api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<APIResponse>> GetRolesAsync()
+        public async Task<ActionResult<APIResponse>> GetAllRolesAsync()
         {
             try
             {
@@ -43,12 +42,12 @@ namespace taskify_api.Controllers
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
             }
-            return _response;
         }
 
-        [HttpGet("{name}")]
-        public async Task<ActionResult<APIResponse>> GetRoleByName(string name)
+        [HttpGet("{name}", Name = "GetRoleByName")]
+        public async Task<ActionResult<APIResponse>> GetRoleByNameAsync(string name)
         {
             try
             {
@@ -69,8 +68,8 @@ namespace taskify_api.Controllers
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
             }
-            return _response;
         }
 
         [HttpPost]
@@ -78,7 +77,7 @@ namespace taskify_api.Controllers
         {
             try
             {
-                if(await _roleRepository.GetByNameAsync(roleDTO.Name) != null)
+                if (await _roleRepository.GetByNameAsync(roleDTO.Name) != null)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
@@ -98,8 +97,8 @@ namespace taskify_api.Controllers
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
             }
-            return _response;
         }
     }
 }

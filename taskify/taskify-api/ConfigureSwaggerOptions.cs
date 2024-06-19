@@ -31,10 +31,10 @@ namespace taskify_api
             new OpenApiSecurityScheme
             {
                 Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            },
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
                 Scheme = "oauth2",
                 Name = "Bearer",
                 In = ParameterLocation.Header
@@ -48,8 +48,8 @@ namespace taskify_api
                 options.SwaggerDoc(desc.GroupName, new OpenApiInfo
                 {
                     Version = desc.ApiVersion.ToString(),
-                    Title = $"Magic Villa {desc.ApiVersion}",
-                    Description = "API to manage Villa",
+                    Title = $"Taskify API Version {desc.ApiVersion}",
+                    Description = "API to taskify",
                     TermsOfService = new Uri("https://example.com/terms"),
                     Contact = new OpenApiContact
                     {

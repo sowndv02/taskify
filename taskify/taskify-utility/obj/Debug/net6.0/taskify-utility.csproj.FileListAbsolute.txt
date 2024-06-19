@@ -9,3 +9,14 @@ H:\PRN231\Taskify\taskify\taskify-utility\obj\Debug\net6.0\taskify-utility.dll
 H:\PRN231\Taskify\taskify\taskify-utility\obj\Debug\net6.0\refint\taskify-utility.dll
 H:\PRN231\Taskify\taskify\taskify-utility\obj\Debug\net6.0\taskify-utility.pdb
 H:\PRN231\Taskify\taskify\taskify-utility\obj\Debug\net6.0\ref\taskify-utility.dll
+D:\Learning\Semester8\PRN231\taskify\taskify\taskify-utility\bin\Debug\net6.0\taskify-utility.deps.json
+D:\Learning\Semester8\PRN231\taskify\taskify\taskify-utility\bin\Debug\net6.0\taskify-utility.dll
+D:\Learning\Semester8\PRN231\taskify\taskify\taskify-utility\bin\Debug\net6.0\taskify-utility.pdb
+D:\Learning\Semester8\PRN231\taskify\taskify\taskify-utility\obj\Debug\net6.0\taskify-utility.GeneratedMSBuildEditorConfig.editorconfig
+D:\Learning\Semester8\PRN231\taskify\taskify\taskify-utility\obj\Debug\net6.0\taskify-utility.AssemblyInfoInputs.cache
+D:\Learning\Semester8\PRN231\taskify\taskify\taskify-utility\obj\Debug\net6.0\taskify-utility.AssemblyInfo.cs
+D:\Learning\Semester8\PRN231\taskify\taskify\taskify-utility\obj\Debug\net6.0\taskify-utility.csproj.CoreCompileInputs.cache
+D:\Learning\Semester8\PRN231\taskify\taskify\taskify-utility\obj\Debug\net6.0\taskify-utility.dll
+D:\Learning\Semester8\PRN231\taskify\taskify\taskify-utility\obj\Debug\net6.0\refint\taskify-utility.dll
+D:\Learning\Semester8\PRN231\taskify\taskify\taskify-utility\obj\Debug\net6.0\taskify-utility.pdb
+D:\Learning\Semester8\PRN231\taskify\taskify\taskify-utility\obj\Debug\net6.0\ref\taskify-utility.dll

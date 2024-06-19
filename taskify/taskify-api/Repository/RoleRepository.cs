@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 using taskify_api.Data;
 using taskify_api.Repository.IRepository;
 
@@ -19,12 +18,17 @@ namespace taskify_api.Repository
         {
             try
             {
-                if (!_roleManager.RoleExistsAsync(objAdd.Name).GetAwaiter().GetResult())
+                if (_roleManager.RoleExistsAsync(objAdd.Name).GetAwaiter().GetResult())
                 {
                     return;
                 }
-                await _roleManager.CreateAsync(objAdd);
-            }catch (Exception ex)
+                IdentityRole role = new IdentityRole()
+                {
+                    Name = objAdd.Name,
+                };
+                await _roleManager.CreateAsync(role);
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -34,8 +38,9 @@ namespace taskify_api.Repository
         {
             try
             {
-                return await _context.Roles.ToListAsync();
-            }catch(Exception ex) 
+                return await _roleManager.Roles.ToListAsync();
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -46,7 +51,11 @@ namespace taskify_api.Repository
             try
             {
                 if (!string.IsNullOrEmpty(name))
-                    return await _roleManager.FindByNameAsync(name);
+                {
+                    var role = await _roleManager.FindByNameAsync(name);
+                    return role;
+                }
+
 
                 return null;
 

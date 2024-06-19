@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "H:\\PRN231\\Taskify\\taskify\\taskify-api\\taskify-api.csproj": {}
+    "D:\\Learning\\Semester8\\PRN231\\taskify\\taskify\\taskify-api\\taskify-api.csproj": {}
   },
   "projects": {
-    "H:\\PRN231\\Taskify\\taskify\\taskify-api\\taskify-api.csproj": {
+    "D:\\Learning\\Semester8\\PRN231\\taskify\\taskify\\taskify-api\\taskify-api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "H:\\PRN231\\Taskify\\taskify\\taskify-api\\taskify-api.csproj",
+        "projectUniqueName": "D:\\Learning\\Semester8\\PRN231\\taskify\\taskify\\taskify-api\\taskify-api.csproj",
         "projectName": "taskify-api",
-        "projectPath": "H:\\PRN231\\Taskify\\taskify\\taskify-api\\taskify-api.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "H:\\PRN231\\Taskify\\taskify\\taskify-api\\obj\\",
+        "projectPath": "D:\\Learning\\Semester8\\PRN231\\taskify\\taskify\\taskify-api\\taskify-api.csproj",
+        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+        "outputPath": "D:\\Learning\\Semester8\\PRN231\\taskify\\taskify\\taskify-api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "H:\\Data\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -32,7 +32,11 @@
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\Learning\\Semester8\\PRN231\\taskify\\taskify\\taskify-utility\\taskify-utility.csproj": {
+                "projectPath": "D:\\Learning\\Semester8\\PRN231\\taskify\\taskify\\taskify-utility\\taskify-utility.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -125,7 +129,67 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\Learning\\Semester8\\PRN231\\taskify\\taskify\\taskify-utility\\taskify-utility.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Learning\\Semester8\\PRN231\\taskify\\taskify\\taskify-utility\\taskify-utility.csproj",
+        "projectName": "taskify-utility",
+        "projectPath": "D:\\Learning\\Semester8\\PRN231\\taskify\\taskify\\taskify-utility\\taskify-utility.csproj",
+        "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
+        "outputPath": "D:\\Learning\\Semester8\\PRN231\\taskify\\taskify\\taskify-utility\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\ADMIN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }
