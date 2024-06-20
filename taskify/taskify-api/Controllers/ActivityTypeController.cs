@@ -77,7 +77,7 @@ namespace taskify_api.Controllers
                 if (createDTO == null) return BadRequest(createDTO);
                 ActivityType model = _mapper.Map<ActivityType>(createDTO);
                 await _activityTypeRepository.CreateAsync(model);
-                _response.Result = _mapper.Map<ColorDTO>(model);
+                _response.Result = _mapper.Map<ActivityTypeDTO>(model);
                 _response.StatusCode = HttpStatusCode.Created;
                 return CreatedAtRoute("GetActivityTypeById", new { model.Id }, _response);
             }
@@ -101,7 +101,7 @@ namespace taskify_api.Controllers
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages = new List<string>() { "Color Id invalid!" };
+                    _response.ErrorMessages = new List<string>() { "Id invalid!" };
                     return BadRequest(_response);
                 }
                 ActivityType model = _mapper.Map<ActivityType>(updateDTO);

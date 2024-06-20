@@ -2,12 +2,14 @@
 
 namespace taskify_api.Models.DTO
 {
-    public class TagDTO
+    public class TodoDTO
     {
         public int Id { get; set; }
+        public WorkspaceDTO Workspace { get; set; }
+        public bool Status { get; set; }
         [Required]
         public string Title { get; set; }
         public string? Description { get; set; }
-        public ColorDTO color { get; set; }
+        public UserDTO User { get; set; }
     }
 }

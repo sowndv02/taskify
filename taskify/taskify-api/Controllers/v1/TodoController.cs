@@ -7,17 +7,17 @@ using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Controllers.v1
 {
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     [ApiVersion("1.0")]
-    public class ActivityLogController : ControllerBase
+    public class TodoController : ControllerBase
     {
-        private readonly IActivityLogRepository _activityLogRepository;
+        private readonly ITodoRepository _todoRepository;
         protected APIResponse _response;
         private readonly IMapper _mapper;
-        public ActivityLogController(IActivityLogRepository activityLogRepository, IMapper mapper)
+        public TodoController(ITodoRepository todoRepository, IMapper mapper)
         {
-            _activityLogRepository = activityLogRepository;
+            _todoRepository = todoRepository;
             _mapper = mapper;
             _response = new();
         }
@@ -28,8 +28,8 @@ namespace taskify_api.Controllers.v1
         {
             try
             {
-                List<ActivityLog> list = await _activityLogRepository.GetAllAsync();
-                _response.Result = _mapper.Map<List<ActivityLogDTO>>(list);
+                List<Todo> list = await _todoRepository.GetAllAsync();
+                _response.Result = _mapper.Map<List<TodoDTO>>(list);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -42,7 +42,7 @@ namespace taskify_api.Controllers.v1
             }
         }
 
-        [HttpGet("{id:int}", Name = "GetActivityLogById")]
+        [HttpGet("{id:int}", Name = "GetTodoById")]
         public async Task<ActionResult<APIResponse>> GetByIdAsync(int id)
         {
             try
@@ -54,8 +54,33 @@ namespace taskify_api.Controllers.v1
                     _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
                     return BadRequest(_response);
                 }
-                ActivityLog model = await _activityLogRepository.GetAsync(x => x.Id == id);
-                _response.Result = _mapper.Map<ActivityLogDTO>(model);
+                Todo model = await _todoRepository.GetAsync(x => x.Id == id);
+                _response.Result = _mapper.Map<TodoDTO>(model);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+        [HttpGet("{key}", Name = "GetTodoByTitle")]
+        public async Task<ActionResult<APIResponse>> GetTodoByTitleAsync(string key)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(key))
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{key} is null or empty!" };
+                    return BadRequest(_response);
+                }
+                List<Todo> model = await _todoRepository.GetAllAsync(x => x.Title.Contains(key));
+                _response.Result = _mapper.Map<List<TodoDTO>>(model);
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -68,17 +93,17 @@ namespace taskify_api.Controllers.v1
         }
 
         [HttpPost]
-        public async Task<ActionResult<APIResponse>> CreateAsync([FromBody] ActivityLogDTO createDTO)
+        public async Task<ActionResult<APIResponse>> CreateAsync([FromBody] TodoDTO createDTO)
         {
             try
             {
 
                 if (createDTO == null) return BadRequest(createDTO);
-                ActivityLog model = _mapper.Map<ActivityLog>(createDTO);
-                await _activityLogRepository.CreateAsync(model);
-                _response.Result = _mapper.Map<ActivityLogDTO>(model);
+                Todo model = _mapper.Map<Todo>(createDTO);
+                await _todoRepository.CreateAsync(model);
+                _response.Result = _mapper.Map<TodoDTO>(model);
                 _response.StatusCode = HttpStatusCode.Created;
-                return CreatedAtRoute("GetActivityLogById", new { model.Id }, _response);
+                return CreatedAtRoute("GetTodoById", new { model.Id }, _response);
             }
             catch (Exception ex)
             {
@@ -92,7 +117,7 @@ namespace taskify_api.Controllers.v1
 
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<APIResponse>> UpdateAsync(int id, [FromBody] ActivityLogDTO updateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateAsync(int id, [FromBody] TodoDTO updateDTO)
         {
             try
             {
@@ -100,11 +125,11 @@ namespace taskify_api.Controllers.v1
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages = new List<string>() { "Id invalid!" };
+                    _response.ErrorMessages = new List<string>() { "Color Id invalid!" };
                     return BadRequest(_response);
                 }
-                ActivityLog model = _mapper.Map<ActivityLog>(updateDTO);
-                await _activityLogRepository.UpdateAsync(model);
+                Todo model = _mapper.Map<Todo>(updateDTO);
+                await _todoRepository.UpdateAsync(model);
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);
@@ -118,5 +143,28 @@ namespace taskify_api.Controllers.v1
             }
         }
 
+        [HttpDelete]
+        public async Task<ActionResult<APIResponse>> DeleteAsync(int id)
+        {
+            try
+            {
+                if (id == 0) return BadRequest();
+                var obj = await _todoRepository.GetAsync(x => x.Id == id);
+
+                if (obj == null) return NotFound();
+
+                await _todoRepository.RemoveAsync(obj);
+                _response.StatusCode = HttpStatusCode.NoContent;
+                _response.IsSuccess = true;
+                return Ok(_response);
+
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
     }
 }

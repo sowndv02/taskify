@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using taskify_api.Models.DTO;
 using taskify_api.Models;
+using taskify_api.Models.DTO;
 using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Controllers
@@ -16,7 +15,7 @@ namespace taskify_api.Controllers
         private readonly IActivityTypeRepository _activityTypeRepository;
         protected APIResponse _response;
         private readonly IMapper _mapper;
-        public TagController(IActivityTypeRepository activityTypeRepository, ILogger<ColorController> logger, IMapper mapper)
+        public TagController(IActivityTypeRepository activityTypeRepository, IMapper mapper)
         {
             _activityTypeRepository = activityTypeRepository;
             _mapper = mapper;
@@ -77,7 +76,7 @@ namespace taskify_api.Controllers
                 if (createDTO == null) return BadRequest(createDTO);
                 ActivityType model = _mapper.Map<ActivityType>(createDTO);
                 await _activityTypeRepository.CreateAsync(model);
-                _response.Result = _mapper.Map<ColorDTO>(model);
+                _response.Result = _mapper.Map<TagDTO>(model);
                 _response.StatusCode = HttpStatusCode.Created;
                 return CreatedAtRoute("GetTagById", new { model.Id }, _response);
             }
@@ -101,7 +100,7 @@ namespace taskify_api.Controllers
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages = new List<string>() { "Color Id invalid!" };
+                    _response.ErrorMessages = new List<string>() { "Id invalid!" };
                     return BadRequest(_response);
                 }
                 ActivityType model = _mapper.Map<ActivityType>(updateDTO);

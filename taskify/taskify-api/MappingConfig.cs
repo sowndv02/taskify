@@ -18,6 +18,9 @@ namespace taskify_api
             CreateMap<ActivityTypeDTO, ActivityType>().ReverseMap();
             CreateMap<StatusDTO, Status>().ReverseMap();
             CreateMap<TagDTO, Tag>().ReverseMap();
+            CreateMap<TodoDTO, Todo>().ReverseMap();
+            CreateMap<NoteDTO, Note>().ReverseMap();
+            CreateMap<WorkspaceUserDTO, WorkspaceUser>().ReverseMap();
         }
     }
 }

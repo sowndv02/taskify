@@ -17,13 +17,16 @@ namespace taskify_api.Data
         public DbSet<Activity> Activities { get; set; }
         public DbSet<Workspace> Workspaces { get; set; }
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<Todo> Todos { get; set; }
+        public DbSet<Note> Notes { get; set; }
+        public DbSet<WorkspaceUser> WorkspaceUsers { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
             modelBuilder.Entity<ActivityLog>()
             .HasOne(al => al.Workspace)
-            .WithMany() 
+            .WithMany()
             .HasForeignKey(al => al.WorkspaceId)
             .OnDelete(DeleteBehavior.NoAction);
 

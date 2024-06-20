@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using taskify_api.Models.DTO;
 using taskify_api.Models;
+using taskify_api.Models.DTO;
 using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Controllers
@@ -12,7 +12,7 @@ namespace taskify_api.Controllers
     [ApiVersionNeutral]
     public class StatusController : ControllerBase
     {
-        readonly IStatusRepository _statusRepository;
+        private readonly IStatusRepository _statusRepository;
         protected APIResponse _response;
         private readonly IMapper _mapper;
         public StatusController(IStatusRepository statusRepository, IMapper mapper)
@@ -76,7 +76,7 @@ namespace taskify_api.Controllers
                 if (createDTO == null) return BadRequest(createDTO);
                 Status model = _mapper.Map<Status>(createDTO);
                 await _statusRepository.CreateAsync(model);
-                _response.Result = _mapper.Map<ColorDTO>(model);
+                _response.Result = _mapper.Map<StatusDTO>(model);
                 _response.StatusCode = HttpStatusCode.Created;
                 return CreatedAtRoute("GetStatusById", new { model.Id }, _response);
             }
@@ -100,7 +100,7 @@ namespace taskify_api.Controllers
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages = new List<string>() { "Color Id invalid!" };
+                    _response.ErrorMessages = new List<string>() { "Id invalid!" };
                     return BadRequest(_response);
                 }
                 Status model = _mapper.Map<Status>(updateDTO);

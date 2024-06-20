@@ -8,7 +8,6 @@ namespace taskify_api.Repository.IRepository
         Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO);
         Task<UserDTO> Register(RegisterationRequestDTO registerationRequestDTO);
         Task<TokenDTO> RefreshAccessToken(TokenDTO tokenDTO);
-
         Task RevokeRefreshToken(TokenDTO tokenDTO);
     }
 }

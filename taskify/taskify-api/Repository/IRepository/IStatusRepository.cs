@@ -4,6 +4,6 @@ namespace taskify_api.Repository.IRepository
 {
     public interface IStatusRepository : IRepository<Status>
     {
-        Task<Status> UpdateAsync(Status status);
+        Task<Status> UpdateAsync(Status entity);
     }
 }
