@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace taskify_font_end
 {
@@ -6,7 +8,7 @@ namespace taskify_font_end
     {
         public MappingConfig()
         {
-
+            
         }
     }
 }

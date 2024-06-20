@@ -1,10 +1,23 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using taskify_font_end;
+using taskify_font_end.Service;
+using taskify_font_end.Service.IService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+
+builder.Services.AddScoped<IBaseServices, BaseServices>();
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddHttpClient<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddSingleton<IApiMessageRequestBuilder, ApiMessageRequestBuilder>();
+
+
+
 
 
 builder.Services.AddDistributedMemoryCache();

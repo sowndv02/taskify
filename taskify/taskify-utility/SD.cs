@@ -12,6 +12,9 @@
             CREATE, UPDATE, DELETE
         }
 
+        public const string Admin = "admin";
+        public const string Client = "client";
+
         public static string AccessToken = "JWTToken";
         public static string RefreshToken = "RefreshToken";
         public static string CurrentAPIVersion = "v1";

@@ -5,6 +5,7 @@ using System.Net;
 using taskify_api.Models.DTO;
 using taskify_api.Models;
 using taskify_api.Repository.IRepository;
+using taskify_api.Repository;
 
 namespace taskify_api.Controllers.v1
 {
@@ -114,6 +115,31 @@ namespace taskify_api.Controllers.v1
             {
                 _response.IsSuccess = false;
                 _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+
+        [HttpDelete]
+        public async Task<ActionResult<APIResponse>> DeleteAsync(int id)
+        {
+            try
+            {
+                if (id == 0) return BadRequest();
+                var obj = await _workspaceRepository.GetAsync(x => x.Id == id);
+
+                if (obj == null) return NotFound();
+
+                await _workspaceRepository.RemoveAsync(obj);
+                _response.StatusCode = HttpStatusCode.NoContent;
+                _response.IsSuccess = true;
+                return Ok(_response);
+
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
                 return StatusCode((int)HttpStatusCode.InternalServerError, _response);
             }

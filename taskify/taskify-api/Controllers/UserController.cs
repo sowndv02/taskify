@@ -6,7 +6,7 @@ using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Controllers
 {
-    [Route("api/v{version:apiVersion}/[controller]")]
+    [Route("api/v{version:apiVersion}/UserAuth")]
     [ApiController]
     [ApiVersionNeutral]
     public class UserController : Controller
