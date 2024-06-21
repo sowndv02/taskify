@@ -13,6 +13,11 @@ namespace taskify_font_end.Controllers
             _logger = logger;
         }
 
+        public IActionResult LandingPage()
+        {
+            return View();
+        }
+
         public IActionResult Index()
         {
             return View();

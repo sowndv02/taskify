@@ -1,10 +1,11 @@
-﻿
+
 <!DOCTYPE html>
 
-<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" >
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="https://taskify.taskhub.company/assets" data-template="vertical-menu-template-free">
 
 <head>
     <meta charset="utf-8" />
+    <meta name="csrf-token" content="kCp6nuXgRy7BQO3KUgK7xlpQbXxbgaj1j4p00Jcb" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
     <title>Dashboard - Taskify</title>
@@ -13,40 +14,51 @@
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="~/image/2fztny1qdtz7cttwwc8hh1ey4l7cihgo.png" />
+    <link rel="icon" type="image/x-icon" href="https://taskify.taskhub.company/storage/logos/2FZTNY1qDTz7CTtwWC8Hh1eY4l7cIHgOXG2stVIU.png" />
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://taskify.taskhub.company/assets/css/google-fonts.css" />
 
     <!-- Icons. Uncomment required icon fonts -->
-    <link href="~/css/vendor/fonts/boxicons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://taskify.taskhub.company/assets/vendor/fonts/boxicons.css" />
 
     <!-- Core CSS -->
-    <link href="~/css/core.css" rel="stylesheet" />
-    <link href="~/css/theme-default.css" rel="stylesheet" />
-    <link href="~/css/demo.css" rel="stylesheet" />
-    <link href="~/css/custom.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://taskify.taskhub.company/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="https://taskify.taskhub.company/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="https://taskify.taskhub.company/assets/css/demo.css" />
+    <link rel="stylesheet" href="https://taskify.taskhub.company/assets/css/custom.css" />
 
-    <!-- Vendors CSS --><link href="~/css/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" /><link href="~/css/vendor/css/page/pages-auth.css" rel="stylesheet" />
-    <link href="~/css/apex-charts.css" rel="stylesheet" />
-    <link href="~/css/lightbox/lightbox.min.css" rel="stylesheet" />
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="https://taskify.taskhub.company/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="https://taskify.taskhub.company/assets/vendor/css/pages/page-auth.css" />
+    <link rel="stylesheet" href="https://taskify.taskhub.company/assets/css/apex-charts.css" />
+    <link rel="stylesheet" href="https://taskify.taskhub.company/assets/lightbox/lightbox.min.css" />
     <!-- Page CSS -->
 
     <!-- Helpers -->
-    <script src="~/js/helper.js"></script>
+    <script src="https://taskify.taskhub.company/assets/vendor/js/helpers.js"></script>
+
     <!-- Date picker -->
-    <link href="~/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
-    <link href="~/css/daterangepicker.css" rel="stylesheet" />
-    <link href="~/css/select2.min.css" rel="stylesheet" /><link href="~/css/bootstrap-table.min.css" rel="stylesheet" /><link href="~/css/toastr.min.css" rel="stylesheet" />
-    <link href="~/css/dropzone.min.css" rel="stylesheet" />
-    <link href="~/css/fullcalendar/core/main.css" rel="stylesheet" />
-    <link href="~/css/fullcalendar/daygrid/main.css" rel="stylesheet" />
-    <link href="~/css/fullcalendar/list/main.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://taskify.taskhub.company/assets/css/daterangepicker.css" />
+    <link rel="stylesheet" href="https://taskify.taskhub.company/assets/css/bootstrap-datetimepicker.min.css" />
+
+    <link href="https://taskify.taskhub.company/assets/css/select2.min.css" rel="stylesheet" />
+    <link href="https://taskify.taskhub.company/assets/css/bootstrap-table.min.css" rel="stylesheet" />
+    <link href="https://taskify.taskhub.company/assets/css/dragula.css" rel="stylesheet" />
+    <link href="https://taskify.taskhub.company/assets/css/toastr.min.css" rel="stylesheet" />
+    <link href="https://taskify.taskhub.company/assets/css/dropzone.min.css" rel="stylesheet" />
+
+    <link href="https://taskify.taskhub.company/assets/css/fullcalendar/core/main.css" rel="stylesheet" />
+    <link href="https://taskify.taskhub.company/assets/css/fullcalendar/daygrid/main.css" rel="stylesheet" />
+    <link href="https://taskify.taskhub.company/assets/css/fullcalendar/list/main.css" rel="stylesheet" />
+
 
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="~/js/config.js"></script>
-    <script src="~/js/libs/jquery/jquery.js"></script>
+    <script src="https://taskify.taskhub.company/assets/js/config.js"></script>
+
+    <script src="https://taskify.taskhub.company/assets/vendor/libs/jquery/jquery.js"></script>
+
 
 </head>
 
@@ -59,11 +71,11 @@
         <div class="layout-container">
 
             <!-- Menu -->
-         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme menu-container">
+                        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme menu-container">
     <div class="app-brand demo">
         <a href="/home" class="app-brand-link">
             <span class="app-brand-logo demo">
-                <img src="~/image/zey4tscafsmczwbooxbz3b43nc9eeqml.png" width="200px" alt="" />
+                <img src="https://taskify.taskhub.company/storage/logos/zEy4tSCAFSMczWbOoxBZ3B43Nc9eeqMlNBXDrOzn.png" width="200px" alt="" />
             </span>
             <!-- <span class="app-brand-text demo menu-text fw-bolder ms-2">Taskify</span> -->
         </a>
@@ -77,20 +89,20 @@
             Main workspace
         </button>
 
-        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/workspaces/switch/6"><i class='menu-icon tf-icons bx bx-check-square text-primary'></i>Main workspace</a></li>
-                            <li><a class="dropdown-item" href="/workspaces/switch/7"><i class='menu-icon tf-icons bx bx-square text-solid'></i>Dev Team</a></li>
-                            <li><a class="dropdown-item" href="/workspaces/switch/13"><i class='menu-icon tf-icons bx bx-square text-solid'></i>UI/UX &amp; Graphics Team</a></li>
-                            <li><a class="dropdown-item" href="/workspaces/switch/14"><i class='menu-icon tf-icons bx bx-square text-solid'></i>Sales Team</a></li>
-                            <li><a class="dropdown-item" href="/workspaces/switch/15"><i class='menu-icon tf-icons bx bx-square text-solid'></i>DevOps Team</a></li>
-            <li>
-        <hr class="dropdown-divider" />
-    </li>
-                <li><a class="dropdown-item" href="/workspaces"><i class='menu-icon tf-icons bx bx-bar-chart-alt-2 text-success'></i>Manage Workspaces <span class="badge badge-center bg-primary"> + 90</span></a></li>
-                <li><span data-bs-toggle="modal" data-bs-target="#createWorkspaceModal"><a class="dropdown-item" href="javascript:void(0);"><i class='menu-icon tf-icons bx bx-plus text-warning'></i>Create Workspace</a></span></li>
-                            <li><a class="dropdown-item edit-workspace" href="javascript:void(0);" data-id="6"><i class='menu-icon tf-icons bx bx-edit text-primary'></i>Edit Workspace</a></li>
-                            <li><a class="dropdown-item" href="#" id="remove-participant"><i class='menu-icon tf-icons bx bx-exit text-danger'></i>Remove Me from Workspace</a></li>
-</ul>
+                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/workspaces/switch/6"><i class='menu-icon tf-icons bx bx-check-square text-primary'></i>Main workspace</a></li>
+                                    <li><a class="dropdown-item" href="/workspaces/switch/7"><i class='menu-icon tf-icons bx bx-square text-solid'></i>Dev Team</a></li>
+                                    <li><a class="dropdown-item" href="/workspaces/switch/13"><i class='menu-icon tf-icons bx bx-square text-solid'></i>UI/UX &amp; Graphics Team</a></li>
+                                    <li><a class="dropdown-item" href="/workspaces/switch/14"><i class='menu-icon tf-icons bx bx-square text-solid'></i>Sales Team</a></li>
+                                    <li><a class="dropdown-item" href="/workspaces/switch/15"><i class='menu-icon tf-icons bx bx-square text-solid'></i>DevOps Team</a></li>
+                        <li>
+                <hr class="dropdown-divider" />
+            </li>
+                        <li><a class="dropdown-item" href="/workspaces"><i class='menu-icon tf-icons bx bx-bar-chart-alt-2 text-success'></i>Manage Workspaces <span class="badge badge-center bg-primary"> + 90</span></a></li>
+                        <li><span data-bs-toggle="modal" data-bs-target="#createWorkspaceModal"><a class="dropdown-item" href="javascript:void(0);"><i class='menu-icon tf-icons bx bx-plus text-warning'></i>Create Workspace</a></span></li>
+                                    <li><a class="dropdown-item edit-workspace" href="javascript:void(0);" data-id="6"><i class='menu-icon tf-icons bx bx-edit text-primary'></i>Edit Workspace</a></li>
+                                    <li><a class="dropdown-item" href="#" id="remove-participant"><i class='menu-icon tf-icons bx bx-exit text-danger'></i>Remove Me from Workspace</a></li>
+        </ul>
             </div>
     <ul class="menu-inner py-1">
         <hr class="dropdown-divider" />
@@ -3017,18 +3029,25 @@
     
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
+    <script src="https://taskify.taskhub.company/assets/vendor/libs/popper/popper.js"></script>
+    <script src="https://taskify.taskhub.company/assets/vendor/js/bootstrap.js"></script>
+    <script src="https://taskify.taskhub.company/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="https://taskify.taskhub.company/assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
-    <script src="~/js/popper.js"></script>
-    <script src="~/js/vendor/js/menu.js"></script>
-    <script src="~/js/vendor/js/bootstrap.js"></script>
-    <script src="~/js/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+
     <!-- Main JS -->
-    <script src="~/js/ui-toasts.js"></script>
-    <script src="~/js/main.js"></script>
+    <script src="https://taskify.taskhub.company/assets/js/main.js"></script>
+
+    <script src="https://taskify.taskhub.company/assets/js/ui-toasts.js"></script>
+
+
     <!-- Place this tag in your head or just before your close body tag. -->
-    <script src="~/js/button.js"></script>
+    <script async defer src="https://taskify.taskhub.company/assets/js/buttons.js"></script>
+
     <!-- select 2 js !-->
-    <script src="~/js/select2.min.js"></script>
+    <script src="https://taskify.taskhub.company/assets/js/select2.min.js"></script>
+
     <script>
         $(document).ready(function() {
             $('.js-example-basic-multiple').select2();
@@ -3038,38 +3057,59 @@
     </script>
 
     <!-- Bootstrap-table -->
-    <script src="~/js/bootstrap-table.min.js"></script>
-    <script src="~/js/bootstrap-table-export.min.js"></script>
-    <script src="~/js/bootstrap-table-export.min.js">
-    </script><script src="~/js/tableexport.min.js"></script>
+    <script src="https://taskify.taskhub.company/assets/js/bootstrap-table/bootstrap-table.min.js"></script>
+
+    <!-- <script src="https://taskify.taskhub.company/assets/js/bootstrap-table/bootstrap-table-export.min.js"></script> -->
+    <!-- <script src="https://taskify.taskhub.company/assets/js/bootstrap-table/tableExport.min.js"></script> -->
+
     <!-- Dragula -->
-<script src="~/js/popper.js"></script>
+    <script src="https://taskify.taskhub.company/assets/js/dragula.min.js"></script>
+    <script src="https://taskify.taskhub.company/assets/js/popper.js"></script>
+
     <!-- Toastr -->
-    <script src="~/js/toastr.min.js"></script>
-    <script src="~/js/ui-popover.js"></script>
-    <script src="~/js/tinymce.min.js"></script>
-    <script src="~/js/tinymce-jquery.min.js"></script>
-    <script src="~/js/ui-toasts.js"></script>
+    <script src="https://taskify.taskhub.company/assets/js/toastr.min.js"></script>
+
+    <script src="https://taskify.taskhub.company/assets/js/ui-toasts.js"></script>
+
+    <script src="https://taskify.taskhub.company/assets/js/ui-popover.js"></script>
+
+    <script src="https://taskify.taskhub.company/assets/js/tinymce.min.js"></script>
+    <script src="https://taskify.taskhub.company/assets/js/tinymce-jquery.min.js"></script>
+
     <!-- Date picker -->
-    <script src="~/js/moment.min.js"></script>
-    <script src="~/js/daterangepicker.js"></script>
-    <script src="~/js/lightbox.min.js"></script>
-    <script src="~/js/dropzone.min.js"></script>
-    <script src="~/js/fullcalendar/core/main.js"></script>
-    <script src="~/js/extended-ui-perfect-scrollbar.js"></script>
-    <script src="~/js/fullcalendar/google-calendar/main.js"></script>
-    <script src="~/js/fullcalendar/interaction/main.js"></script>
-    <script src="~/js/fullcalendar/list/main.js"></script>
-    <script src="~/js/fullcalendar/daygrid/main.js"></script>
-    <script>
+    <script src="https://taskify.taskhub.company/assets/js/moment.min.js"></script>
+
+    <script src="https://taskify.taskhub.company/assets/js/daterangepicker.js"></script>
+
+    <script src="https://taskify.taskhub.company/assets/lightbox/lightbox.min.js"></script>
+
+    <script src="https://taskify.taskhub.company/assets/js/dropzone.min.js"></script>
+
+    <script src="https://taskify.taskhub.company/assets/js/extended-ui-perfect-scrollbar.js"></script>
+
+    <script src="https://taskify.taskhub.company/assets/js/fullcalendar/core/main.js"></script>
+    <script src="https://taskify.taskhub.company/assets/js/fullcalendar/interaction/main.js"></script>
+    <script src="https://taskify.taskhub.company/assets/js/fullcalendar/daygrid/main.js"></script>
+    <script src="https://taskify.taskhub.company/assets/js/fullcalendar/list/main.js"></script>
+    <script src="https://taskify.taskhub.company/assets/js/fullcalendar/google-calendar/main.js"></script>
+
+        <script>
         var authUserId = '7';
     </script>
-    <script>
+            <script>
         var permissions = ["edit_tasks","delete_tasks","edit_projects","delete_projects","edit_clients","delete_clients","create_projects","create_tasks","create_clients","edit_users","delete_users","manage_users","manage_projects","manage_tasks","manage_clients","create_users","create_workspaces","manage_workspaces","edit_workspaces","delete_workspaces","create_meetings","manage_meetings","edit_meetings","delete_meetings","delete_contracts","edit_contracts","manage_contracts","create_contracts"];
     </script>
 
     <!-- Custom js -->
-    <script src="~/js/custom.js"></script>
+    <script>
+        var csrf_token = 'kCp6nuXgRy7BQO3KUgK7xlpQbXxbgaj1j4p00Jcb';
+        var js_date_format = 'MMMM DD, YYYY';
+    </script>
+        <script>
+        var isAdmin = 1;
+    </script>
+        <script src="https://taskify.taskhub.company/assets/js/custom.js"></script>
+
     </body>
 
 </html>
