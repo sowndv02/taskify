@@ -35,7 +35,7 @@ namespace taskify_api.Controllers
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequestDTO model)
+        public async Task<IActionResult> Login(LoginRequestDTO model)
         {
             var tokenDto = await _userRepository.Login(model);
 

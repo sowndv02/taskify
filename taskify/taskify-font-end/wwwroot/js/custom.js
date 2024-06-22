@@ -539,136 +539,136 @@ $('textarea#footer_text,textarea#contract_description,textarea#update_contract_d
     ],
     toolbar: 'link | undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist checklist outdent indent | removeformat | code table help'
 });
-$(document).on('submit', '.form-submit-event', function (e) {
-    e.preventDefault();
-    if ($('#net_payable').length > 0) {
-        var net_payable = $('#net_payable').text();
-        $('#net_pay').val(net_payable);
-    }
-    var formData = new FormData(this);
-    var currentForm = $(this);
-    var submit_btn = $(this).find('#submit_btn');
-    var btn_html = submit_btn.html();
-    var btn_val = submit_btn.val();
-    var redirect_url = currentForm.find('input[name="redirect_url"]').val();
-    redirect_url = (typeof redirect_url !== 'undefined' && redirect_url) ? redirect_url : '';
-    var button_text = (btn_html != '' || btn_html != 'undefined') ? btn_html : btn_val;
-    var tableInput = currentForm.find('input[name="table"]');
-    var tableID = tableInput.length ? tableInput.val() : 'table';
-    $.ajax({
-        type: 'POST',
-        url: $(this).attr('action'),
-        data: formData,
-        headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
-        },
-        beforeSend: function () {
-            submit_btn.html(label_please_wait);
-            submit_btn.attr('disabled', true);
-        },
-        cache: false,
-        contentType: false,
-        processData: false,
-        dataType: 'json',
-        success: function (result) {
-            submit_btn.html(button_text);
-            submit_btn.attr('disabled', false);
-            if (result['error'] == true) {
-                toastr.error(result['message']);
-            } else {
-                if ($('.empty-state').length > 0) {
-                    window.location.reload();
-                } else {
-                    if (currentForm.find('input[name="dnr"]').length > 0) {
-                        var modalWithClass = $('.modal.fade.show');
-                        // Accessing the ID attribute of the element
-                        var idOfModal = modalWithClass.attr('id');
-                        $('#' + idOfModal).modal('hide');
-                        toastr.success(result['message']);
-                        $('#' + tableID).bootstrapTable('refresh');
-                    } else {
-                        if (result.hasOwnProperty('message')) {
-                            toastr.success(result['message']);
-                            // Show toastr for 3 seconds before reloading or redirecting
-                            setTimeout(function () {
-                                if (redirect_url === '') {
-                                    window.location.reload(); // Reload the current page
-                                } else {
-                                    window.location.href = redirect_url; // Redirect to specified URL
-                                }
-                            }, 3000);
-                        } else {
-                            // No 'message' key, proceed to redirection immediately
-                            if (redirect_url === '') {
-                                window.location.reload(); // Reload the current page
-                            } else {
-                                window.location.href = redirect_url; // Redirect to specified URL
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        error: function (xhr, status, error) {
-            submit_btn.html(button_text);
-            submit_btn.attr('disabled', false);
-            if (xhr.status === 422) {
-                // Handle validation errors here
-                var response = xhr.responseJSON; // Assuming you're returning JSON
-                // You can access validation errors from the response object
-                var errors = response.errors;
-                for (var key in errors) {
-                    if (errors.hasOwnProperty(key) && Array.isArray(errors[key])) {
-                        errors[key].forEach(function (error) {
-                            toastr.error(error);
-                        });
-                    }
-                }
-                // Example: Display the first validation error message
-                toastr.error(label_please_correct_errors);
-                // Assuming you have a list of all input fields with error messages
-                var inputFields = currentForm.find('input[name], select[name], textarea[name]');
-                inputFields = $(inputFields.toArray().reverse());
-                // Iterate through all input fields
-                inputFields.each(function () {
-                    var inputField = $(this);
-                    var fieldName = inputField.attr('name');
-                    if (inputField.attr('type') !== 'radio') {
-                        var errorMessageElement = inputField.next('.error-message');
-                        if (errorMessageElement.length === 0) {
-                            errorMessageElement = inputField.parent().nextAll('.error-message').first();
-                        }
-                        if (errorMessageElement.length === 0) {
-                            // If it doesn't exist, create and append it
-                            errorMessageElement = $('<p class="text-danger text-xs mt-1 error-message"></p>');
-                            inputField.after(errorMessageElement);
-                        }
-                    }
-                    if (errors && errors[fieldName]) {
-                        // If there is a validation error message for this field, display it
-                        if (errorMessageElement && errorMessageElement.length > 0) {
-                            if (errors[fieldName][0].includes('required')) {
-                                errorMessageElement.text('This field is required');
-                            } else {
-                                errorMessageElement.text(errors[fieldName]);
-                            }
-                            inputField[0].scrollIntoView({ behavior: "smooth", block: "start" });
-                            inputField.focus();
-                        }
-                    } else {
-                        // If there is no validation error message, clear the existing message
-                        if (errorMessageElement && errorMessageElement.length > 0) {
-                            errorMessageElement.text('');
-                        }
-                    }
-                });
-            } else {
-                // Handle other errors (non-validation errors) here
-                toastr.error(error);
-            }
-        }
-    });
-});
+//$(document).on('submit', '.form-submit-event', function (e) {
+//    e.preventDefault();
+//    if ($('#net_payable').length > 0) {
+//        var net_payable = $('#net_payable').text();
+//        $('#net_pay').val(net_payable);
+//    }
+//    var formData = new FormData(this);
+//    var currentForm = $(this);
+//    var submit_btn = $(this).find('#submit_btn');
+//    var btn_html = submit_btn.html();
+//    var btn_val = submit_btn.val();
+//    var redirect_url = currentForm.find('input[name="redirect_url"]').val();
+//    redirect_url = (typeof redirect_url !== 'undefined' && redirect_url) ? redirect_url : '';
+//    var button_text = (btn_html != '' || btn_html != 'undefined') ? btn_html : btn_val;
+//    var tableInput = currentForm.find('input[name="table"]');
+//    var tableID = tableInput.length ? tableInput.val() : 'table';
+//    $.ajax({
+//        type: 'POST',
+//        url: $(this).attr('action'),
+//        data: formData,
+//        headers: {
+//            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
+//        },
+//        beforeSend: function () {
+//            submit_btn.html(label_please_wait);
+//            submit_btn.attr('disabled', true);
+//        },
+//        cache: false,
+//        contentType: false,
+//        processData: false,
+//        dataType: 'json',
+//        success: function (result) {
+//            submit_btn.html(button_text);
+//            submit_btn.attr('disabled', false);
+//            if (result['error'] == true) {
+//                toastr.error(result['message']);
+//            } else {
+//                if ($('.empty-state').length > 0) {
+//                    window.location.reload();
+//                } else {
+//                    if (currentForm.find('input[name="dnr"]').length > 0) {
+//                        var modalWithClass = $('.modal.fade.show');
+//                        // Accessing the ID attribute of the element
+//                        var idOfModal = modalWithClass.attr('id');
+//                        $('#' + idOfModal).modal('hide');
+//                        toastr.success(result['message']);
+//                        $('#' + tableID).bootstrapTable('refresh');
+//                    } else {
+//                        if (result.hasOwnProperty('message')) {
+//                            toastr.success(result['message']);
+//                            // Show toastr for 3 seconds before reloading or redirecting
+//                            setTimeout(function () {
+//                                if (redirect_url === '') {
+//                                    window.location.reload(); // Reload the current page
+//                                } else {
+//                                    window.location.href = redirect_url; // Redirect to specified URL
+//                                }
+//                            }, 3000);
+//                        } else {
+//                            // No 'message' key, proceed to redirection immediately
+//                            if (redirect_url === '') {
+//                                window.location.reload(); // Reload the current page
+//                            } else {
+//                                window.location.href = redirect_url; // Redirect to specified URL
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        },
+//        error: function (xhr, status, error) {
+//            submit_btn.html(button_text);
+//            submit_btn.attr('disabled', false);
+//            if (xhr.status === 422) {
+//                // Handle validation errors here
+//                var response = xhr.responseJSON; // Assuming you're returning JSON
+//                // You can access validation errors from the response object
+//                var errors = response.errors;
+//                for (var key in errors) {
+//                    if (errors.hasOwnProperty(key) && Array.isArray(errors[key])) {
+//                        errors[key].forEach(function (error) {
+//                            toastr.error(error);
+//                        });
+//                    }
+//                }
+//                // Example: Display the first validation error message
+//                toastr.error(label_please_correct_errors);
+//                // Assuming you have a list of all input fields with error messages
+//                var inputFields = currentForm.find('input[name], select[name], textarea[name]');
+//                inputFields = $(inputFields.toArray().reverse());
+//                // Iterate through all input fields
+//                inputFields.each(function () {
+//                    var inputField = $(this);
+//                    var fieldName = inputField.attr('name');
+//                    if (inputField.attr('type') !== 'radio') {
+//                        var errorMessageElement = inputField.next('.error-message');
+//                        if (errorMessageElement.length === 0) {
+//                            errorMessageElement = inputField.parent().nextAll('.error-message').first();
+//                        }
+//                        if (errorMessageElement.length === 0) {
+//                            // If it doesn't exist, create and append it
+//                            errorMessageElement = $('<p class="text-danger text-xs mt-1 error-message"></p>');
+//                            inputField.after(errorMessageElement);
+//                        }
+//                    }
+//                    if (errors && errors[fieldName]) {
+//                        // If there is a validation error message for this field, display it
+//                        if (errorMessageElement && errorMessageElement.length > 0) {
+//                            if (errors[fieldName][0].includes('required')) {
+//                                errorMessageElement.text('This field is required');
+//                            } else {
+//                                errorMessageElement.text(errors[fieldName]);
+//                            }
+//                            inputField[0].scrollIntoView({ behavior: "smooth", block: "start" });
+//                            inputField.focus();
+//                        }
+//                    } else {
+//                        // If there is no validation error message, clear the existing message
+//                        if (errorMessageElement && errorMessageElement.length > 0) {
+//                            errorMessageElement.text('');
+//                        }
+//                    }
+//                });
+//            } else {
+//                // Handle other errors (non-validation errors) here
+//                toastr.error(error);
+//            }
+//        }
+//    });
+//});
 // Click event handler for the favorite icon
 $(document).on('click', '.favorite-icon', function () {
     var icon = $(this);

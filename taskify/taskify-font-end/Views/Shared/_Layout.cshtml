@@ -5,7 +5,6 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta name="csrf-token" content="M6Wba8w99x1u3xoJAxQykwHXuYs5B6iYbXNcUhhY" />
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
@@ -18,7 +17,7 @@
     <link rel="icon" type="image/x-icon" href="~/image/e9fpoewysvxc1lwnfobulqeohy8jn6glk9pqfqnq.png" />
 
     <!-- Fonts -->
-    <link href="~/css/google-fonts.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Icons. Uncomment required icon fonts -->
     <link href="~/css/vendor/fonts/boxicons.css" rel="stylesheet" />
     <!-- Core CSS -->
@@ -50,6 +49,7 @@
 </head>
 
 <body>
+    <partial name="_Notification" />
     <div class="layout-wrapper layout-content-navbar">
 
         <div class="layout-container">
@@ -95,7 +95,10 @@
         var lable_min_0 = 'Value must be greater then 0';
         var lable_max_100 = 'Not greater Then 100';
     </script>
-    <script src="~/js/custom.js"></script>
+    <script src="~/js/custom.js"></script> 
+    @await RenderSectionAsync("Scripts", required: false)
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </body>
 
 </html>

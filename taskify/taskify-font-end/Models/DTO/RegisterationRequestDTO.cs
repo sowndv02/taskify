@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using taskify_utility;
 
 namespace taskify_font_end.Models.DTO
 {
@@ -9,8 +9,11 @@ namespace taskify_font_end.Models.DTO
         [EmailAddress]
         public string UserName { get; set; }
         [Required]
-        [PasswordPropertyText]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "Password and ConfirmPassword do not match.")]
+        public string ConfirmPassword { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
@@ -18,6 +21,6 @@ namespace taskify_font_end.Models.DTO
         [Required]
         [Phone]
         public string PhoneNumber { get; set; }
-        public string Role { get; set; } = "client";
+        public string Role { get; set; } = SD.Client;
     }
 }

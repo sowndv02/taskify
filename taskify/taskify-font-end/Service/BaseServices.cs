@@ -1,16 +1,15 @@
-﻿using AutoMapper.Internal;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
 using System.Net;
+using System.Net.Http.Headers;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Text;
-using taskify_font_end.Service.IService;
 using taskify_font_end.Models;
 using taskify_font_end.Models.DTO;
-using System.Security.Authentication;
+using taskify_font_end.Service.IService;
 using taskify_utility;
 
 namespace taskify_font_end.Service
@@ -48,26 +47,40 @@ namespace taskify_font_end.Service
 
                 HttpResponseMessage httpResponseMessage = null;
                 httpResponseMessage = await SendWithRefreshTokenAsync(client, messageFactory, withBearer);
-                APIResponse FinalApiResponse = new()
+                APIResponse FinalApiResponse = null;
+                if (httpResponseMessage != null)
                 {
-                    IsSuccess = false
-                };
+                    var responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
+                    FinalApiResponse = JsonConvert.DeserializeObject<APIResponse>(responseContent);
+                }
+                else
+                {
+                    FinalApiResponse = new()
+                    {
+                        ErrorMessages = new List<string>(),
+                        IsSuccess = false
+                    };
+                }
+
 
                 try
                 {
                     switch (httpResponseMessage.StatusCode)
                     {
                         case HttpStatusCode.NotFound:
-                            FinalApiResponse.ErrorMessages = new List<string>() { "Not Found" };
+                            FinalApiResponse.ErrorMessages.Add("Not Found");
+                            break;
+                        case HttpStatusCode.BadRequest:
+                            FinalApiResponse.ErrorMessages.Add("Data input invalid");
                             break;
                         case HttpStatusCode.Forbidden:
-                            FinalApiResponse.ErrorMessages = new List<string>() { "Access Denied" };
+                            FinalApiResponse.ErrorMessages.Add("Access Denied");
                             break;
                         case HttpStatusCode.Unauthorized:
-                            FinalApiResponse.ErrorMessages = new List<string>() { "Unauthorized" };
+                            FinalApiResponse.ErrorMessages.Add("Unauthorized");
                             break;
                         case HttpStatusCode.InternalServerError:
-                            FinalApiResponse.ErrorMessages = new List<string>() { "Internal Server Error" };
+                            FinalApiResponse.ErrorMessages.Add("Internal Server Error");
                             break;
                         default:
                             var apiContent = await httpResponseMessage.Content.ReadAsStringAsync();

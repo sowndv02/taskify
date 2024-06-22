@@ -18,7 +18,7 @@ namespace taskify_font_end.Controllers
             return View();
         }
 
-        public IActionResult Index()
+        public IActionResult Dashboard()
         {
             return View();
         }

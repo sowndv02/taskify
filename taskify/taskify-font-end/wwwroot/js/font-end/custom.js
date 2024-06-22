@@ -25,7 +25,7 @@ $(document).ready(function () {
             type: 'POST',
             data: formData,
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+               
             },
             success: function (response) {
                 // Hide loading indicator
@@ -82,66 +82,65 @@ eyeicon.onclick = function () {
 
 
 
-$(document).ready(function () {
-    $('#loginBtn').on('click', function (e) {
-        e.preventDefault();
-        var formData = $('#formAuthentication').serialize();
+//$(document).ready(function () {
+//    $('#loginBtn').on('click', function (e) {
+//        e.preventDefault();
+//        var formData = $('#formAuthentication').serialize();
 
-        $.ajax({
-            url: $('#formAuthentication').attr('action'),
-            type: 'POST',
-            data: formData,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (response) {
-                if (response.error) {
-                    console.log(response);
+//        $.ajax({
+//            url: $('#formAuthentication').attr('action'),
+//            type: 'POST',
+//            data: formData,
+//            headers: {
+//            },
+//            success: function (response) {
+//                if (response.error) {
+//                    console.log(response);
 
-                    toastr.error(response.message);
+//                    toastr.error(response.message);
 
-                }
-                else {
+//                }
+//                else {
 
-                    toastr.success(response.message);
-                    window.location.href = response.redirect_url;
+//                    toastr.success(response.message);
+//                    window.location.href = response.redirect_url;
 
-                }
-
-
-            },
-            error: function (xhr, status, error) {
-                // Handle error response
+//                }
 
 
-                var errors = xhr.responseJSON.errors;
-                console.log(errors);
-                // Check if there are any validation errors
-                if (errors) {
-                    // Loop through each error and display it using toastr
-                    $.each(errors, function (key, value) {
-                        toastr.error(value);
-                    });
-                } else {
-                    if (xhr.responseJSON.error) {
+//            },
+//            error: function (xhr, status, error) {
+//                // Handle error response
 
-                        console.log(xhr.responseJSON);
-                        $.each(xhr.responseJSON.message, function (key, value) {
 
-                            toastr.error(value);
-                        })
+//                var errors = xhr.responseJSON.errors;
+//                console.log(errors);
+//                // Check if there are any validation errors
+//                if (errors) {
+//                    // Loop through each error and display it using toastr
+//                    $.each(errors, function (key, value) {
+//                        toastr.error(value);
+//                    });
+//                } else {
+//                    if (xhr.responseJSON.error) {
 
-                    } else {
-                        // If there are no validation errors, display a generic error message
-                        toastr.error('An error occurred. Please try again.');
-                    }
-                }
+//                        console.log(xhr.responseJSON);
+//                        $.each(xhr.responseJSON.message, function (key, value) {
 
-            }
+//                            toastr.error(value);
+//                        })
 
-        });
-    });
-});
+//                    } else {
+//                        // If there are no validation errors, display a generic error message
+//                        toastr.error('An error occurred. Please try again.');
+//                    }
+//                }
+
+//            }
+
+//        });
+//    });
+//});
 $(document).ready(function () {
     $('#registerCustomer').on('click', function (e) {
         e.preventDefault();
@@ -153,7 +152,7 @@ $(document).ready(function () {
             data: formData,
             dataType: 'json',
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+               
             },
             success: function (response) {
                 console.log(response);

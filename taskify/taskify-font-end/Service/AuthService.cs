@@ -1,5 +1,5 @@
-﻿using taskify_font_end.Models.DTO;
-using taskify_font_end.Models;
+﻿using taskify_font_end.Models;
+using taskify_font_end.Models.DTO;
 using taskify_font_end.Service.IService;
 using taskify_utility;
 
@@ -22,7 +22,7 @@ namespace taskify_font_end.Service
             {
                 ApiType = SD.ApiType.POST,
                 Data = obj,
-                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/UserAuth/register"
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/UserAuth/login"
             }, withBearer: false);
         }
 
@@ -32,7 +32,7 @@ namespace taskify_font_end.Service
             {
                 ApiType = SD.ApiType.POST,
                 Data = obj,
-                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/UserAuth/login"
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/UserAuth/register"
             }, withBearer: false);
         }
 
