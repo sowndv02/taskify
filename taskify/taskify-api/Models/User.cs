@@ -12,5 +12,6 @@ namespace taskify_api.Models
         public string? Address {  get; set; }
         public string? ImageUrl { get; set; }
         public string? ImageLocalPathUrl { get; set; }
+        public virtual List<Color> Colors { get; set; } = new List<Color>();
     }
 }

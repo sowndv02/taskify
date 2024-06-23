@@ -12,6 +12,11 @@
             CREATE, UPDATE, DELETE
         }
 
+        public enum TaskAccessbility
+        {
+            AssignedUser, ProjectUser
+        }
+
         public const string Admin = "admin";
         public const string Client = "client";
 

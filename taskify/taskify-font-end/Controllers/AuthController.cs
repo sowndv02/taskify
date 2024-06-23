@@ -16,10 +16,12 @@ namespace taskify_font_end.Controllers
     {
         private readonly IAuthService _authService;
         private readonly ITokenProvider _tokenProvider;
-        public AuthController(IAuthService authService, ITokenProvider tokenProvider)
+        private readonly IWorkspaceService _workspaceService;
+        public AuthController(IAuthService authService, ITokenProvider tokenProvider, IWorkspaceService workspaceService)
         {
             _authService = authService;
             _tokenProvider = tokenProvider;
+            _workspaceService = workspaceService;
         }
 
         [HttpGet]
@@ -32,6 +34,21 @@ namespace taskify_font_end.Controllers
             };
             return View(obj);
         }
+
+
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -50,16 +67,37 @@ namespace taskify_font_end.Controllers
                     var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                     identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(u => u.Type == "unique_name").Value));
                     identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == "role").Value));
+                    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, jwt.Claims.FirstOrDefault(u => u.Type == "sub").Value));
                     var principal = new ClaimsPrincipal(identity);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                     _tokenProvider.SetToken(model);
-                    return RedirectToAction("Dashboard", "Home");
+                    var res = await _workspaceService.GetByUserIdAsync<APIResponse>(jwt.Claims.FirstOrDefault(u => u.Type == "sub").Value);
+                    List<WorkspaceDTO> workspaces = new List<WorkspaceDTO>();
+                    if (res != null && res.IsSuccess)
+                    {
+                        workspaces = JsonConvert.DeserializeObject<List<WorkspaceDTO>>(Convert.ToString(res.Result));
+                    }
+                    if(workspaces.Count > 0)
+                    {
+                        workspaces.OrderByDescending(x => x.CreatedDate);
+                        return RedirectToAction("Dashboard", "Home", workspaces.FirstOrDefault().Id);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Dashboard", "Home", 0);
+                    }
                 }
                 else
                 {
                     TempData["error"] = response.ErrorMessages.FirstOrDefault();
                     return View(obj);
                 }
+            }
+            else
+            {
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors)
+                                                 .Select(e => e.ErrorMessage).FirstOrDefault();
+                TempData["error"] = errorMessages;
             }
             return View(obj);
         }
@@ -108,11 +146,6 @@ namespace taskify_font_end.Controllers
             await _authService.LogoutAsync<APIResponse>(token);
             _tokenProvider.ClearToken();
             return RedirectToAction("LandingPage", "Home");
-        }
-
-        public IActionResult AccessDenied()
-        {
-            return View();
         }
 
     }

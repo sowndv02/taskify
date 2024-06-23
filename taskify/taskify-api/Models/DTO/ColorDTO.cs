@@ -10,5 +10,7 @@ namespace taskify_api.Models.DTO
         public string Title { get; set; }
         [Required]
         public string ColorCode { get; set; }
+        public UserDTO User { get; set; }
+
     }
 }

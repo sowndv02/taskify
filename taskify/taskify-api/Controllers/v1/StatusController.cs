@@ -9,7 +9,7 @@ namespace taskify_api.Controllers
 {
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [ApiVersionNeutral]
+    [ApiVersion("1.0")]
     public class StatusController : ControllerBase
     {
         private readonly IStatusRepository _statusRepository;

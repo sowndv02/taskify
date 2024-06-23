@@ -32,7 +32,6 @@ namespace taskify_font_end.Service
             _contextAccessor = contextAccessor;
             _apiMessageRequestBuilder = apiMessageRequestBuilder;
         }
-
         public async Task<T> SendAsync<T>(APIRequest apiRequest, bool withBearer = true)
         {
             try
@@ -47,11 +46,18 @@ namespace taskify_font_end.Service
 
                 HttpResponseMessage httpResponseMessage = null;
                 httpResponseMessage = await SendWithRefreshTokenAsync(client, messageFactory, withBearer);
-                APIResponse FinalApiResponse = null;
+                APIResponse FinalApiResponse = new()
+                {
+                    ErrorMessages = new List<string>(),
+                    IsSuccess = false
+                };
                 if (httpResponseMessage != null)
                 {
                     var responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
-                    FinalApiResponse = JsonConvert.DeserializeObject<APIResponse>(responseContent);
+                    if (!string.IsNullOrEmpty(responseContent))
+                    {
+                        FinalApiResponse = JsonConvert.DeserializeObject<APIResponse>(responseContent);
+                    }
                 }
                 else
                 {
@@ -61,7 +67,6 @@ namespace taskify_font_end.Service
                         IsSuccess = false
                     };
                 }
-
 
                 try
                 {

@@ -1,35 +1,36 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using taskify_api.Models;
 using taskify_api.Models.DTO;
+using taskify_api.Models;
 using taskify_api.Repository.IRepository;
 
-namespace taskify_api.Controllers
+namespace taskify_api.Controllers.v1
 {
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [ApiVersionNeutral]
-    public class ColorController : ControllerBase
+    [ApiVersion("1.0")]
+    public class WorkspaceUserController : ControllerBase
     {
-        private readonly IColorRepository _colorRepository;
+        private readonly IWorkspaceUserRepository _workspaceUserRepository;
         protected APIResponse _response;
         private readonly IMapper _mapper;
-        public ColorController(IColorRepository colorRepository, IMapper mapper)
+        public WorkspaceUserController(IWorkspaceUserRepository workspaceUserRepository, IMapper mapper)
         {
-            _colorRepository = colorRepository;
+            _workspaceUserRepository = workspaceUserRepository;
             _mapper = mapper;
             _response = new();
         }
 
 
         [HttpGet]
-        public async Task<ActionResult<APIResponse>> GetAllColorsAsync()
+        public async Task<ActionResult<APIResponse>> GetAllAsync()
         {
             try
             {
-                List<Color> list = await _colorRepository.GetAllAsync();
-                _response.Result = _mapper.Map<List<ColorDTO>>(list);
+                List<WorkspaceUser> list = await _workspaceUserRepository.GetAllAsync();
+                _response.Result = _mapper.Map<List<WorkspaceUserDTO>>(list);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -42,20 +43,14 @@ namespace taskify_api.Controllers
             }
         }
 
-        [HttpGet("{code}", Name = "GetColorByCode")]
-        public async Task<ActionResult<APIResponse>> GetColorByCodeAsync(string code)
+        [HttpGet("{userId}", Name = "GetWorkspaceUserByUserId")]
+        public async Task<ActionResult<APIResponse>> GetAsyncByUserId(string userId)
         {
             try
             {
-                if (string.IsNullOrEmpty(code))
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages = new List<string> { $"{code} is null or empty!" };
-                    return BadRequest(_response);
-                }
-                List<Color> model = await _colorRepository.GetAllAsync(x => x.ColorCode.Equals(code));
-                _response.Result = _mapper.Map<List<ColorDTO>>(model);
+                List<WorkspaceUser> list = await _workspaceUserRepository.GetAllAsync(x => x.UserId.Equals(userId));
+                _response.Result = _mapper.Map<List<WorkspaceUserDTO>>(list);
+                _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -68,8 +63,8 @@ namespace taskify_api.Controllers
         }
 
 
-        [HttpGet("{id:int}", Name = "GetColorById")]
-        public async Task<ActionResult<APIResponse>> GetColorByIdAsync(int id)
+        [HttpGet("{id:int}", Name = "GetWorkspaceUserById")]
+        public async Task<ActionResult<APIResponse>> GetByIdAsync(int id)
         {
             try
             {
@@ -80,8 +75,8 @@ namespace taskify_api.Controllers
                     _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
                     return BadRequest(_response);
                 }
-                Color model = await _colorRepository.GetAsync(x => x.Id == id);
-                _response.Result = _mapper.Map<ColorDTO>(model);
+                WorkspaceUser model = await _workspaceUserRepository.GetAsync(x => x.Id == id);
+                _response.Result = _mapper.Map<WorkspaceUserDTO>(model);
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -94,17 +89,17 @@ namespace taskify_api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<APIResponse>> CreateColorAsync([FromBody] ColorDTO colorDTO)
+        public async Task<ActionResult<APIResponse>> CreateAsync([FromBody] WorkspaceUserDTO createDTO)
         {
             try
             {
 
-                if (colorDTO == null) return BadRequest(colorDTO);
-                Color model = _mapper.Map<Color>(colorDTO);
-                await _colorRepository.CreateAsync(model);
-                _response.Result = _mapper.Map<ColorDTO>(model);
+                if (createDTO == null) return BadRequest(createDTO);
+                WorkspaceUser model = _mapper.Map<WorkspaceUser>(createDTO);
+                await _workspaceUserRepository.CreateAsync(model);
+                _response.Result = _mapper.Map<WorkspaceUserDTO>(model);
                 _response.StatusCode = HttpStatusCode.Created;
-                return CreatedAtRoute("GetColorById", new { model.Id }, _response);
+                return CreatedAtRoute("GetWorkspaceUserById", new { model.Id }, _response);
             }
             catch (Exception ex)
             {
@@ -118,19 +113,19 @@ namespace taskify_api.Controllers
 
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<APIResponse>> UpdateColorAsync(int id, [FromBody] ColorDTO colorDTO)
+        public async Task<ActionResult<APIResponse>> UpdateAsync(int id, [FromBody] WorkspaceUserDTO updateDTO)
         {
             try
             {
-                if (colorDTO == null || id != colorDTO.Id)
+                if (updateDTO == null || id != updateDTO.Id)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages = new List<string>() { "Color Id invalid!" };
+                    _response.ErrorMessages = new List<string>() { "Id invalid!" };
                     return BadRequest(_response);
                 }
-                Color model = _mapper.Map<Color>(colorDTO);
-                await _colorRepository.UpdateAsync(model);
+                WorkspaceUser model = _mapper.Map<WorkspaceUser>(updateDTO);
+                await _workspaceUserRepository.UpdateAsync(model);
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);
@@ -146,26 +141,16 @@ namespace taskify_api.Controllers
 
 
         [HttpDelete]
-        public async Task<ActionResult<APIResponse>> DeleteColor(int id)
+        public async Task<ActionResult<APIResponse>> DeleteAsync(int id)
         {
             try
             {
                 if (id == 0) return BadRequest();
-                var color = await _colorRepository.GetAsync(x => x.Id == id);
+                var obj = await _workspaceUserRepository.GetAsync(x => x.Id == id);
 
-                if (color == null) return NotFound();
+                if (obj == null) return NotFound();
 
-                //if (!string.IsNullOrEmpty(villa.ImageLocalPathUrl))
-                //{
-                //    var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), villa.ImageLocalPathUrl);
-                //    FileInfo file = new FileInfo(oldFilePathDirectory);
-                //    if (file.Exists)
-                //    {
-                //        file.Delete();
-                //    }
-                //}
-
-                await _colorRepository.RemoveAsync(color);
+                await _workspaceUserRepository.RemoveAsync(obj);
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);

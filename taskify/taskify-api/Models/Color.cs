@@ -13,5 +13,10 @@ namespace taskify_api.Models
         public string Title { get; set; }
         [Required]
         public string ColorCode { get; set; }
+        public string UserId { get; set; }
+        [ForeignKey(nameof(UserId))]
+        public User Owner { get; set; }
+        
+
     }
 }

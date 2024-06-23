@@ -12,26 +12,26 @@ using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Repository
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : Repository<User>, IUserRepository
     {
-        private readonly ApplicationDbContext _db;
+        private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private string secretKey;
+        private string secretKey = string.Empty;
 
-        public UserRepository(ApplicationDbContext db, IConfiguration configuration, UserManager<User> userManager, IMapper mapper, RoleManager<IdentityRole> roleManager)
+        public UserRepository(ApplicationDbContext context, IConfiguration configuration, UserManager<User> userManager, IMapper mapper, RoleManager<IdentityRole> roleManager) : base(context)
         {
             _roleManager = roleManager;
             _mapper = mapper;
             _userManager = userManager;
-            _db = db;
+            _context = context;
             secretKey = configuration.GetValue<string>("ApiSettings:Secret");
         }
 
         public bool IsUniqueUser(string username)
         {
-            var user = _db.Users.FirstOrDefault(x => x.UserName == username);
+            var user = _context.Users.FirstOrDefault(x => x.UserName == username);
             if (user == null)
             {
                 return true;
@@ -41,7 +41,7 @@ namespace taskify_api.Repository
 
         public async Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO)
         {
-            var user = _db.Users.FirstOrDefault(x => x.UserName.ToLower() == loginRequestDTO.UserName.ToLower());
+            var user = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == loginRequestDTO.UserName.ToLower());
 
             bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
 
@@ -88,7 +88,7 @@ namespace taskify_api.Repository
                     }
 
                     await _userManager.AddToRoleAsync(user, registerationRequestDTO.Role);
-                    var userToReturn = _db.Users.FirstOrDefault(u => u.UserName == registerationRequestDTO.UserName);
+                    var userToReturn = _context.Users.FirstOrDefault(u => u.UserName == registerationRequestDTO.UserName);
                     return _mapper.Map<UserDTO>(userToReturn);
                 }
             }
@@ -130,7 +130,7 @@ namespace taskify_api.Repository
         {
             // Find an existing refresh token
 
-            var existingRefreshToken = await _db.RefreshTokens.FirstOrDefaultAsync(x => x.Refresh_Token == tokenDTO.RefreshToken);
+            var existingRefreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(x => x.Refresh_Token == tokenDTO.RefreshToken);
             if (existingRefreshToken == null)
             {
                 return new TokenDTO();
@@ -167,7 +167,7 @@ namespace taskify_api.Repository
             await MarkTokenAsInValid(existingRefreshToken);
 
             // generate new access token
-            var applicationUser = _db.Users.FirstOrDefault(x => x.Id == existingRefreshToken.UserId);
+            var applicationUser = _context.Users.FirstOrDefault(x => x.Id == existingRefreshToken.UserId);
             if (applicationUser == null)
                 return new TokenDTO();
 
@@ -190,8 +190,8 @@ namespace taskify_api.Repository
                 Refresh_Token = Guid.NewGuid() + "-" + Guid.NewGuid()
             };
 
-            await _db.RefreshTokens.AddAsync(refreshToken);
-            await _db.SaveChangesAsync();
+            await _context.RefreshTokens.AddAsync(refreshToken);
+            await _context.SaveChangesAsync();
             return refreshToken.Refresh_Token;
         }
 
@@ -216,25 +216,25 @@ namespace taskify_api.Repository
 
         private async Task MarkAllTokenInChainASInValid(string userId, string tokenId)
         {
-            var chainRecords = _db.RefreshTokens.Where(x => x.UserId == userId
+            var chainRecords = _context.RefreshTokens.Where(x => x.UserId == userId
                 && x.JwtTokenId == tokenId);
             foreach (var item in chainRecords)
             {
                 item.IsValid = false;
             }
-            _db.UpdateRange(chainRecords);
-            _db.SaveChanges();
+            _context.UpdateRange(chainRecords);
+            _context.SaveChanges();
         }
 
         private async Task MarkTokenAsInValid(RefreshToken refreshToken)
         {
             refreshToken.IsValid = false;
-            await _db.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task RevokeRefreshToken(TokenDTO tokenDTO)
         {
-            var existingRefreshToken = await _db.RefreshTokens.FirstOrDefaultAsync(_ => _.Refresh_Token == tokenDTO.RefreshToken);
+            var existingRefreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(_ => _.Refresh_Token == tokenDTO.RefreshToken);
             if (existingRefreshToken == null)
                 return;
 
@@ -246,11 +246,9 @@ namespace taskify_api.Repository
             {
                 return;
             }
-
-
             await MarkAllTokenInChainASInValid(existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
-
-
         }
+
+        
     }
 }

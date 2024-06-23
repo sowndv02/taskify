@@ -14,6 +14,9 @@ namespace taskify_api.Models
         [Required]
         public string Title { get; set; }
         public string? Description { get; set; }
+        public string UserId { get; set; }
+        [ForeignKey(nameof(UserId))]
+        public User Owner { get; set; }
 
     }
 }

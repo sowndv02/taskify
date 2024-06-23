@@ -1,4 +1,5 @@
-﻿using taskify_api.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using taskify_api.Data;
 using taskify_api.Models;
 using taskify_api.Repository.IRepository;
 

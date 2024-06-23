@@ -23,7 +23,7 @@ namespace taskify_api.Data
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<ActivityLog>()
             .HasOne(al => al.Workspace)
             .WithMany()
@@ -48,7 +48,31 @@ namespace taskify_api.Data
                 .HasForeignKey(al => al.ActivityTypeId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Note>()
+            .HasOne(n => n.Workspace)
+            .WithMany(w => w.Notes)
+            .HasForeignKey(n => n.WorkspaceId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Todo>()
+           .HasOne(n => n.Workspace)
+           .WithMany(w => w.Todos)
+           .HasForeignKey(n => n.WorkspaceId)
+           .OnDelete(DeleteBehavior.NoAction);
+
+
+            modelBuilder.Entity<WorkspaceUser>()
+           .HasOne(n => n.Workspace)
+           .WithMany(w => w.WorkspaceUsers)
+           .HasForeignKey(n => n.WorkspaceId)
+           .OnDelete(DeleteBehavior.NoAction);
+
+
+            modelBuilder.Entity<Color>()
+           .HasOne(n => n.Owner)
+           .WithMany(w => w.Colors)
+           .HasForeignKey(n => n.UserId)
+           .OnDelete(DeleteBehavior.NoAction);
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {

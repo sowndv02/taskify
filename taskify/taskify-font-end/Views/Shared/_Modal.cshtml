@@ -1,0 +1,191 @@
+﻿<div class="modal fade" id="create_todo_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/todos/store" method="POST">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Create todo                    </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <input type="hidden" name="_token" value="M6Wba8w99x1u3xoJAxQykwHXuYs5B6iYbXNcUhhY" autocomplete="off">                <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" class="form-control" name="title"
+                               placeholder="Please enter title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Priority <span class="asterisk">*</span>
+                        </label>
+                        <select class="form-select" name="priority">
+                            <option value="low">
+                                Low
+                            </option>
+                            <option value="medium">
+                                Medium
+                            </option>
+                            <option value="high">
+                                High
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" name="description"
+                          placeholder="Please enter description"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="submit" id="submit_btn"
+                        class="btn btn-primary">
+                    Create
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="edit_todo_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="https://taskify-saas.taskhub.company/master-panel/todos/update" class="modal-content form-submit-event" method="POST">
+            <input type="hidden" name="id" id="todo_id">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">
+                    Update todo</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <input type="hidden" name="_token" value="M6Wba8w99x1u3xoJAxQykwHXuYs5B6iYbXNcUhhY" autocomplete="off">                <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" id="todo_title" class="form-control" name="title"
+                               placeholder="Please enter title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Priority <span class="asterisk">*</span>
+                        </label>
+                        <select class="form-select" id="todo_priority" name="priority">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </div>
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="todo_description" name="description"
+                          placeholder="Please enter description"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="submit" class="btn btn-primary"
+                        id="submit_btn">
+                    Update</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="leaveWorkspaceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="exampleModalLabel2">Warning</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want leave this workspace?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="submit" class="btn btn-danger" id="confirm">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Warning</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> '</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="submit" class="btn btn-danger"
+                        id="confirmDelete">
+                    Yes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmDeleteSelectedModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Warning</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> '</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete selected record(s)?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="submit" class="btn btn-danger"
+                        id="confirmDeleteSelections">
+                    Yes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="duplicateModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="exampleModalLabel2">Warning</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to duplicate?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+
+                <button type="submit" class="btn btn-primary"
+                        id="confirmDuplicate">
+                    Yes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

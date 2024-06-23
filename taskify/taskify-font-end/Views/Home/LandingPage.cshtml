@@ -78,8 +78,14 @@
                 </ul>
 
                 <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-2">
-                    <a asp-action="Login" asp-controller="Auth"
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a asp-action="Dashboard" asp-controller="Home"
+                           class="btn btn-sm btn-round mb-0 me-1 mt-2 mt-md-0 bg-gradient-primary">Dashboard</a>
+                    }else{
+                        <a asp-action="Login" asp-controller="Auth"
                        class="btn btn-sm btn-round mb-0 me-1 mt-2 mt-md-0 bg-gradient-primary">Login</a>
+                    }
                 </div>
 
 
@@ -104,7 +110,15 @@
                                 Unleash peak productivity with this system, your one-stop cloud-based project management platform. Streamline workflows, boost team collaboration, and stay ahead of deadlines. This system empowers you to effortlessly create tasks, assign them to team members, and track progress in real-time.
                             </p>
                             <div class="buttons">
-                                <a asp-controller="Auth" asp-action="login" class="btn bg-gradient-primary mt-4">Get Started</a>
+                                
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <a asp-controller="Home" asp-action="Dashboard" class="btn bg-gradient-primary mt-4">Get Started</a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Auth" asp-action="login" class="btn bg-gradient-primary mt-4">Get Started</a>
+                                }
                                 <a href="#" class="btn text-primary shadow-none mt-4">Contact Us</a>
 
                             </div>

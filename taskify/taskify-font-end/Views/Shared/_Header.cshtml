@@ -1,4 +1,6 @@
-﻿    <div id="section-not-to-print">
+﻿﻿@using taskify_utility
+
+<div id="section-not-to-print">
     <nav class="layout-navbar container-fluid navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
          id="layout-navbar">
 
@@ -26,7 +28,7 @@
                 <li class="nav-item navbar-dropdown dropdown-user dropdown mt-3 mx-2">
                     <p class="nav-item">
                         <span class="nav-mobile-hidden">Hi👋</span>
-                        <span class="nav-mobile-hidden">Sid</span>
+                        <span class="nav-mobile-hidden">@(User.Identity.Name)</span>
                     </p>
 
                 </li>
@@ -50,11 +52,15 @@
                                     </div>
                                     <div class="flex-grow-1">
                                         <span class="fw-semibold d-block">
-                                            Sid
-                                            gor
+                                            @(User.Identity.Name)
                                         </span>
                                         <small class="text-muted text-capitalize">
-                                            admin
+                                            @if (User.IsInRole(SD.Admin))
+                                            {
+                                                <span>Admin</span>
+                                            }else{
+                                                <span>Client</span>
+                                            }
                                         </small>
                                     </div>
                                 </div>
@@ -64,8 +70,7 @@
                             <div class="dropdown-divider"></div>
                         </li>
                         <li>
-                            <a class="dropdown-item"
-                               href="https://taskify-saas.taskhub.company/master-panel/account/5">
+                            <a class="dropdown-item" href="https://taskify-saas.taskhub.company/master-panel/account/5">
                                 <i class="bx bx-user me-2"></i>
                                 <span class="align-middle">My Profile</span>
                             </a>
@@ -74,12 +79,11 @@
                             <div class="dropdown-divider"></div>
                         </li>
                         <li>
-                            <form action="https://taskify-saas.taskhub.company/logout" method="POST" class="dropdown-item">
-                                <input type="hidden" name="_token" value="M6Wba8w99x1u3xoJAxQykwHXuYs5B6iYHi👋 SidbXNcUhhY" autocomplete="off">                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <p class="dropdown-item">
+                                <a type="submit" class="btn btn-sm btn-outline-danger">
                                     <i class="bx bx-log-out-circle"></i> Logout
-                                </button>
-
-                            </form>
+                                </a>
+                            </p>
                         </li>
                     </ul>
                 </li>

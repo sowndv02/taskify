@@ -25,3 +25,17 @@
         })
     </script>
 }
+
+@if (TempData["warning"] != null)
+{
+    <script type="text/javascript">
+        Swal.fire({
+            position: 'top-end',
+            icon: 'warning',
+            title: '@TempData["warning"]',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        })
+    </script>
+}

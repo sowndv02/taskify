@@ -10,10 +10,15 @@ namespace taskify_api.Models
         public int Id { get; set; }
         public string OwnerId {  get; set; }
         [ForeignKey(nameof(OwnerId))]
-        public virtual User Owner {  get; set; }
+        public virtual User? Owner {  get; set; }
         [Required]
         public string Title {  get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; } = DateTime.Now;
         public DateTime? UpdatedDate { get; set; }
+        public bool IsDeleted { get; set; }
+        public virtual List<WorkspaceUser> WorkspaceUsers { get; set; } = new List<WorkspaceUser>();
+        public virtual List<Todo> Todos { get; set; } = new List<Todo>();
+        public virtual List<Note> Notes { get; set; } = new List<Note>();
+        public virtual List<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
     }
 }

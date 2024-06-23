@@ -1,10 +1,14 @@
-﻿<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme menu-container">
+﻿@{
+    string currentController = ViewContext.RouteData.Values["controller"] as string;
+    bool modelIsNull = Model == null;
+}
+
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme menu-container">
     <div class="app-brand demo">
-        <a href="https://taskify-saas.taskhub.company/master-panel/home" class="app-brand-link">
+        <a asp-action="Dashboard" asp-controller="Home" class="app-brand-link">
             <span class="app-brand-logo demo">
                 <img src="~/image/wkxkoc9sktp18zkesk6l7elhi6zjhubntr7u7ik3.png" width="200px" alt="" />
             </span>
-            <!-- <span class="app-brand-text demo menu-text fw-bolder ms-2">Taskify</span> -->
         </a>
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
             <i class="bx bx-chevron-left bx-sm align-middle"></i>
@@ -17,43 +21,35 @@
             Workspace
         </button>
         <ul class="dropdown-menu">
-            <li>
-                <a class="dropdown-item"
-                   href="https://taskify-saas.taskhub.company/master-panel/workspaces/switch/9"><i class='menu-icon tf-icons bx bx-check-square text-primary'></i>Workspace</a>
-            </li>
-            <li>
-                <a class="dropdown-item"
-                   href="https://taskify-saas.taskhub.company/master-panel/workspaces/switch/12"><i class='menu-icon tf-icons bx bx-square text-solid'></i>UI/UX Design</a>
-            </li>
-            <li>
-                <a class="dropdown-item"
-                   href="https://taskify-saas.taskhub.company/master-panel/workspaces/switch/13"><i class='menu-icon tf-icons bx bx-square text-solid'></i>Web development</a>
-            </li>
-            <li>
-                <a class="dropdown-item"
-                   href="https://taskify-saas.taskhub.company/master-panel/workspaces/switch/14"><i class='menu-icon tf-icons bx bx-square text-solid'></i>Marketing</a>
-            </li>
-            <li>
-                <a class="dropdown-item"
-                   href="https://taskify-saas.taskhub.company/master-panel/workspaces/switch/15"><i class='menu-icon tf-icons bx bx-square text-solid'></i>one-person-only</a>
-            </li>
+            @if(ViewBag.workspaces != null && ViewBag.workspaces.Count > 0)
+            {
+                foreach(var item in ViewBag.workspaces)
+                {
+                    <li>
+                        <a class="dropdown-item"
+                           href=""><i class='menu-icon tf-icons bx @(item.Id == Model.Id ? "bx-check-square" : "bx-square") @(modelIsNull && item.Id == ViewBag.workspaces.FirstOrDefault()?.Id ? "bx-check-square": "")  text-primary'></i>@item.Title</a>
+                    </li>
+                }
+            }
+            
             <li>
                 <hr class="dropdown-divider" />
             </li>
             <li>
-                <a class="dropdown-item" href="https://taskify-saas.taskhub.company/master-panel/workspaces">
-                    <i class='menu-icon tf-icons bx bx-bar-chart-alt-2 text-success'></i>Manage workspaces                            <span class="badge badge-center bg-primary"> + 5</span>
+                <a class="dropdown-item" asp-action="Index" asp-controller="Workspace">
+                    <i class='menu-icon tf-icons bx bx-bar-chart-alt-2 text-success'></i>Manage workspaces
+                    <span class="badge badge-center bg-primary"> + @(ViewBag.workspaces != null ? ViewBag.workspaces.Count  : "0")</span>
                 </a>
             </li>
-            <li>
+            @* <li>
                 <a class="dropdown-item" href="https://taskify-saas.taskhub.company/master-panel/workspaces/create">
                     <i class='menu-icon tf-icons bx bx-plus text-warning'></i>Create workspace
-                </a></span>
-            </li>
-            <!-- <li><span data-bs-toggle="modal" data-bs-target="#create_workspace_modal"><a class="dropdown-item" href="javascript:void(0);"><i class='menu-icon tf-icons bx bx-plus text-warning'></i>Create workspace</a></span></li> -->
+                </a>
+            </li> *@
+            <li><a class="dropdown-item" asp-action="Create" asp-controller="Workspace"><i class='menu-icon tf-icons bx bx-plus text-warning'></i>Create workspace</a></li>
             <li>
-                <a class="dropdown-item"
-                   href=" https://taskify-saas.taskhub.company/master-panel/workspaces/edit/9">
+            <li>
+                <a class="dropdown-item" asp-action="Update" asp-route-workspaceId="" asp-controller="Workspace">
                     <i class='menu-icon tf-icons bx bx-edit text-info'></i>Edit workspace
                 </a>
             </li>
@@ -69,13 +65,12 @@
     <ul class="menu-inner py-1">
         <hr class="dropdown-divider" />
         <!-- Dashboard -->
-        <li class="menu-item active">
+        <li class="menu-item @(currentController == "Home" ? "active" : "")">
             <a href="https://taskify-saas.taskhub.company/master-panel/home" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle text-danger"></i>
                 <div>Dashboard</div>
             </a>
         </li>
-
 
 
 
@@ -85,17 +80,12 @@
                 <div>Projects</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item ">
+                <li class="menu-item @(currentController == "Project" ? "active" : "")">
                     <a href="https://taskify-saas.taskhub.company/master-panel/projects" class="menu-link">
                         <div>Manage projects</div>
                     </a>
                 </li>
-                <li class="menu-item ">
-                    <a href="https://taskify-saas.taskhub.company/master-panel/projects/favorite" class="menu-link">
-                        <div>Favorite projects</div>
-                    </a>
-                </li>
-                <li class="menu-item ">
+                <li class="menu-item @(currentController == "Tag" ? "active" : "")">
                     <a href="https://taskify-saas.taskhub.company/master-panel/tags/manage" class="menu-link">
                         <div>Tags</div>
                     </a>
@@ -103,21 +93,29 @@
             </ul>
         </li>
 
-        <li class="menu-item ">
-            <a href="https://taskify-saas.taskhub.company/master-panel/tasks" class="menu-link">
+        <li class="menu-item @(currentController == "Task" ? "active" : "")">
+            <a href="" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-task text-primary"></i>
                 <div>Tasks</div>
             </a>
         </li>
 
-        <li class="menu-item ">
+        <li class="menu-item @(currentController == "Color" ? "active" : "")">
+            <a href="" class="menu-link">
+                <i class="menu-icon tf-icons bx bxs-palette text-primary"></i>
+                <div>Colors</div>
+            </a>
+        </li>
+
+
+        <li class="menu-item @(currentController == "Status" ? "active" : "")">
             <a href="https://taskify-saas.taskhub.company/master-panel/status/manage" class="menu-link">
                 <i class='menu-icon tf-icons bx bx-grid-small text-secondary'></i>
                 <div>Statuses</div>
             </a>
         </li>
 
-        <li class="menu-item ">
+        <li class="menu-item @(currentController == "Workspace" ? "active" : "")">
             <a href="https://taskify-saas.taskhub.company/master-panel/workspaces" class="menu-link">
                 <i class='menu-icon tf-icons bx bx-check-square text-danger'></i>
                 <div>Workspaces</div>
@@ -134,7 +132,7 @@
 
             </a>
         </li>
-        <li class="menu-item ">
+        <li class="menu-item @(currentController == "Todo" ? "active" : "")">
             <a href="https://taskify-saas.taskhub.company/master-panel/todos" class="menu-link">
                 <i class='menu-icon tf-icons bx bx-list-check text-dark'></i>
                 <div>
@@ -143,7 +141,7 @@
             </a>
         </li>
 
-        <li class="menu-item ">
+        <li class="menu-item @(currentController == "Meeting" ? "active" : "")">
             <a href="https://taskify-saas.taskhub.company/master-panel/meetings" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-shape-polygon text-success"></i>
                 <div>
@@ -152,75 +150,41 @@
             </a>
         </li>
 
-        <li class="menu-item ">
+        <li class="menu-item @(currentController == "User" ? "active" : "")">
             <a href="https://taskify-saas.taskhub.company/master-panel/users" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-group text-primary"></i>
                 <div>Users</div>
             </a>
         </li>
-        <li class="menu-item ">
-            <a href="https://taskify-saas.taskhub.company/master-panel/clients" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-group text-warning"></i>
-                <div>Clients</div>
-            </a>
-        </li>
 
 
-        <li class="menu-item ">
+        <li class="menu-item @(currentController == "Note" ? "active" : "")">
             <a href="https://taskify-saas.taskhub.company/master-panel/notes" class="menu-link">
                 <i class='menu-icon tf-icons bx bx-notepad text-primary'></i>
                 <div>Notes</div>
             </a>
         </li>
+
         <li class="menu-item ">
             <a href="javascript:void(0)" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-box text-success"></i>
-                Finance
+                <i class="menu-icon tf-icons bx bx-briefcase-alt-2 text-success"></i>
+                <div>Activities</div>
             </a>
             <ul class="menu-sub">
-                <li class="menu-item ">
-                    <a href="https://taskify-saas.taskhub.company/master-panel/expenses" class="menu-link">
-                        <div>Expenses</div>
+                <li class="menu-item @(currentController == "Activity" ? "active" : "")">
+                    <a href="https://taskify-saas.taskhub.company/master-panel/projects" class="menu-link">
+                        <div>Manage Activity</div>
                     </a>
                 </li>
-
-                <li class="menu-item ">
-                    <a href="https://taskify-saas.taskhub.company/master-panel/estimates-invoices" class="menu-link">
-                        <div>Estimates/Invoices</div>
-                    </a>
-                </li>
-
-                <li class="menu-item ">
-                    <a href="https://taskify-saas.taskhub.company/master-panel/payments" class="menu-link">
-                        <div>Payments</div>
-                    </a>
-                </li>
-
-                <li class="menu-item ">
-                    <a href="https://taskify-saas.taskhub.company/master-panel/payment-methods" class="menu-link">
-                        <div>Payment methods</div>
-                    </a>
-                </li>
-
-                <li class="menu-item ">
-                    <a href="https://taskify-saas.taskhub.company/master-panel/taxes" class="menu-link">
-                        <div>Taxes</div>
-                    </a>
-                </li>
-                <li class="menu-item ">
-                    <a href="https://taskify-saas.taskhub.company/master-panel/units" class="menu-link">
-                        <div>Units</div>
-                    </a>
-                </li>
-                <li class="menu-item ">
-                    <a href="https://taskify-saas.taskhub.company/master-panel/items" class="menu-link">
-                        <div>Items</div>
+                <li class="menu-item @(currentController == "ActivityType" ? "active" : "")">
+                    <a href="https://taskify-saas.taskhub.company/master-panel/tags/manage" class="menu-link">
+                        <div>Activity Types</div>
                     </a>
                 </li>
             </ul>
         </li>
 
-        <li class="menu-item ">
+        <li class="menu-item @(currentController == "ActivityLog" ? "active" : "")">
             <a href="https://taskify-saas.taskhub.company/master-panel/activity-log" class="menu-link">
                 <i class='menu-icon tf-icons bx bx-line-chart text-warning'></i>
                 <div>Activity Log</div>

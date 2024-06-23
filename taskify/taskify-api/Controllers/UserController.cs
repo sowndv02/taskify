@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using taskify_api.Models;
 using taskify_api.Models.DTO;
+using taskify_api.Repository;
 using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Controllers
@@ -13,8 +15,10 @@ namespace taskify_api.Controllers
     {
         private readonly IUserRepository _userRepository;
         protected APIResponse _response;
-        public UserController(IUserRepository userRepository)
+        private readonly IMapper _mapper;
+        public UserController(IUserRepository userRepository, IMapper mapper)
         {
+            _mapper = mapper;
             _userRepository = userRepository;
             _response = new();
         }
@@ -32,7 +36,30 @@ namespace taskify_api.Controllers
             throw new BadImageFormatException("Fake image exception.");
         }
 
-
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUserByIdAsync(string userId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(userId))
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{userId} is invalid!" };
+                    return BadRequest(_response);
+                }
+                User model = await _userRepository.GetAsync(x => x.Id.Equals(userId));
+                _response.Result = _mapper.Map<UserDTO>(model);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequestDTO model)

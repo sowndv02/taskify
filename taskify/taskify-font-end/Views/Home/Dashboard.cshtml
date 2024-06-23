@@ -1,15 +1,46 @@
-﻿
+﻿﻿@using taskify_utility
+
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    bool isAdmin = User.IsInRole(SD.Admin);
 }
+@model taskify_font_end.Models.DTO.WorkspaceDTO
+
+@if(Model == null)
+{
 
 
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="card text-center mt-4">
+                <div class="card-body">
+                    <div class="misc-wrapper">
+                        <h2 class="mb-2 mx-2">You don't have any workspaces!</h2>
+                        <p class="mb-4 mx-2">
+                            Do you want to create a new workspace?
+                        </p>
+                        <a asp-action="Create" asp-controller="Workspace" class="btn btn-primary">Create</a>
+                        <div class="mt-3">
+                            <img src="~/image/man-with-laptop-light.png" alt="page-misc-error-light"
+                                 width="500" class="img-fluid" data-app-dark-img="illustrations/page-misc-error-dark.png"
+                                 data-app-light-img="illustrations/page-misc-error-light.png" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
     <div class="content-wrapper">
 
         <div class="container-fluid">
             <div class="col-lg-12 col-md-12 order-1">
                 <div class="row mt-4">
-                    <div class="col-lg-3 col-md-12 col-6 mb-4">
+
+                    <div class="@(isAdmin ? "col-lg-4" : "col-lg-6") col-md-12 col-6 mb-4">
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-title d-flex align-items-start justify-content-between">
@@ -19,9 +50,9 @@
                                 </div>
                                 <span class="fw-semibold d-block mb-1">Total projects</span>
                                 <h3 class="card-title mb-2">
-                                    13
+                                    @Model.
                                 </h3>
-                                <a href="https://taskify-saas.taskhub.company/master-panel/projects">
+                                <a asp-action="Index" asp-controller="Project">
                                     <small class="text-success fw-semibold">
                                         <i class="bx bx-right-arrow-alt"></i>View more
                                     </small>
@@ -29,7 +60,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-12 col-6 mb-4">
+                    <div class="@(isAdmin ? "col-lg-4" : "col-lg-6")  col-md-12 col-6 mb-4">
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-title d-flex align-items-start justify-content-between">
@@ -39,7 +70,7 @@
                                 </div>
                                 <span class="fw-semibold d-block mb-1">Total tasks</span>
                                 <h3 class="card-title mb-2">48</h3>
-                                <a href="https://taskify-saas.taskhub.company/master-panel/tasks">
+                                <a asp-action="Index" asp-controller="Task">
                                     <small class="text-primary fw-semibold">
                                         <i class="bx bx-right-arrow-alt"></i>View more
                                     </small>
@@ -47,54 +78,31 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-12 col-6 mb-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="card-title d-flex align-items-start justify-content-between">
-                                    <div class="avatar flex-shrink-0">
-                                        <i class="menu-icon tf-icons bx bxs-user-detail bx-md text-warning"></i>
+                    @if (isAdmin)
+                    {
+                        <div class="@(isAdmin ? "col-lg-4" : "col-lg-6")  col-md-12 col-6 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="card-title d-flex align-items-start justify-content-between">
+                                        <div class="avatar flex-shrink-0">
+                                            <i class="menu-icon tf-icons bx bxs-user-detail bx-md text-warning"></i>
+                                        </div>
                                     </div>
+                                    <span class="fw-semibold d-block mb-1">Total users</span>
+                                    <h3 class="card-title mb-2">
+                                        6
+                                    </h3>
+                                    <a asp-action="Index" asp-controller="User">
+                                        <small class="text-warning fw-semibold">
+                                            <i class="bx bx-right-arrow-alt"></i>View more
+                                        </small>
+                                    </a>
                                 </div>
-                                <span class="fw-semibold d-block mb-1">Total users</span>
-                                <h3 class="card-title mb-2">
-                                    6
-                                </h3>
-                                <a href="https://taskify-saas.taskhub.company/master-panel/users">
-                                    <small class="text-warning fw-semibold">
-                                        <i class="bx bx-right-arrow-alt"></i>View more
-                                    </small>
-                                </a>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-md-12 col-6 mb-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="card-title d-flex align-items-start justify-content-between">
-                                    <div class="avatar flex-shrink-0">
-                                        <i class="menu-icon tf-icons bx bxs-user-detail bx-md text-info"></i>
-                                    </div>
-                                </div>
-                                <span class="fw-semibold d-block mb-1">Total clients</span>
-                                <h3 class="card-title mb-2">
-                                    3
-                                </h3>
-                                <a href="https://taskify-saas.taskhub.company/master-panel/clients">
-                                    <small class="text-info fw-semibold">
-                                        <i class="bx bx-right-arrow-alt"></i>View more
-                                    </small>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
+                    }
                 </div>
                 <div class="row">
-                    <div class="col-12">
-                        <div class="alert alert-info alert-dismissible" role="alert">
-                            Reload the page to change chart colors!                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    </div>
                     <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
                         <div class="card h-100">
                             <div class="card-header d-flex align-items-center justify-content-between pt-3 pb-1">
@@ -658,20 +666,20 @@
 
                             <script>
                                 var label_update = '
-                                                                                    Update ';
+                                                                                                                    Update ';
                                 var label_delete = '
-                                                                                    Delete ';
+                                                                                                                    Delete ';
                                 var label_not_assigned = '
-                                                                                    Not assigned ';
+                                                                                                                    Not assigned ';
                                 var add_favorite = '
-                                                                                    Click to mark as favorite ';
+                                                                                                                    Click to mark as favorite ';
                                 var remove_favorite = '
-                                                                                    Click to remove from favorite ';
+                                                                                                                    Click to remove from favorite ';
                                 var label_duplicate = '
-                                                                                    Duplicate ';
+                                                                                                                    Duplicate ';
 
                             </script>
-                            <script src="https://taskify-saas.taskhub.company/assets/js/pages/project-list.js"></script>
+                            <script src="~/js/project-list.js"></script>
                         </div>
 
                     </div>
@@ -794,9 +802,6 @@
 
                                                 <option value="0">Default</option>
 
-
-
-
                                                 <option value="72">STARTED</option>
 
 
@@ -869,7 +874,7 @@
                                 var remove_favorite = 'Click to remove from favorite ';
                                 var id = '';
                             </script>
-                            <script src="https://taskify-saas.taskhub.company/assets/js/pages/tasks.js"></script>
+                            <script src="~/js/task.js"></script>
                         </div>
 
                     </div>
@@ -893,447 +898,6 @@
             var total = 'Total ';
         </script>
         <script src="~/js/apexcharts.js"></script><script src="~/js/dashboard.js"></script>
-        <div class="modal fade" id="create_todo_modal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/todos/store" method="POST">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel1">Create todo                    </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <input type="hidden" name="_token" value="M6Wba8w99x1u3xoJAxQykwHXuYs5B6iYbXNcUhhY" autocomplete="off">                <div class="modal-body">
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="nameBasic" class="form-label">
-                                    Title <span class="asterisk">*</span>
-                                </label>
-                                <input type="text" class="form-control" name="title"
-                                       placeholder="Please enter title" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="nameBasic" class="form-label">
-                                    Priority <span class="asterisk">*</span>
-                                </label>
-                                <select class="form-select" name="priority">
-                                    <option value="low">
-                                        Low
-                                    </option>
-                                    <option value="medium">
-                                        Medium
-                                    </option>
-                                    <option value="high">
-                                        High
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" name="description"
-                                  placeholder="Please enter description"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" id="submit_btn"
-                                class="btn btn-primary">
-                            Create
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div class="modal fade" id="edit_todo_modal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <form action="https://taskify-saas.taskhub.company/master-panel/todos/update" class="modal-content form-submit-event" method="POST">
-                    <input type="hidden" name="id" id="todo_id">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel1">
-                            Update todo</span>
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <input type="hidden" name="_token" value="M6Wba8w99x1u3xoJAxQykwHXuYs5B6iYbXNcUhhY" autocomplete="off">                <div class="modal-body">
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="nameBasic" class="form-label">
-                                    Title <span class="asterisk">*</span>
-                                </label>
-                                <input type="text" id="todo_title" class="form-control" name="title"
-                                       placeholder="Please enter title" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="nameBasic" class="form-label">
-                                    Priority <span class="asterisk">*</span>
-                                </label>
-                                <select class="form-select" id="todo_priority" name="priority">
-                                    <option value="low">Low</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="high">High</option>
-                                </select>
-                            </div>
-                        </div>
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="todo_description" name="description"
-                                  placeholder="Please enter description"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn btn-primary"
-                                id="submit_btn">
-                            Update</span>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div class="modal fade" id="default_language_modal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h6 class="modal-title" id="exampleModalLabel2">Confirm!</h6>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you want to set as your primary language?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn btn-primary" id="confirm">Yes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="leaveWorkspaceModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h6 class="modal-title" id="exampleModalLabel2">Warning</h6>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure you want leave this workspace?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn btn-danger" id="confirm">Yes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="create_language_modal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/superadmin/settings/languages/store" method="POST">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel1">Create language                </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <input type="hidden" name="_token" value="M6Wba8w99x1u3xoJAxQykwHXuYs5B6iYbXNcUhhY" autocomplete="off">            <div class="modal-body">
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="nameBasic" class="form-label">
-                                    Title <span class="asterisk">*</span>
-                                </label>
-                                <input type="text" class="form-control" name="name"
-                                       placeholder="For Example: English" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="nameBasic" class="form-label">
-                                    Code <span class="asterisk">*</span>
-                                </label>
-                                <input type="text" class="form-control" name="code" placeholder="For Example: en" />
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" id="submit_btn"
-                                class="btn btn-primary">
-                            Create
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div class="modal fade" id="create_contract_type_modal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/contracts/store-contract-type"
-                      method="POST">
-                    <input type="hidden" name="dnr">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel1">
-                            Create contract type
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="nameBasic" class="form-label">
-                                    Type <span class="asterisk">*</span>
-                                </label>
-                                <input type="text" class="form-control" name="type"
-                                       placeholder="Please enter contract type" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" id="submit_btn"
-                                class="btn btn-primary">
-                            Create
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div class="modal fade" id="edit_contract_type_modal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/contracts/update-contract-type"
-                      method="POST">
-                    <input type="hidden" name="dnr">
-                    <input type="hidden" id="update_contract_type_id" name="id">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel1">
-                            Update contract type
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col mb-3">
-                                <label for="nameBasic" class="form-label">
-                                    Type <span class="asterisk">*</span>
-                                </label>
-                                <input type="text" class="form-control" name="type" id="contract_type"
-                                       placeholder="Please enter contract type" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" id="submit_btn"
-                                class="btn btn-primary">
-                            Update
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-
-
-
-
-
-
-
-
-        <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h6 class="modal-title" id="exampleModalLabel2">Warning</h6>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete your account?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <form id="formAccountDeactivation"
-                              action="https://taskify-saas.taskhub.company/master-panel/account/destroy/5" method="POST">
-
-                            <input type="hidden" name="_token" value="M6Wba8w99x1u3xoJAxQykwHXuYs5B6iYbXNcUhhY" autocomplete="off">                    <input type="hidden" name="_method" value="DELETE">                    <button type="submit" class="btn btn-danger">Yes</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel2">Warning</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> '</button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn btn-danger"
-                                id="confirmDelete">
-                            Yes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="confirmDeleteSelectedModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel2">Warning</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> '</button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete selected record(s)?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn btn-danger"
-                                id="confirmDeleteSelections">
-                            Yes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="duplicateModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h6 class="modal-title" id="exampleModalLabel2">Warning</h6>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to duplicate?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-
-                        <button type="submit" class="btn btn-primary"
-                                id="confirmDuplicate">
-                            Yes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="timerModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-md" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h6 class="modal-title" id="exampleModalLabel2">Time tracker                </h6>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="modal-body">
-                            <div class="stopwatch">
-                                <div class="stopwatch_time">
-                                    <input type="text" name="hour" id="hour" value="00"
-                                           class="form-control stopwatch_time_input" readonly>
-                                    <div class="stopwatch_time_lable">Hours</div>
-                                </div>
-                                <div class="stopwatch_time">
-                                    <input type="text" name="minute" id="minute" value="00"
-                                           class="form-control stopwatch_time_input" readonly>
-                                    <div class="stopwatch_time_lable">Minutes</div>
-                                </div>
-                                <div class="stopwatch_time">
-                                    <input type="text" name="second" id="second" value="00"
-                                           class="form-control stopwatch_time_input" readonly>
-                                    <div class="stopwatch_time_lable">Second</div>
-                                </div>
-                            </div>
-                            <div class="selectgroup selectgroup-pills d-flex justify-content-around mt-3">
-                                <label class="selectgroup-item">
-                                    <span class="selectgroup-button selectgroup-button-icon" data-bs-toggle="tooltip"
-                                          data-bs-placement="left" data-bs-original-title="Start"
-                                          id="start" onclick="startTimer()"><i class="bx bx-play"></i></span>
-                                </label>
-                                <label class="selectgroup-item">
-                                    <span class="selectgroup-button selectgroup-button-icon" data-bs-toggle="tooltip"
-                                          data-bs-placement="left" data-bs-original-title="Stop"
-                                          id="end" onclick="stopTimer()"><i class="bx bx-stop"></i></span>
-                                </label>
-                                <label class="selectgroup-item">
-                                    <span class="selectgroup-button selectgroup-button-icon" data-bs-toggle="tooltip"
-                                          data-bs-placement="left" data-bs-original-title="Pause"
-                                          id="pause" onclick="pauseTimer()"><i class="bx bx-pause"></i></span>
-                                </label>
-                            </div>
-                            <div class="form-group mb-0 mt-3">
-                                <label class="label">Message:</label>
-                                <textarea class="form-control" id="time_tracker_message" placeholder="Please Enter Your Message" name="message"></textarea>
-                            </div>
-                        </div>
-                        <div class="modal-footer justify-content-center">
-                            <a href="https://taskify-saas.taskhub.company/master-panel/time-tracker" class="btn btn-primary">
-                                <i class="bx bxs-time"></i> View timesheet
-                            </a>
-
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="stopTimerModal" tabindex="-1" aria-hidden="true">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel2">Warning</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> '</button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to stop the timer?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn btn-danger"
-                                id="confirmStop">
-                            Yes
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
 
         <script>
             var label_please_wait = 'Please wait...';
@@ -1346,6 +910,10 @@
             var label_upload = 'Upload';
         </script>
     </div>
+}
+
+
+    
 
 
 @section Scripts {
