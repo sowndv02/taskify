@@ -147,7 +147,7 @@ namespace taskify_api.Repository
             // When someone tries to use not valid refresh token, fraud possible
             if (!existingRefreshToken.IsValid)
             {
-                await MarkAllTokenInChainASInValid(existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
+                MarkAllTokenInChainAsInValid(existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
                 return new TokenDTO();
             }
 
@@ -214,7 +214,7 @@ namespace taskify_api.Repository
         }
 
 
-        private async Task MarkAllTokenInChainASInValid(string userId, string tokenId)
+        private void MarkAllTokenInChainAsInValid(string userId, string tokenId)
         {
             var chainRecords = _context.RefreshTokens.Where(x => x.UserId == userId
                 && x.JwtTokenId == tokenId);
@@ -246,7 +246,7 @@ namespace taskify_api.Repository
             {
                 return;
             }
-            await MarkAllTokenInChainASInValid(existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
+            MarkAllTokenInChainASInValid(existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
         }
 
         

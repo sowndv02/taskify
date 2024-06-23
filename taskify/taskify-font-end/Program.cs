@@ -26,9 +26,30 @@ builder.Services.AddHttpClient<IWorkspaceUserService, WorkspaceUserService>();
 builder.Services.AddScoped<IWorkspaceUserService, WorkspaceUserService>();
 builder.Services.AddHttpClient<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
-
-
-
+builder.Services.AddHttpClient<IActivityService, ActivityService>();
+builder.Services.AddScoped<IActivityService, ActivityService>();
+builder.Services.AddHttpClient<IColorService, ColorService>();
+builder.Services.AddScoped<IColorService, ColorService>();
+builder.Services.AddHttpClient<IStatusService, StatusService>();
+builder.Services.AddScoped<IStatusService, StatusService>();
+builder.Services.AddHttpClient<IActivityTypeService, ActivityTypeService>();
+builder.Services.AddScoped<IActivityTypeService, ActivityTypeService>();
+builder.Services.AddHttpClient<IActivityLogService, ActivityLogService>();
+builder.Services.AddScoped<IActivityLogService, ActivityLogService>();
+builder.Services.AddHttpClient<ITagService, TagService>();
+builder.Services.AddScoped<ITagService, TagService>();
+builder.Services.AddHttpClient<ITodoService, TodoService>();
+builder.Services.AddScoped<ITodoService, TodoService>();
+builder.Services.AddHttpClient<INoteService, NoteService>();
+builder.Services.AddScoped<INoteService, NoteService>();
+builder.Services.AddHttpClient<ITaskService, TaskService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddHttpClient<ITaskUserService, TaskUserService>();
+builder.Services.AddScoped<ITaskUserService, TaskUserService>();
+builder.Services.AddHttpClient<IPriorityService, PriorityService>();
+builder.Services.AddScoped<IPriorityService, PriorityService>();
+builder.Services.AddHttpClient<IProjectUserService, ProjectUserService>();
+builder.Services.AddScoped<IProjectUserService, ProjectUserService>();
 
 builder.Services.AddDistributedMemoryCache();
 
