@@ -20,6 +20,11 @@ namespace taskify_api.Data
         public DbSet<Todo> Todos { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<WorkspaceUser> WorkspaceUsers { get; set; }
+        public DbSet<TaskModel> Tasks { get; set; }
+        public DbSet<TaskUser> TaskUsers { get; set; }
+        public DbSet<Priority> Priorities { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<ProjectUser> ProjectUsers { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,30 +54,78 @@ namespace taskify_api.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Note>()
-            .HasOne(n => n.Workspace)
-            .WithMany(w => w.Notes)
-            .HasForeignKey(n => n.WorkspaceId)
-            .OnDelete(DeleteBehavior.NoAction);
+                .HasOne(n => n.Workspace)
+                .WithMany(w => w.Notes)
+                .HasForeignKey(n => n.WorkspaceId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Todo>()
-           .HasOne(n => n.Workspace)
-           .WithMany(w => w.Todos)
-           .HasForeignKey(n => n.WorkspaceId)
-           .OnDelete(DeleteBehavior.NoAction);
+               .HasOne(n => n.Workspace)
+               .WithMany(w => w.Todos)
+               .HasForeignKey(n => n.WorkspaceId)
+               .OnDelete(DeleteBehavior.NoAction);
 
 
             modelBuilder.Entity<WorkspaceUser>()
-           .HasOne(n => n.Workspace)
-           .WithMany(w => w.WorkspaceUsers)
-           .HasForeignKey(n => n.WorkspaceId)
-           .OnDelete(DeleteBehavior.NoAction);
+               .HasOne(n => n.Workspace)
+               .WithMany(w => w.WorkspaceUsers)
+               .HasForeignKey(n => n.WorkspaceId)
+               .OnDelete(DeleteBehavior.NoAction);
 
 
             modelBuilder.Entity<Color>()
-           .HasOne(n => n.Owner)
-           .WithMany(w => w.Colors)
-           .HasForeignKey(n => n.UserId)
-           .OnDelete(DeleteBehavior.NoAction);
+               .HasOne(n => n.Owner)
+               .WithMany(w => w.Colors)
+               .HasForeignKey(n => n.UserId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Project>()
+                .HasOne(p => p.Owner)
+                .WithMany(u => u.Projects)
+                .HasForeignKey(p => p.OwnerId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Project>()
+                .HasOne(p => p.Workspace)
+                .WithMany(w => w.Projects)
+                .HasForeignKey(p => p.WorkspaceId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProjectUser>()
+                .HasOne(pu => pu.User)
+                .WithMany(u => u.ProjectUsers)
+                .HasForeignKey(pu => pu.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProjectUser>()
+                .HasOne(pu => pu.Project)
+                .WithMany(p => p.ProjectUsers)
+                .HasForeignKey(pu => pu.ProjectId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TaskModel>()
+                .HasOne(t => t.Project)
+                .WithMany(p => p.TaskModels)
+                .HasForeignKey(t => t.ProjectId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TaskModel>()
+                .HasOne(t => t.Status)
+                .WithMany(s => s.TaskModels)
+                .HasForeignKey(t => t.StatusId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TaskUser>()
+                .HasOne(tu => tu.User)
+                .WithMany(u => u.TaskUsers)
+                .HasForeignKey(tu => tu.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TaskUser>()
+                .HasOne(tu => tu.Task)
+                .WithMany(t => t.TaskUsers)
+                .HasForeignKey(tu => tu.TaskId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {

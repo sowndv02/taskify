@@ -16,5 +16,6 @@ namespace taskify_font_end.Models.DTO
         public virtual List<WorkspaceUserDTO>? WorkspaceUsers { get; set; } = new List<WorkspaceUserDTO>();
         public virtual List<TodoDTO>? Todos { get; set; } = new List<TodoDTO>();
         public virtual List<ActivityLogDTO>? ActivityLogs { get; set; } = new List<ActivityLogDTO>();
+        public virtual List<ProjectDTO> Projects { get; set; } = new List<ProjectDTO>();
     }
 }

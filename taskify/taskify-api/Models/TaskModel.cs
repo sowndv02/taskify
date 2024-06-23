@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace taskify_api.Models
 {
-    public class Task
+    [Table("Task")]
+    public class TaskModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -27,7 +28,7 @@ namespace taskify_api.Models
         public string Description { get; set; }
         public DateTime CreatedDate {  get; set; } = DateTime.Now;
         public DateTime? UpdatedDate {  get; set; }
-
+        public virtual List<TaskUser> TaskUsers { get; set; } = new List<TaskUser>();
 
     }
 }

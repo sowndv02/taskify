@@ -16,9 +16,10 @@ namespace taskify_api.Models
         public DateTime? CreatedDate { get; set; } = DateTime.Now;
         public DateTime? UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
-        public virtual List<WorkspaceUser> WorkspaceUsers { get; set; } = new List<WorkspaceUser>();
         public virtual List<Todo> Todos { get; set; } = new List<Todo>();
         public virtual List<Note> Notes { get; set; } = new List<Note>();
         public virtual List<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
+        public virtual List<WorkspaceUser> WorkspaceUsers { get; set; } = new List<WorkspaceUser>();
+        public virtual List<Project> Projects { get; set; } = new List<Project>();
     }
 }

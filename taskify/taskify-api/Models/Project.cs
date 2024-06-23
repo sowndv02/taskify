@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace taskify_api.Models.DTO
+namespace taskify_api.Models
 {
     public class Project
     {
@@ -18,13 +18,14 @@ namespace taskify_api.Models.DTO
         public string? Description { get; set; }
         public string? Notes { get; set; }
         public DateTime StartAt { get; set; }
-        public DateTime EndAt { get; set;}
+        public DateTime EndAt { get; set; }
         public DateTime? ActualEndAt { get; set; }
         public string OwnerId { get; set; }
         [ForeignKey(nameof(OwnerId))]
         public User Owner { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;   
-        public DateTime? UpdatedDate {  get; set; }
-
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime? UpdatedDate { get; set; }
+        public List<ProjectUser> ProjectUsers { get; set; } = new List<ProjectUser>();
+        public List<TaskModel> TaskModels { get; set; } = new List<TaskModel>();
     }
 }

@@ -24,6 +24,11 @@ builder.Services.AddHttpClient<IUserService, UserService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddHttpClient<IWorkspaceUserService, WorkspaceUserService>();
 builder.Services.AddScoped<IWorkspaceUserService, WorkspaceUserService>();
+builder.Services.AddHttpClient<IProjectService, ProjectService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+
+
+
 
 builder.Services.AddDistributedMemoryCache();
 
