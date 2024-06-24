@@ -24,7 +24,7 @@ namespace taskify_font_end.Service
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/UserAuth"
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/User"
             });
         }
 
@@ -33,7 +33,7 @@ namespace taskify_font_end.Service
             return await _baseServices.SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.DELETE,
-                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/UserAuth/" + id
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/User/" + id
             });
         }
 
@@ -42,7 +42,7 @@ namespace taskify_font_end.Service
             return await _baseServices.SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/UserAuth"
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/User"
             });
         }
 
@@ -51,7 +51,7 @@ namespace taskify_font_end.Service
             return await _baseServices.SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/UserAuth/" + id
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/User/" + id
             });
         }
 
@@ -61,7 +61,7 @@ namespace taskify_font_end.Service
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto,
-                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/UserAuth/" + dto.Id
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/User/" + dto.Id
             });
         }
     }

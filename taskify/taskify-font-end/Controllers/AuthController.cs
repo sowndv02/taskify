@@ -71,21 +71,11 @@ namespace taskify_font_end.Controllers
                     var principal = new ClaimsPrincipal(identity);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                     _tokenProvider.SetToken(model);
-                    var res = await _workspaceService.GetByUserIdAsync<APIResponse>(jwt.Claims.FirstOrDefault(u => u.Type == "sub").Value);
-                    List<WorkspaceDTO> workspaces = new List<WorkspaceDTO>();
-                    if (res != null && res.IsSuccess)
-                    {
-                        workspaces = JsonConvert.DeserializeObject<List<WorkspaceDTO>>(Convert.ToString(res.Result));
-                    }
-                    if(workspaces.Count > 0)
-                    {
-                        workspaces.OrderByDescending(x => x.CreatedDate);
+                    List<WorkspaceDTO> workspaces = await GetAllWorkspaceByUserIdAsync(jwt.Claims.FirstOrDefault(u => u.Type == "sub").Value);
+                    if (workspaces.Count > 0)
                         return RedirectToAction("Dashboard", "Home", workspaces.FirstOrDefault().Id);
-                    }
                     else
-                    {
                         return RedirectToAction("Dashboard", "Home", 0);
-                    }
                 }
                 else
                 {
@@ -147,6 +137,20 @@ namespace taskify_font_end.Controllers
             _tokenProvider.ClearToken();
             return RedirectToAction("LandingPage", "Home");
         }
-
+        private async Task<List<WorkspaceDTO>> GetAllWorkspaceByUserIdAsync(string userId)
+        {
+            if (string.IsNullOrEmpty(userId)) return new List<WorkspaceDTO>();
+            var res = await _workspaceService.GetAllAsync<APIResponse>();
+            List<WorkspaceDTO> workspaces = new List<WorkspaceDTO>();
+            if (res != null && res.IsSuccess)
+            {
+                workspaces = JsonConvert.DeserializeObject<List<WorkspaceDTO>>(Convert.ToString(res.Result));
+            }
+            if (workspaces.Count > 0)
+            {
+                workspaces.OrderByDescending(x => x.CreatedDate);
+            }
+            return workspaces;
+        }
     }
 }

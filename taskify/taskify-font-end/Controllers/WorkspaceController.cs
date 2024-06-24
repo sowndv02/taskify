@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using taskify_font_end.Models;
 using taskify_font_end.Models.DTO;
-using taskify_font_end.Service;
 using taskify_font_end.Service.IService;
 
 namespace taskify_font_end.Controllers
@@ -30,7 +29,8 @@ namespace taskify_font_end.Controllers
 
         public async Task<IActionResult> CreateAsync()
         {
-            List<UserDTO> users = await GetUsersAsync();
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            List<UserDTO> users = await GetUsersAsync(userId);
             ViewBag.users = users;
             WorkspaceDTO workspaceDTO = new WorkspaceDTO();
             return View(workspaceDTO);
@@ -40,18 +40,22 @@ namespace taskify_font_end.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAsync(WorkspaceDTO obj)
         {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (ModelState.IsValid)
             {
-                var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-                
-                if (string.IsNullOrEmpty(userId) || !obj.OwnerId.Equals(userId) )
+
+                if (string.IsNullOrEmpty(userId) || !obj.OwnerId.Equals(userId))
                 {
                     return RedirectToAction("AccessDenied", "Auth");
                 }
                 APIResponse result = await _workspaceService.CreateAsync<APIResponse>(obj);
+
                 if (result != null && result.IsSuccess)
                 {
+                    var workspace = JsonConvert.DeserializeObject<WorkspaceDTO>(Convert.ToString(result.Result));
+                    await AddUserToWorkSpace(obj.WorkspaceUserIds, workspace.Id);
                     TempData["success"] = "Create new workspace successfully";
+                    return RedirectToAction("Index", "Workspace");
                 }
                 else
                 {
@@ -64,12 +68,12 @@ namespace taskify_font_end.Controllers
                                                   .Select(e => e.ErrorMessage).FirstOrDefault();
                 TempData["error"] = errorMessages;
             }
-            List<UserDTO> users = await GetUsersAsync();
+            List<UserDTO> users = await GetUsersAsync(userId);
             ViewBag.users = users;
             return View(obj);
         }
 
-        private async Task<List<UserDTO>> GetUsersAsync()
+        private async Task<List<UserDTO>> GetUsersAsync(string userId)
         {
             var response = await _userService.GetAllAsync<APIResponse>();
             List<UserDTO> users = new();
@@ -77,10 +81,12 @@ namespace taskify_font_end.Controllers
             {
                 users = JsonConvert.DeserializeObject<List<UserDTO>>(Convert.ToString(response.Result));
             }
-            if(users.Count == 0)
-            {
+            if (users.Count > 0) users = users.Where(x => !x.Id.Equals(userId)).ToList();
+
+
+            if (users.Count == 0)
                 TempData["warning"] = "No users are available.";
-            }
+
             return users;
         }
 
@@ -93,6 +99,30 @@ namespace taskify_font_end.Controllers
                 user = JsonConvert.DeserializeObject<UserDTO>(Convert.ToString(response.Result));
             }
             return user;
+        }
+
+        private async Task<bool> AddUserToWorkSpace(List<string> userIds, int workspaceId)
+        {
+            try
+            {
+                foreach (var user in userIds)
+                {
+                    var workspaceUser = new WorkspaceUserDTO { UserId = user, WorkspaceId = workspaceId };
+                    var response = await _workspaceUserService.CreateAsync<APIResponse>(workspaceUser);
+                    if (response == null && !response.IsSuccess)
+                    {
+                        TempData["error"] = response.ErrorMessages.FirstOrDefault();
+                        return false;
+                    }
+
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = $"Internal Server Error! {ex.Message}";
+                return false;
+            }
         }
 
     }

@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Claims;
 using taskify_font_end.Models;
@@ -34,7 +32,7 @@ namespace taskify_font_end.Controllers
                 return RedirectToAction("AccessDenied", "Auth");
             }
             List<WorkspaceDTO> workspaces = new();
-            if (!string.IsNullOrEmpty(userId)) 
+            if (!string.IsNullOrEmpty(userId))
             {
                 workspaces = await GetWorkspaceByUserIdAsync(userId);
                 ViewBag.workspaces = workspaces;
@@ -47,7 +45,7 @@ namespace taskify_font_end.Controllers
                     return View(null);
                 }
                 var workspace = workspaces.FirstOrDefault(x => x.Id == id);
-                return View(workspace); 
+                return View(workspace);
             }
             return View(null);
         }
@@ -65,7 +63,7 @@ namespace taskify_font_end.Controllers
 
         private async Task<List<WorkspaceDTO>> GetWorkspaceByUserIdAsync(string userId)
         {
-            var response = await _workspaceService.GetByUserIdAsync<APIResponse>(userId);
+            var response = await _workspaceService.GetAllAsync<APIResponse>();
             List<WorkspaceDTO> workspaces = new();
             if (response != null && response.IsSuccess)
             {
@@ -73,6 +71,7 @@ namespace taskify_font_end.Controllers
             }
             if (workspaces.Count > 0)
             {
+                workspaces = workspaces.Where(x => x.OwnerId == userId).ToList();
                 workspaces = workspaces.OrderByDescending(x => x.CreatedDate)
                    .ThenByDescending(x => x.UpdatedDate)
                    .ToList();
@@ -81,7 +80,7 @@ namespace taskify_font_end.Controllers
         }
 
 
-        
+
         //private async Task<List<ProjectDTO> GetProjectByUserIdAsync(string userId)
         //{
         //    var response = await _projectService.GetByUserIdAsync<APIResponse>(userId);

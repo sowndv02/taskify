@@ -29,6 +29,20 @@ namespace taskify_api.Repository
             secretKey = configuration.GetValue<string>("ApiSettings:Secret");
         }
 
+        public async Task<User> UpdateAsync(User entity)
+        {
+            try
+            {
+                _context.Users.Update(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public bool IsUniqueUser(string username)
         {
             var user = _context.Users.FirstOrDefault(x => x.UserName == username);
@@ -246,9 +260,9 @@ namespace taskify_api.Repository
             {
                 return;
             }
-            MarkAllTokenInChainASInValid(existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
+            MarkAllTokenInChainAsInValid(existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
         }
 
-        
+
     }
 }

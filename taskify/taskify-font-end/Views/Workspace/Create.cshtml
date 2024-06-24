@@ -35,10 +35,10 @@
             <div class="mb-3 col-md-12">
                 <label class="form-label" for="user_ids[]">Select Users</label>
                 <div class="input-group">
-                    <select class="form-control js-example-basic-multiple" asp-for="WorkspaceUsers" multiple="multiple" data-placeholder="Type to Search">
+                    <select class="form-control js-example-basic-multiple" asp-for="WorkspaceUserIds" multiple="multiple" data-placeholder="Type to Search">
                     @foreach (var item in ViewBag.users)
                     {
-                        <option value="@item.UserId" selected>@item.UserName</option>
+                        <option value="@item.Id">@item.FirstName @item.LastName</option>
                     }
                     </select>
                 </div>
