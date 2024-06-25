@@ -49,7 +49,7 @@ namespace taskify_api.Controllers.v1
         {
             try
             {
-                List<Workspace> list = await _workspaceRepository.GetAllAsync(x => x.OwnerId.Equals(userId));
+                List<Workspace> list = await _workspaceRepository.GetAllAsync(x => x.OwnerId.Equals(userId) && !x.IsDeleted);
                 _response.Result = _mapper.Map<List<WorkspaceDTO>>(list);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -110,8 +110,6 @@ namespace taskify_api.Controllers.v1
                 return StatusCode((int)HttpStatusCode.InternalServerError, _response);
             }
         }
-
-
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult<APIResponse>> UpdateAsync(int id, [FromBody] WorkspaceDTO updateDTO)

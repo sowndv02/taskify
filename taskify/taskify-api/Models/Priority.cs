@@ -13,5 +13,6 @@ namespace taskify_api.Models
         public int ColorId {  get; set; }
         [ForeignKey(nameof(ColorId))]
         public Color Color { get; set; }
+        public bool IsDefault { get; set; }
     }
 }

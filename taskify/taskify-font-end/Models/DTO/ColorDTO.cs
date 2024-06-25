@@ -10,5 +10,7 @@ namespace taskify_font_end.Models.DTO
         public string Title { get; set; }
         [Required]
         public string ColorCode { get; set; }
+        public bool IsDefault { get; set; }
+        public string Description { get; set; }
     }
 }

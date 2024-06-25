@@ -3,7 +3,7 @@
 *@
 @{
 }
-
+@model List<taskify_font_end.Models.DTO.WorkspaceDTO>
 
 <div class="content-wrapper">
 
@@ -13,7 +13,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1">
                         <li class="breadcrumb-item">
-                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                            <a asp-action="Dashboard" asp-controller="Home">Home</a>
                         </li>
                         <li class="breadcrumb-item">
                             Workspaces
@@ -22,7 +22,7 @@
                 </nav>
             </div>
             <div>
-                <a href="https://taskify-saas.taskhub.company/master-panel/workspaces/create">
+                <a asp-action="Create" asp-controller="Workspace">
                     <button type="button" class="btn btn-sm btn-primary"
                             data-bs-toggle="tooltip" data-bs-placement="left"
                             data-bs-original-title="Create workspace">
@@ -32,154 +32,171 @@
             </div>
         </div>
         <!-- workspaces -->
+        @if (Model.Count > 0)
+        {
+            <div class="card">
+                <div class="table-responsive text-nowrap">
+                    <div class="row mt-4 mx-2">
+                        <div class="col-md-3">
+                            <select class="form-select" id="workspace_user_filter" aria-label="Default select example">
+                                <option value="">Select user</option>
+                                <option value="2">
+                                    super admin
+                                </option>
+                                <option value="5">
+                                    Sid gor
+                                </option>
+                                <option value="7">
+                                    Team Member 1
+                                </option>
+                                <option value="14">
+                                    King Lost
+                                </option>
+                                <option value="15">
+                                    jimy karter
+                                </option>
+                                <option value="16">
+                                    kenny blinder
+                                </option>
+                                <option value="17">
+                                    teets teets
+                                </option>
+                                <option value="18">
+                                    awd das
+                                </option>
+                                <option value="19">
+                                    yhzf fmfm
+                                </option>
+                                <option value="20">
+                                    asdasd asdas
+                                </option>
+                                <option value="21">
+                                    werwe werwer
+                                </option>
+                                <option value="22">
+                                    Shady Khan
+                                </option>
+                                <option value="23">
+                                    Mohibbur Rahman
+                                </option>
+                                <option value="24">
+                                    muhammed faahir
+                                </option>
+                                <option value="25">
+                                    Abc xyz
+                                </option>
+                                <option value="26">
+                                    Waqas Maqbool
+                                </option>
+                                <option value="27">
+                                    c c
+                                </option>
+                                <option value="28">
+                                    Tanush Gupta
+                                </option>
+                                <option value="29">
+                                    Роман Мельник
+                                </option>
+                                <option value="30">
+                                    એનિસ મેકકેથે
+                                </option>
+                                <option value="31">
+                                    kumar raj
+                                </option>
+                                <option value="32">
+                                    test test
+                                </option>
+                                <option value="33">
+                                    Shady Khan
+                                </option>
+                                <option value="34">
+                                    Akash Dhaman
+                                </option>
+                                <option value="35">
+                                    dharmesh ladani
+                                </option>
+                                <option value="36">
+                                    Anand Behera
+                                </option>
+                                <option value="37">
+                                    Demo New
+                                </option>
+                                <option value="38">
+                                    jknjk jbjkhjk
+                                </option>
+                                <option value="39">
+                                    gurjap singh
+                                </option>
+                                <option value="40">
+                                    Clvois Oliveira
+                                </option>
+                                <option value="41">
+                                    CAIO CAIO
+                                </option>
+                            </select>
+                        </div>
 
-        <div class="card">
-            <div class="table-responsive text-nowrap">
-
-
-                <div class="row mt-4 mx-2">
-                    <div class="col-md-3">
-                        <select class="form-select" id="workspace_user_filter" aria-label="Default select example">
-                            <option value="">Select user</option>
-                            <option value="2">
-                                super admin
-                            </option>
-                            <option value="5">
-                                Sid gor
-                            </option>
-                            <option value="7">
-                                Team Member 1
-                            </option>
-                            <option value="14">
-                                King Lost
-                            </option>
-                            <option value="15">
-                                jimy karter
-                            </option>
-                            <option value="16">
-                                kenny blinder
-                            </option>
-                            <option value="17">
-                                teets teets
-                            </option>
-                            <option value="18">
-                                awd das
-                            </option>
-                            <option value="19">
-                                yhzf fmfm
-                            </option>
-                            <option value="20">
-                                asdasd asdas
-                            </option>
-                            <option value="21">
-                                werwe werwer
-                            </option>
-                            <option value="22">
-                                Shady Khan
-                            </option>
-                            <option value="23">
-                                Mohibbur Rahman
-                            </option>
-                            <option value="24">
-                                muhammed faahir
-                            </option>
-                            <option value="25">
-                                Abc xyz
-                            </option>
-                            <option value="26">
-                                Waqas Maqbool
-                            </option>
-                            <option value="27">
-                                c c
-                            </option>
-                            <option value="28">
-                                Tanush Gupta
-                            </option>
-                            <option value="29">
-                                Роман Мельник
-                            </option>
-                            <option value="30">
-                                એનિસ મેકકેથે
-                            </option>
-                            <option value="31">
-                                kumar raj
-                            </option>
-                            <option value="32">
-                                test test
-                            </option>
-                            <option value="33">
-                                Shady Khan
-                            </option>
-                            <option value="34">
-                                Akash Dhaman
-                            </option>
-                            <option value="35">
-                                dharmesh ladani
-                            </option>
-                            <option value="36">
-                                Anand Behera
-                            </option>
-                            <option value="37">
-                                Demo New
-                            </option>
-                            <option value="38">
-                                jknjk jbjkhjk
-                            </option>
-                            <option value="39">
-                                gurjap singh
-                            </option>
-                            <option value="40">
-                                Clvois Oliveira
-                            </option>
-                            <option value="41">
-                                CAIO CAIO
-                            </option>
-                        </select>
+                        <div class="col-md-3">
+                            <select class="form-select" id="workspace_client_filter" aria-label="Default select example">
+                                <option value="">Select client</option>
+                                <option value="2">
+                                    same parker
+                                </option>
+                                <option value="3">
+                                    Thomas bond
+                                </option>
+                                <option value="4">
+                                    shie Waine
+                                </option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="col-md-3">
-                        <select class="form-select" id="workspace_client_filter" aria-label="Default select example">
-                            <option value="">Select client</option>
-                            <option value="2">
-                                same parker
-                            </option>
-                            <option value="3">
-                                Thomas bond
-                            </option>
-                            <option value="4">
-                                shie Waine
-                            </option>
-                        </select>
+                    <input type="hidden" id="data_type" value="workspaces">
+
+                    <div class="card-body">
+                        <table id="table" data-toggle="table" data-loading-template="loadingTemplate"
+                               data-url="https://taskify-saas.taskhub.company/master-panel/workspaces/list" data-icons-prefix="bx" data-icons="icons"
+                               data-show-refresh="true" data-total-field="total" data-trim-on-search="false" data-data-field="rows"
+                               data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true" data-side-pagination="server"
+                               data-show-columns="true" data-pagination="true" data-sort-name="id" data-sort-order="desc"
+                               data-mobile-responsive="true" data-query-params="queryParams">
+                            <thead>
+                                <tr>
+                                    <th data-checkbox="true"></th>
+                                    <th data-sortable="true" data-field="id">ID</th>
+                                    <th data-sortable="true" data-field="title">Title</th>
+                                    <th data-field="users" data-formatter="userFormatter">Users                            </th>
+                                    <th data-field="clients" data-formatter="clientFormatter">
+                                        Clients
+                                    </th>
+                                    <th data-formatter="actionsFormatter">Actions</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
-                </div>
-
-                <input type="hidden" id="data_type" value="workspaces">
-
-                <div class="card-body">
-                    <table id="table" data-toggle="table" data-loading-template="loadingTemplate"
-                           data-url="https://taskify-saas.taskhub.company/master-panel/workspaces/list" data-icons-prefix="bx" data-icons="icons"
-                           data-show-refresh="true" data-total-field="total" data-trim-on-search="false" data-data-field="rows"
-                           data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true" data-side-pagination="server"
-                           data-show-columns="true" data-pagination="true" data-sort-name="id" data-sort-order="desc"
-                           data-mobile-responsive="true" data-query-params="queryParams">
-                        <thead>
-                            <tr>
-                                <th data-checkbox="true"></th>
-                                <th data-sortable="true" data-field="id">ID</th>
-                                <th data-sortable="true" data-field="title">Title</th>
-                                <th data-field="users" data-formatter="userFormatter">Users                            </th>
-                                <th data-field="clients" data-formatter="clientFormatter">
-                                    Clients
-                                </th>
-                                <th data-formatter="actionsFormatter">Actions</th>
-                            </tr>
-                        </thead>
-                    </table>
                 </div>
             </div>
-        </div>
+        }else{
+            <div class="card text-center mt-4">
+                <div class="card-body">
+                    <div class="misc-wrapper">
+                        <h2 class="mb-2 mx-2">You don't have any workspaces!</h2>
+                        <p class="mb-4 mx-2">
+                            Do you want to create a new workspace?
+                        </p>
+                        <a asp-action="Create" asp-controller="Workspace" class="btn btn-primary">Create</a>
+                        <div class="mt-3">
+                            <img src="~/image/man-with-laptop-light.png" alt="page-misc-error-light"
+                                 width="500" class="img-fluid" data-app-dark-img="illustrations/page-misc-error-dark.png"
+                                 data-app-light-img="illustrations/page-misc-error-light.png" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-
+</div>
     <script>
         var label_update = 'Update';
         var label_delete = 'Delete';
@@ -187,343 +204,4 @@
         var label_duplicate = 'Duplicate';
         var routePrefix = '/master-panel';
     </script>
-    <script src="https://taskify-saas.taskhub.company/assets/js/pages/workspaces.js"></script>
-    <div class="modal fade" id="default_language_modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title" id="exampleModalLabel2">Confirm!</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you want to set as your primary language?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="submit" class="btn btn-primary" id="confirm">Yes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="leaveWorkspaceModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title" id="exampleModalLabel2">Warning</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Are you sure you want leave this workspace?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="submit" class="btn btn-danger" id="confirm">Yes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="create_language_modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/superadmin/settings/languages/store" method="POST">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">Create language                </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <input type="hidden" name="_token" value="ohm7ZtEuflkVQRJpUSRreYOavUtSMHQzmsZgBb4L" autocomplete="off">            <div class="modal-body">
-                    <div class="row">
-                        <div class="col mb-3">
-                            <label for="nameBasic" class="form-label">
-                                Title <span class="asterisk">*</span>
-                            </label>
-                            <input type="text" class="form-control" name="name"
-                                   placeholder="For Example: English" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col mb-3">
-                            <label for="nameBasic" class="form-label">
-                                Code <span class="asterisk">*</span>
-                            </label>
-                            <input type="text" class="form-control" name="code" placeholder="For Example: en" />
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="submit" id="submit_btn"
-                            class="btn btn-primary">
-                        Create
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal fade" id="create_contract_type_modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/contracts/store-contract-type"
-                  method="POST">
-                <input type="hidden" name="dnr">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">
-                        Create contract type
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col mb-3">
-                            <label for="nameBasic" class="form-label">
-                                Type <span class="asterisk">*</span>
-                            </label>
-                            <input type="text" class="form-control" name="type"
-                                   placeholder="Please enter contract type" />
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="submit" id="submit_btn"
-                            class="btn btn-primary">
-                        Create
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div class="modal fade" id="edit_contract_type_modal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/contracts/update-contract-type"
-                  method="POST">
-                <input type="hidden" name="dnr">
-                <input type="hidden" id="update_contract_type_id" name="id">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">
-                        Update contract type
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col mb-3">
-                            <label for="nameBasic" class="form-label">
-                                Type <span class="asterisk">*</span>
-                            </label>
-                            <input type="text" class="form-control" name="type" id="contract_type"
-                                   placeholder="Please enter contract type" />
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="submit" id="submit_btn"
-                            class="btn btn-primary">
-                        Update
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-
-
-
-
-
-
-
-    <div class="modal fade" id="deleteAccountModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title" id="exampleModalLabel2">Warning</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete your account?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <form id="formAccountDeactivation"
-                          action="https://taskify-saas.taskhub.company/master-panel/account/destroy/5" method="POST">
-
-                        <input type="hidden" name="_token" value="ohm7ZtEuflkVQRJpUSRreYOavUtSMHQzmsZgBb4L" autocomplete="off">                    <input type="hidden" name="_method" value="DELETE">                    <button type="submit" class="btn btn-danger">Yes</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel2">Warning</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> '</button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="submit" class="btn btn-danger"
-                            id="confirmDelete">
-                        Yes
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="confirmDeleteSelectedModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel2">Warning</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> '</button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to delete selected record(s)?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="submit" class="btn btn-danger"
-                            id="confirmDeleteSelections">
-                        Yes
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="duplicateModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title" id="exampleModalLabel2">Warning</h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to duplicate?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-
-                    <button type="submit" class="btn btn-primary"
-                            id="confirmDuplicate">
-                        Yes
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="timerModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h6 class="modal-title" id="exampleModalLabel2">Time tracker                </h6>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="modal-body">
-                        <div class="stopwatch">
-                            <div class="stopwatch_time">
-                                <input type="text" name="hour" id="hour" value="00"
-                                       class="form-control stopwatch_time_input" readonly>
-                                <div class="stopwatch_time_lable">Hours</div>
-                            </div>
-                            <div class="stopwatch_time">
-                                <input type="text" name="minute" id="minute" value="00"
-                                       class="form-control stopwatch_time_input" readonly>
-                                <div class="stopwatch_time_lable">Minutes</div>
-                            </div>
-                            <div class="stopwatch_time">
-                                <input type="text" name="second" id="second" value="00"
-                                       class="form-control stopwatch_time_input" readonly>
-                                <div class="stopwatch_time_lable">Second</div>
-                            </div>
-                        </div>
-                        <div class="selectgroup selectgroup-pills d-flex justify-content-around mt-3">
-                            <label class="selectgroup-item">
-                                <span class="selectgroup-button selectgroup-button-icon" data-bs-toggle="tooltip"
-                                      data-bs-placement="left" data-bs-original-title="Start"
-                                      id="start" onclick="startTimer()"><i class="bx bx-play"></i></span>
-                            </label>
-                            <label class="selectgroup-item">
-                                <span class="selectgroup-button selectgroup-button-icon" data-bs-toggle="tooltip"
-                                      data-bs-placement="left" data-bs-original-title="Stop"
-                                      id="end" onclick="stopTimer()"><i class="bx bx-stop"></i></span>
-                            </label>
-                            <label class="selectgroup-item">
-                                <span class="selectgroup-button selectgroup-button-icon" data-bs-toggle="tooltip"
-                                      data-bs-placement="left" data-bs-original-title="Pause"
-                                      id="pause" onclick="pauseTimer()"><i class="bx bx-pause"></i></span>
-                            </label>
-                        </div>
-                        <div class="form-group mb-0 mt-3">
-                            <label class="label">Message:</label>
-                            <textarea class="form-control" id="time_tracker_message" placeholder="Please Enter Your Message" name="message"></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-center">
-                        <a href="https://taskify-saas.taskhub.company/master-panel/time-tracker" class="btn btn-primary">
-                            <i class="bx bxs-time"></i> View timesheet
-                        </a>
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="stopTimerModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-sm" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel2">Warning</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> '</button>
-                </div>
-                <div class="modal-body">
-                    <p>Are you sure you want to stop the timer?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="submit" class="btn btn-danger"
-                            id="confirmStop">
-                        Yes
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+<script src="~/js/workspaces.js"></script>

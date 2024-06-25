@@ -12,12 +12,12 @@ using taskify_utility;
 
 namespace taskify_font_end.Controllers
 {
-    public class AuthController : Controller
+    public class AuthController : BaseController
     {
         private readonly IAuthService _authService;
         private readonly ITokenProvider _tokenProvider;
         private readonly IWorkspaceService _workspaceService;
-        public AuthController(IAuthService authService, ITokenProvider tokenProvider, IWorkspaceService workspaceService)
+        public AuthController(IAuthService authService, ITokenProvider tokenProvider, IWorkspaceService workspaceService) : base(workspaceService)
         {
             _authService = authService;
             _tokenProvider = tokenProvider;
@@ -71,11 +71,25 @@ namespace taskify_font_end.Controllers
                     var principal = new ClaimsPrincipal(identity);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                     _tokenProvider.SetToken(model);
-                    List<WorkspaceDTO> workspaces = await GetAllWorkspaceByUserIdAsync(jwt.Claims.FirstOrDefault(u => u.Type == "sub").Value);
-                    if (workspaces.Count > 0)
-                        return RedirectToAction("Dashboard", "Home", workspaces.FirstOrDefault().Id);
+                    if (ViewBag.SelectedWorkspaceId == 0)
+                    {
+                        List<WorkspaceDTO> workspaces = await GetAllWorkspaceByUserIdAsync(jwt.Claims.FirstOrDefault(u => u.Type == "sub").Value);
+                        if (workspaces.Count > 0)
+                        {
+                            HttpContext.Response.Cookies.Append("SelectedWorkspaceId", workspaces.FirstOrDefault().Id.ToString());
+                            return RedirectToAction("Dashboard", "Home", new { id = workspaces.FirstOrDefault().Id });
+                        }
+                        else
+                        {
+                            HttpContext.Response.Cookies.Append("SelectedWorkspaceId", "0");
+                            return RedirectToAction("Dashboard", "Home", new { id = 0 });
+                        }
+                    }
                     else
-                        return RedirectToAction("Dashboard", "Home", 0);
+                    {
+                        return RedirectToAction("Dashboard", "Home", new { id = ViewBag.SelectedWorkspaceId });
+                    }
+                    
                 }
                 else
                 {
@@ -140,7 +154,7 @@ namespace taskify_font_end.Controllers
         private async Task<List<WorkspaceDTO>> GetAllWorkspaceByUserIdAsync(string userId)
         {
             if (string.IsNullOrEmpty(userId)) return new List<WorkspaceDTO>();
-            var res = await _workspaceService.GetAllAsync<APIResponse>();
+            var res = await _workspaceService.GetByUserIdAsync<APIResponse>(userId);
             List<WorkspaceDTO> workspaces = new List<WorkspaceDTO>();
             if (res != null && res.IsSuccess)
             {

@@ -1,0 +1,231 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="content-wrapper">
+
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1">
+                        <li class="breadcrumb-item">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Activity Log
+                        </li>
+
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive text-nowrap">
+                    <div class="row">
+                        <div class="mb-3 col-md-3">
+                            <div class="input-group input-group-merge">
+                                <input type="text" id="activity_log_between_date" class="form-control"
+                                       placeholder="Date between" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <select class="form-select" id="user_filter" aria-label="Default select example">
+                                <option value="">Select user</option>
+                                <option value="5">
+                                    Sid gor
+                                </option>
+                                <option value="7">
+                                    Team Member 1
+                                </option>
+                                <option value="14">
+                                    King Lost
+                                </option>
+                                <option value="15">
+                                    jimy karter
+                                </option>
+                                <option value="16">
+                                    kenny blinder
+                                </option>
+                                <option value="34">
+                                    Akash Dhaman
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <select class="form-select" id="client_filter" aria-label="Default select example">
+                                <option value="">Select client</option>
+                                <option value="2">
+                                    same parker
+                                </option>
+                                <option value="3">
+                                    Thomas bond
+                                </option>
+                                <option value="4">
+                                    shie Waine
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <select class="form-select" id="activity_filter" aria-label="Default select example">
+                                <option value="">Select activity</option>
+                                <option value="created">Created</option>
+                                <option value="updated">Updated</option>
+                                <option value="duplicated">Duplicated</option>
+                                <option value="uploaded">Uploaded</option>
+                                <option value="deleted">Deleted</option>
+                                <option value="updated_status">Updated status</option>
+                                <option value="signed">Signed</option>
+                                <option value="unsigned">Unsigned</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <select class="form-select" id="type_filter" aria-label="Default select example">
+                                <option value="">Select type</option>
+                                <option value="allowance">
+                                    Allowance
+                                </option>
+                                <option value="client">
+                                    Client
+                                </option>
+                                <option value="contract">
+                                    Contract
+                                </option>
+                                <option value="deduction">
+                                    Deduction
+                                </option>
+                                <option value="estimates_invoice">
+                                    Estimates Invoice
+                                </option>
+                                <option value="expense">
+                                    Expense
+                                </option>
+                                <option value="front_end">
+                                    Front End
+                                </option>
+                                <option value="item">
+                                    Item
+                                </option>
+                                <option value="leave_request">
+                                    Leave Request
+                                </option>
+                                <option value="meeting">
+                                    Meeting
+                                </option>
+                                <option value="note">
+                                    Note
+                                </option>
+                                <option value="payment_method">
+                                    Payment Method
+                                </option>
+                                <option value="payment">
+                                    Payment
+                                </option>
+                                <option value="payslip">
+                                    Payslip
+                                </option>
+                                <option value="project">
+                                    Project
+                                </option>
+                                <option value="status">
+                                    Status
+                                </option>
+                                <option value="tag">
+                                    Tag
+                                </option>
+                                <option value="task">
+                                    Task
+                                </option>
+                                <option value="tax">
+                                    Tax
+                                </option>
+                                <option value="time_tracker">
+                                    Time Tracker
+                                </option>
+                                <option value="todo">
+                                    Todo
+                                </option>
+                                <option value="unit">
+                                    Unit
+                                </option>
+                                <option value="user">
+                                    User
+                                </option>
+                                <option value="workspace">
+                                    Workspace
+                                </option>
+                                <option value="contract_type">
+                                    Contract Type
+                                </option>
+                                <option value="media">
+                                    Media
+                                </option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <input type="hidden" id="activity_log_between_date_from">
+                    <input type="hidden" id="activity_log_between_date_to">
+
+                    <input type="hidden" id="data_type" value="activity-log">
+
+
+                    <table id="table" data-toggle="table" data-loading-template="loadingTemplate"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/activity-log/list" data-icons-prefix="bx" data-icons="icons"
+                           data-show-refresh="true" data-total-field="total" data-trim-on-search="false" data-data-field="rows"
+                           data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true" data-side-pagination="server"
+                           data-show-columns="true" data-pagination="true" data-sort-name="id" data-sort-order="desc"
+                           data-mobile-responsive="true" data-query-params="queryParams">
+                        <thead>
+                            <tr>
+                                <th data-checkbox="true"></th>
+                                <th data-sortable="true" data-field="id">ID</th>
+                                <th data-sortable="true" data-visible="false" data-field="actor_id">
+                                    Actor ID
+                                </th>
+                                <th data-sortable="true" data-field="actor_name">
+                                    Actor name
+                                </th>
+                                <th data-sortable="true" data-visible="false" data-field="actor_type">
+                                    Actor type
+                                </th>
+                                <th data-sortable="true" data-visible="false" data-field="type_id">
+                                    Type ID
+                                </th>
+                                <th data-sortable="true" data-field="activity">Activity                                </th>
+                                <th data-sortable="true" data-field="type">Type</th>
+                                <th data-sortable="true" data-field="type_title">
+                                    Type title
+                                </th>
+                                <th data-sortable="true" data-visible="false" data-field="message">
+                                    Message
+                                </th>
+                                <th data-sortable="true" data-field="created_at">
+                                    Created at
+                                </th>
+                                <th data-sortable="true" data-field="updated_at" data-visible="false">
+                                    Updated at
+                                </th>
+                                <th data-formatter="actionsFormatter">Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var label_delete = 'Delete ';
+    </script>
+    <script src="https://taskify-saas.taskhub.company/assets/js/pages/activity-log.js"></script>

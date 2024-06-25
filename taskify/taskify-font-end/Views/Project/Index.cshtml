@@ -1,0 +1,288 @@
+﻿@model List<taskify_font_end.Models.DTO.ProjectDTO>
+@{
+    bool modelIsNull = Model == null;
+}
+@if(Model != null && Model.Count > 0)
+{
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between mt-4">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-style1">
+                            <li class="breadcrumb-item">
+                                <a asp-action="Dashboard" asp-controller="Home">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active">Projects</li>
+                        </ol>
+                    </nav>
+                </div>
+
+                <div>
+                    <a asp-action="Create" asp-controller="Project">
+                        <button type="button" class="btn btn-sm btn-primary"
+                                data-bs-toggle="tooltip" data-bs-placement="left"
+                                data-bs-original-title="Create project">
+                            <i class='bx bx-plus'></i>
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <select class="form-select" id="status_filter" aria-label="Default select example">
+                        <option value="">Filter by status</option>
+                        <option value="0">Default</option>
+                        <option value="72">STARTED</option>
+                        <option value="73">ON GOING</option>
+                        <option value="74">IN REVIEW</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="sort" aria-label="Default select example">
+                        <option value="">Sort by</option>
+                        <option value="newest">
+                            Newest
+                        </option>
+                        <option value="oldest">
+                            Oldest
+                        </option>
+                        <option value="recently-updated">
+                            Most recently updated
+                        </option>
+                        <option value="earliest-updated">
+                            Least recently updated
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-5">
+
+                    <select id="selected_tags" class="form-control js-example-basic-multiple" name="tag[]" multiple="multiple"
+                            data-placeholder="Filter by tags">
+
+                        <option value="1">
+                            WEB DEVELOPMENT
+                        </option>
+                        <option value="2">
+                            E- COMMERCE
+                        </option>
+                        <option value="3">
+                            SOCIAL NETWORKING
+                        </option>
+                        <option value="4">
+                            CONTENT MANAGEMENT
+                        </option>
+                        <option value="5">
+                            PROJECT MANAGEMENT
+                        </option>
+                        <option value="6">
+                            LEARNING AND EDUCATION
+                        </option>
+                        <option value="7">
+                            BOOKING AND RESERVATION
+                        </option>
+                        <option value="8">
+                            sdsad
+                        </option>
+                        <option value="9">
+                            webdesign
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <div>
+                        <button type="button" data-route-prefix="/master-panel" id="tags_filter"
+                                class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="left"
+                                data-bs-original-title="Filter">
+                            <i class='bx bx-filter-alt'></i>
+                        </button>
+
+
+                    </div>
+                </div>
+            </div>
+            @foreach (var item in Model)
+            {
+                <div class="mt-4 d-flex row">
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex flex-wrap gap-2 mb-3">
+                                    @if (item.ProjectTags != null && item.ProjectTags.Count > 0)
+                                    {
+                                        @foreach (var tag in item.ProjectTags)
+                                        {
+                                            <span class="badge bg-@(tag.Tag?.Color?.Title)">@tag.Tag?.Title</span>
+                                        }
+                                    }
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <h4 class="card-title">
+                                        <a asp-action="Detail" asp-controller="Project" asp-route-id="@item.Id"
+                                           target="_blank"><strong>@item.Title</strong></a>
+                                    </h4>
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <div class="input-group">
+                                            <a href="javascript:void(0);" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class='bx bx-cog' id="settings-icon"></i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li class="dropdown-item">
+                                                    <a asp-action="Update" asp-controller="Project" asp-route-id="@item.Id"
+                                                       class="card-link">
+                                                        <i class='menu-icon tf-icons bx bx-edit'></i>Update
+                                                    </a>
+                                                </li>
+                                                <li class="dropdown-item">
+                                                    <a href="javascript:void(0);" class="delete" data-reload="true"
+                                                       data-type="projects" data-id="@item.Id">
+                                                        <i class='menu-icon tf-icons bx bx-trash text-danger'></i>Delete
+                                                    </a>
+                                                </li>
+                                                <li class="dropdown-item">
+                                                    <a href="javascript:void(0);" class="duplicate" data-type="projects"
+                                                       data-id="@item.Id" data-reload="true">
+                                                        <i class='menu-icon tf-icons bx bx-copy text-warning'></i>Duplicate
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="my-4 d-flex justify-content-between">
+                                    <span class='badge bg-label-@(item.Status?.Color?.Title) me-1'>
+                                        @item.Status.Title.ToUpper()
+                                    </span>
+                                </div>
+                                <div class="my-4 d-flex justify-content-between">
+                                    <span>
+                                        <i class='bx bx-task text-primary'></i>
+                                        <b>0</b>
+                                        Tasks
+                                    </span>
+                                    <a asp-action="Index" asp-controller="Task" asp-route-id="@item.Id">
+                                        <button type="button"
+                                                class="btn btn-sm rounded-pill btn-outline-primary">
+                                            Tasks
+                                        </button>
+                                    </a>
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col-md-6">
+                                        <p class="card-text">
+                                            Users:
+                                            <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                                @if (item.ProjectUsers != null && item.ProjectUsers.Count > 0)
+                                                {
+                                                    @foreach (var user in item.ProjectUsers)
+                                                    {
+                                                        <li class="avatar avatar-sm pull-up"
+                                                            title="@user.User?.FirstName @user.User?.LastName">
+                                                            <a asp-action="Profile" asp-controller="User" asp-route-id="@user.UserId"
+                                                               target="_blank">
+                                                                <img src="@user.User?.ImageUrl"
+                                                                     class="rounded-circle"
+                                                                     alt="@user.User?.FirstName @user.User?.LastName">
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <i class='bx bx-calendar text-success'></i>Starts at : @item.StartAt.ToShortDateString()
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <i class='bx bx-calendar text-danger'></i>Ends at : @item.EndAt.ToShortDateString()
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div>
+                        <nav class="d-flex justify-items-center justify-content-between">
+                            <div class="d-flex justify-content-between flex-fill d-sm-none">
+                                <ul class="pagination">
+
+                                    <li class="page-item disabled" aria-disabled="true">
+                                        <span class="page-link">&laquo; Previous</span>
+                                    </li>
+
+
+                                    <li class="page-item">
+                                        <a class="page-link" href="" rel="next">Next &raquo;</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="d-none flex-sm-fill d-sm-flex align-items-sm-center justify-content-sm-between">
+                                <div>
+                                    <p class="small text-muted">
+                                        Showing
+                                        <span class="fw-semibold">1</span>
+                                        to
+                                        <span class="fw-semibold">6</span>
+                                        of
+                                        <span class="fw-semibold">15</span>
+                                        results
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <ul class="pagination">
+
+                                        <li class="page-item disabled" aria-disabled="true" aria-label="&laquo; Previous">
+                                            <span class="page-link" aria-hidden="true">&lsaquo;</span>
+                                        </li>
+                                        <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#" rel="next" aria-label="Next &raquo;">&rsaquo;</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </nav>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="card text-center mt-4">
+                <div class="card-body">
+                    <div class="misc-wrapper">
+                        <h2 class="mb-2 mx-2">You don't have any project!</h2>
+                        <p class="mb-4 mx-2">
+                            Do you want to create a new project?
+                        </p>
+                        <a asp-action="Create" asp-controller="Project" class="btn btn-primary">Create</a>
+                        <div class="mt-3">
+                            <img src="~/image/man-with-laptop-light.png" alt="page-misc-error-light"
+                                 width="500" class="img-fluid" data-app-dark-img="illustrations/page-misc-error-dark.png"
+                                 data-app-light-img="illustrations/page-misc-error-light.png" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/js/project-grid.js"></script>

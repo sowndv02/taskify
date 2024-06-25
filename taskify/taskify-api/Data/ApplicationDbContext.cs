@@ -25,6 +25,7 @@ namespace taskify_api.Data
         public DbSet<Priority> Priorities { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectUser> ProjectUsers { get; set; }
+        public DbSet<ProjectTag> ProjectTags { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -125,6 +126,13 @@ namespace taskify_api.Data
                 .HasOne(tu => tu.Task)
                 .WithMany(t => t.TaskUsers)
                 .HasForeignKey(tu => tu.TaskId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+
+            modelBuilder.Entity<ProjectTag>()
+                .HasOne(pt => pt.Tag)
+                .WithMany(t => t.ProjectTags)
+                .HasForeignKey(pt => pt.TagId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())

@@ -1,0 +1,753 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="content-wrapper">
+
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1">
+                        <li class="breadcrumb-item">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Todos
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+            <div>
+                <span data-bs-toggle="modal" data-bs-target="#create_todo_modal">
+                    <a href="javascript:void(0);"
+                       class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="left"
+                       data-bs-original-title="Create todo">
+                        <i class='bx bx-plus'></i>
+                    </a>
+                </span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="table-responsive text-nowrap">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Todo</th>
+                            <th>Priority</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/1">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="1"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="1" class="form-check-input mt-0">
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 "
+                                            id="1_title">
+                                            Meeting
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            22-02-2024 11:15:50
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-danger me-1'>high</span>
+                            </td>
+                            <td class="todo-description">
+                                web
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/1"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="1" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="1"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/2">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="2"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="2" class="form-check-input mt-0">
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 "
+                                            id="2_title">
+                                            UI Project
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            26-03-2024 17:56:47
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-danger me-1'>high</span>
+                            </td>
+                            <td class="todo-description">
+                                Opinion
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/2"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="2" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="2"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/3">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="3"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="3" class="form-check-input mt-0">
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 "
+                                            id="3_title">
+                                            frontend design
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            09-04-2024 09:44:22
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-warning me-1'>medium</span>
+                            </td>
+                            <td class="todo-description">
+                                review
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/3"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="3" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="3"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/4">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="4"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="4" class="form-check-input mt-0"
+                                                                                                                                                                                                                                                                                                                    checked>
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 striked"
+                                            id="4_title">
+                                            Event
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            09-04-2024 09:45:04
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-warning me-1'>medium</span>
+                            </td>
+                            <td class="todo-description">
+                                Sales
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/4"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="4" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="4"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/5">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="5"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="5" class="form-check-input mt-0"
+                                                                                                                                                                                                                                                                                                                    checked>
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 striked"
+                                            id="5_title">
+                                            Client support
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            09-04-2024 09:45:53
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-danger me-1'>high</span>
+                            </td>
+                            <td class="todo-description">
+                                issue
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/5"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="5" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="5"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/6">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="6"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="6" class="form-check-input mt-0"
+                                                                                                                                                                                                                                                                                                                    checked>
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 striked"
+                                            id="6_title">
+                                            Food app
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            09-04-2024 09:47:12
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-danger me-1'>high</span>
+                            </td>
+                            <td class="todo-description">
+                                upload on Play Store
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/6"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="6" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="6"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/7">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="7"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="7" class="form-check-input mt-0"
+                                                                                                                                                                                                                                                                                                                    checked>
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 striked"
+                                            id="7_title">
+                                            fun event
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            09-04-2024 09:47:43
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-success me-1'>low</span>
+                            </td>
+                            <td class="todo-description">
+                                movie
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/7"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="7" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="7"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/13">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="13"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="13" class="form-check-input mt-0"
+                                                                                                                                                                                                                                                                                                                    checked>
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 striked"
+                                            id="13_title">
+                                            dvdv
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            10-05-2024 00:56:29
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-warning me-1'>medium</span>
+                            </td>
+                            <td class="todo-description">
+                                ddvdv
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/13"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="13" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="13"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/15">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="15"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="15" class="form-check-input mt-0"
+                                                                                                                                                                                                                                                                                                                    checked>
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 striked"
+                                            id="15_title">
+                                            qer
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            15-05-2024 15:14:15
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-danger me-1'>high</span>
+                            </td>
+                            <td class="todo-description">
+                                rtret
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/15"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="15" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="15"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/20">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="20"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="20" class="form-check-input mt-0"
+                                                                                                                                                                                                                                                                                                                    checked>
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 striked"
+                                            id="20_title">
+                                            ddd
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            24-05-2024 13:46:35
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-success me-1'>low</span>
+                            </td>
+                            <td class="todo-description">
+                                dddd
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/20"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="20" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="20"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/21">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="21"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="21" class="form-check-input mt-0"
+                                                                                                                                                                                                                                                                                                                    checked>
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 striked"
+                                            id="21_title">
+                                            Votre connexion n’est pas privée
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            24-05-2024 13:46:50
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-success me-1'>low</span>
+                            </td>
+                            <td class="todo-description">
+                                Votre connexion n’est pas privée
+                                Les utilisateurs malveillants essaient peut-être de voler vos informations de ns545182.ip-198-27-68.net (par exemple, les mots de passe, les messages ou les cartes de crédit).
+                                NET::ERR_CERT_AUTHORITY_INVALID
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/21"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="21" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="21"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/23">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="23"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="23" class="form-check-input mt-0"
+                                                                                                                                                                                                                                                                                                                    checked>
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 striked"
+                                            id="23_title">
+                                            test
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            24-05-2024 22:26:58
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-danger me-1'>high</span>
+                            </td>
+                            <td class="todo-description">
+                                sddf sas fsda asd dasf asdf asf
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/23"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="23" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="23"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/28">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="28"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="28" class="form-check-input mt-0">
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 "
+                                            id="28_title">
+                                            Tksdjflkas
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            05-06-2024 13:25:06
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-danger me-1'>high</span>
+                            </td>
+                            <td class="todo-description">
+                                sadfads
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/28"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="28" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="28"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/34">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="34"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="34" class="form-check-input mt-0"
+                                                                                                                                                                                                                                                                                                                    checked>
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 striked"
+                                            id="34_title">
+                                            Make A videos
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            17-06-2024 16:36:37
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-danger me-1'>high</span>
+                            </td>
+                            <td class="todo-description">
+                                Website Development Videos
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/34"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="34" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="34"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div>
+                                        <form method="POST" action="/todos/cross/35">
+                                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                                                    <input type="hidden" name="_method" value="PATCH">                                                    <input type="checkbox" id="35"
+                                                                                                                                                                                                                                                                                                                    onclick='update_status(this)'
+                                                                                                                                                                                                                                                                                                                    data-url="https://taskify-saas.taskhub.company/master-panel/todos/update_status"
+                                                                                                                                                                                                                                                                                                                    name="35" class="form-check-input mt-0">
+                                        </form>
+                                    </div>
+                                    <span class="mx-4">
+                                        <h4 class="m-0 "
+                                            id="35_title">
+                                            aaa
+                                        </h4>
+                                        <h7 class="m-0 text-muted">
+                                            18-06-2024 12:26:07
+                                        </h7>
+
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class='badge bg-label-success me-1'>low</span>
+                            </td>
+                            <td class="todo-description">
+                                bbb
+                            </td>
+                            <td>
+                                <div class="d-flex">
+                                    <a href="javascript:void(0);" class="edit-todo"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/todos/get/35"
+                                       data-bs-toggle="modal" data-bs-target="#edit_todo_modal"
+                                       data-id="35" title="Update"
+                                       class="card-link"><i class='bx bx-edit mx-1'></i></a>
+
+
+                                    <a href="javascript:void(0);" type="button" data-id="35"
+                                       data-reload="true" data-type="todos" class="card-link mx-4 delete">
+                                        <i class='bx bx-trash text-danger mx-1'></i>
+                                    </a>
+
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

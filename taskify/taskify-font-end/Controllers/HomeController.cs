@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -9,11 +10,11 @@ using taskify_font_end.Service.IService;
 
 namespace taskify_font_end.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly IWorkspaceService _workspaceService;
         private readonly IMapper _mapper;
-        public HomeController(IWorkspaceService workspaceService, IMapper mapper)
+        public HomeController(IWorkspaceService workspaceService, IMapper mapper) : base(workspaceService)
         {
             _workspaceService = workspaceService;
             _mapper = mapper;
@@ -24,8 +25,11 @@ namespace taskify_font_end.Controllers
             return View();
         }
 
+
         public async Task<IActionResult> DashboardAsync(int id)
         {
+            if(ViewBag.SelectedWorkspaceId == 0 && id != 0)
+                HttpContext.Response.Cookies.Append("SelectedWorkspaceId", id.ToString());
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
             {
@@ -63,7 +67,7 @@ namespace taskify_font_end.Controllers
 
         private async Task<List<WorkspaceDTO>> GetWorkspaceByUserIdAsync(string userId)
         {
-            var response = await _workspaceService.GetAllAsync<APIResponse>();
+            var response = await _workspaceService.GetByUserIdAsync<APIResponse>(userId);
             List<WorkspaceDTO> workspaces = new();
             if (response != null && response.IsSuccess)
             {
@@ -71,7 +75,6 @@ namespace taskify_font_end.Controllers
             }
             if (workspaces.Count > 0)
             {
-                workspaces = workspaces.Where(x => x.OwnerId == userId).ToList();
                 workspaces = workspaces.OrderByDescending(x => x.CreatedDate)
                    .ThenByDescending(x => x.UpdatedDate)
                    .ToList();

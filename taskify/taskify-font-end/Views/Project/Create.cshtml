@@ -1,0 +1,180 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model taskify_font_end.Models.DTO.ProjectDTO
+<div class="content-wrapper">
+
+    <div class="container-fluid">
+
+
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1">
+                        <li class="breadcrumb-item">
+                            <a asp-action="Dashboard" asp-controller="Home">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a asp-action="Index" asp-controller="Project">Projects</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Create
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+
+
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Create" asp-controller="Project" class="form-submit-event"
+                      method="POST">
+                    <div class="row">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">
+                                Title <span class="asterisk">*</span>
+                            </label>
+                            <input class="form-control" type="text" id="title" asp-for="Title"
+                                   placeholder="Enter Title">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3">
+                            <label class="form-label" for="status_id">
+                                Status <span class="asterisk">*</span>
+                            </label>
+                            <div class="input-group">
+                                <select class="form-select" id="status_id" asp-for="StatusId">
+                                    @if (ViewBag.statuses != null && ViewBag.statuses.Count > 0)
+                                    {
+                                        @foreach(var item in ViewBag.statuses)
+                                        {
+                                            <option value="@item.Id" class="badge bg-label-@item.Color?.Title">@item.Title.ToUpper() (@item.Description)</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="mt-2">
+                                <a href="javascript:void(0);" data-bs-toggle="modal"
+                                   data-bs-target="#create_status_modal">
+                                    <button type="button"
+                                            class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="right"
+                                            data-bs-original-title=" Create status">
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </a>
+                                <a asp-action="Index" asp-controller="Status" target="_blank">
+                                    <button type="button"
+                                            class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="right"
+                                            data-bs-original-title="Manage statuses">
+                                        <i class="bx bx-list-ul"></i>
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label" for="start_date">
+                                Starts at <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" asp-for="StartAt" id="start_date" class="form-control">
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label" for="end_date">
+                                Ends at <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" id="end_date" asp-for="EndAt" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3">
+                            <label class="form-label"
+                                   for="user_id">Select users</label>
+                            <div class="input-group">
+                                <select id="" class="form-control js-example-basic-multiple" asp-for="ProjectUserIds"
+                                        multiple="multiple"
+                                        data-placeholder="Type to search">
+                                    @if(ViewBag.users != null && ViewBag.users.Count > 0)
+                                    {
+                                        @foreach(var item in ViewBag.users)
+                                        {
+                                            <option value="@item.Id">
+                                                @item.FirstName @item.LastName
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3 col-md-12">
+                            <label class="form-label"
+                                   for="">Select tags</label>
+                            <div class="input-group">
+                                <select id="" class="form-control js-example-basic-multiple" asp-for="ProjectTagIds"
+                                        multiple="multiple"
+                                        data-placeholder="Type to search">
+                                    @if(ViewBag.tags != null && ViewBag.tags.Count > 0)
+                                    {
+                                        @foreach(var item in ViewBag.tags)
+                                        {
+                                            <option value="@item.Id">
+                                                @item.Title
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="mt-2">
+                                <a href="javascript:void(0);" data-bs-toggle="modal"
+                                   data-bs-target="#create_tag_modal">
+                                    <button type="button"
+                                            class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="right"
+                                            data-bs-original-title=" Create tag">
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </a>
+                                <a asp-action="Index" asp-controller="Tag">
+                                    <button type="button"
+                                            class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="right"
+                                            data-bs-original-title="Manage tags">
+                                        <i class="bx bx-list-ul"></i>
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description                                
+                            <span class="asterisk">*</span></label>
+                            <textarea class="form-control" id="description" asp-for="Description" placeholder="Enter Description" rows="5"></textarea>
+                        </div>
+                    </div>
+
+
+                    <div class="mt-2">
+                        <button type="submit" class="btn btn-primary me-2"
+                                id="submit_btn">
+                            Create
+                        </button>
+                        <button type="reset"
+                                class="btn btn-outline-secondary">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

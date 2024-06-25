@@ -13,9 +13,11 @@ namespace taskify_api.Models
         public string? Description { get; set; }
         public int ColorId {  get; set; }
         [ForeignKey(nameof(ColorId))]
-        public virtual Color color {  get; set; }
+        public virtual Color Color {  get; set; }
         public string UserId {  get; set; }
         [ForeignKey(nameof(UserId))]
         public User Owner {  get; set; }
+        public bool IsDefault { get; set; }
+        public List<ProjectTag> ProjectTags { get; set; } = new List<ProjectTag>();
     }
 }

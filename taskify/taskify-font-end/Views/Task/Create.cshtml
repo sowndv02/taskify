@@ -1,0 +1,214 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="content-wrapper">
+
+    <div class="container-fluid">
+
+        <div class="mt-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1">
+                        <li class="breadcrumb-item">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/tasks">Tasks</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Create
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <form action="https://taskify-saas.taskhub.company/master-panel/tasks/store" class="form-submit-event" method="POST">
+                    <input type="hidden" name="redirect_url" value="https://taskify-saas.taskhub.company/master-panel/tasks">
+                    <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                    <div class="row">
+                        <div class="mb-3 col-md-6">
+                            <label for="title" class="form-label">
+                                Title <span class="asterisk">*</span>
+                            </label>
+                            <input class="form-control" type="text" id="title" name="title"
+                                   placeholder="Enter Title" value="">
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label" for="status">
+                                Status <span class="asterisk">*</span>
+                            </label>
+                            <div class="input-group">
+
+                                <select class="form-select" id="status_id" name="status_id">
+                                    <option value="0" class="badge bg-label-danger"
+                                            selected>
+                                        Default
+                                        (danger)
+                                    </option>
+                                    <option value="72" class="badge bg-label-primary">
+                                        STARTED
+                                        (primary)
+                                    </option>
+                                    <option value="73" class="badge bg-label-info">
+                                        ON GOING
+                                        (info)
+                                    </option>
+                                    <option value="74" class="badge bg-label-warning">
+                                        IN REVIEW
+                                        (warning)
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mt-2">
+                                <a href="javascript:void(0);" data-bs-toggle="modal"
+                                   data-bs-target="#create_status_modal">
+                                    <button type="button"
+                                            class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="right"
+                                            data-bs-original-title=" Create status">
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </a>
+                                <a href="https://taskify-saas.taskhub.company/master-panel/status/manage" target="_blank">
+                                    <button type="button"
+                                            class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="right"
+                                            data-bs-original-title="Manage statuses">
+                                        <i class="bx bx-list-ul"></i>
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label" for="start_date">
+                                Starts at <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" id="start_date" name="start_date" class="form-control" value="">
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label" for="due_date">
+                                Ends at <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" id="end_date" name="due_date" class="form-control" value="">
+                        </div>
+
+
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3">
+                            <label class="form-label" for="user_id">Select project                                <span class="asterisk">*</span></label>
+                            <div class="input-group">
+                                <select id="" class="form-control js-example-basic-multiple" name="project"
+                                        data-placeholder="Type to search">
+                                    <option value=""></option>
+                                    <option value="11">
+                                        Software App
+                                    </option>
+                                    <option value="12">
+                                        Frontend development
+                                    </option>
+                                    <option value="13">
+                                        UI/UX Designing
+                                    </option>
+                                    <option value="14">
+                                        Client Issue in Web
+                                    </option>
+                                    <option value="15">
+                                        eShop Marketing
+                                    </option>
+                                    <option value="16">
+                                        Lot 1837
+                                    </option>
+                                    <option value="17">
+                                        Test
+                                    </option>
+                                    <option value="18">
+                                        Create a YouTube channel
+                                    </option>
+                                    <option value="19">
+                                        Webdesign - Pompom
+                                    </option>
+                                    <option value="20">
+                                        fsssds
+                                    </option>
+                                    <option value="21">
+                                        Background Check
+                                    </option>
+                                    <option value="22">
+                                        Testing
+                                    </option>
+                                    <option value="23">
+                                        HSER
+                                    </option>
+                                    <option value="24">
+                                        projeto1
+                                    </option>
+                                    <option value="25">
+                                        abc
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="row">
+                        <div class="mb-3">
+                            <label class="form-label" for="user_id">Select users                                </label>
+                            <div class="input-group">
+                                <select id="" class="form-control js-example-basic-multiple" name="user_id[]"
+                                        multiple="multiple"
+                                        data-placeholder="Type to search">
+                                    <option value="5">
+                                        Sid gor
+                                    </option>
+                                    <option value="7">
+                                        Team Member 1
+                                    </option>
+                                    <option value="14">
+                                        King Lost
+                                    </option>
+                                    <option value="15">
+                                        jimy karter
+                                    </option>
+                                    <option value="16">
+                                        kenny blinder
+                                    </option>
+                                    <option value="34">
+                                        Akash Dhaman
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description                                <span class="asterisk">*</span></label>
+                            <textarea class="form-control" id="description" rows="5" name="description" placeholder="Enter Description"></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="mt-2">
+                        <button type="submit" class="btn btn-primary me-2"
+                                id="submit_btn">
+                            Create
+                        </button>
+                        <button type="reset"
+                                class="btn btn-outline-secondary">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

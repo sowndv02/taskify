@@ -7,6 +7,7 @@
         public string Title { get; set; }
         public string? Description { get; set; }
         public UserDTO User { get; set; }
+        public bool IsDefault { get; set; }
         public List<TaskDTO> TaskModels { get; set; } = new List<TaskDTO>();
     }
 }

@@ -1,0 +1,639 @@
+﻿
+@{
+}
+
+
+<div class="content-wrapper">
+
+    <div class="container-fluid">
+
+
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1">
+                        <li class="breadcrumb-item">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/projects">Projects</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/projects/information/24">projeto1</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Update
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+
+
+        <div class="card">
+            <div class="card-body">
+                <form action="https://taskify-saas.taskhub.company/master-panel/projects/update/24" class="form-submit-event"
+                      method="POST">
+                    <input type="hidden" name="redirect_url" value="https://taskify-saas.taskhub.company/master-panel/projects">
+                    <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                    <input type="hidden" name="_method" value="PUT">                    <div class="row">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">
+                                Title <span class="asterisk">*</span>
+                            </label>
+                            <input class="form-control" type="text" id="title" name="title"
+                                   placeholder="Enter Title" value="projeto1">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label" for="status_id">
+                                Status <span class="asterisk">*</span>
+                            </label>
+                            <div class="input-group">
+                                <select class="form-select" id="status_id" name="status_id">
+
+
+
+                                    <option value="0" class="badge bg-label-danger">Default (danger)</option>
+
+
+
+
+                                    <option value="72" class="badge bg-label-primary"
+                                            selected>STARTED (primary)</option>
+
+
+
+
+                                    <option value="73" class="badge bg-label-info">ON GOING (info)</option>
+
+
+
+
+                                    <option value="74" class="badge bg-label-warning">IN REVIEW (warning)</option>
+
+                                </select>
+                            </div>
+                            <div class="mt-2">
+                                <a href="javascript:void(0);" data-bs-toggle="modal"
+                                   data-bs-target="#create_status_modal">
+                                    <button type="button"
+                                            class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="right"
+                                            data-bs-original-title=" Create status">
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </a>
+                                <a href="https://taskify-saas.taskhub.company/master-panel/status/manage" target="_blank">
+                                    <button type="button"
+                                            class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="right"
+                                            data-bs-original-title="Manage statuses">
+                                        <i class="bx bx-list-ul"></i>
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label for="budget" class="form-label">Budget</label>
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text">₹</span>
+                                <input class="form-control" type="number" min="0" id="budget" name="budget"
+                                       placeholder="Enter Budget" value="">
+                            </div>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label" for="start_date">
+                                Starts at <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" name="start_date" id="start_date" class="form-control"
+                                   value="09-06-2024">
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label class="form-label" for="end_date">
+                                Ends at <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" id="end_date" name="end_date" class="form-control"
+                                   value="09-06-2024">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3">
+                            <label class="form-label"
+                                   for="user_id">Select users</label>
+                            <div class="input-group">
+                                <select id="" class="form-control js-example-basic-multiple" name="user_id[]"
+                                        multiple="multiple"
+                                        data-placeholder="Type to search">
+                                    <option value="5">
+                                        Sid gor
+                                    </option>
+                                    <option value="7">
+                                        Team Member 1
+                                    </option>
+                                    <option value="14" selected>
+                                        King Lost
+                                    </option>
+                                    <option value="15" selected>
+                                        jimy karter
+                                    </option>
+                                    <option value="16">
+                                        kenny blinder
+                                    </option>
+                                    <option value="34">
+                                        Akash Dhaman
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3">
+                            <label class="form-label"
+                                   for="client_id">Select clients</label>
+                            <div class="input-group">
+                                <select id="" class="form-control js-example-basic-multiple" name="client_id[]"
+                                        multiple="multiple"
+                                        data-placeholder="Type to search">
+                                    <option value="2" selected>
+                                        same
+                                        parker
+                                    </option>
+                                    <option value="3">
+                                        Thomas
+                                        bond
+                                    </option>
+                                    <option value="4">
+                                        shie
+                                        Waine
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3 col-md-12">
+                            <label class="form-label"
+                                   for="">Select tags</label>
+                            <div class="input-group">
+                                <select id="" class="form-control js-example-basic-multiple" name="tag_ids[]"
+                                        multiple="multiple"
+                                        data-placeholder="Type to search">
+                                    <option value="1">
+                                        WEB DEVELOPMENT
+                                    </option>
+                                    <option value="2">
+                                        E- COMMERCE
+                                    </option>
+                                    <option value="3">
+                                        SOCIAL NETWORKING
+                                    </option>
+                                    <option value="4">
+                                        CONTENT MANAGEMENT
+                                    </option>
+                                    <option value="5">
+                                        PROJECT MANAGEMENT
+                                    </option>
+                                    <option value="6">
+                                        LEARNING AND EDUCATION
+                                    </option>
+                                    <option value="7">
+                                        BOOKING AND RESERVATION
+                                    </option>
+                                    <option value="8">
+                                        sdsad
+                                    </option>
+                                    <option value="9">
+                                        webdesign
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="mt-2">
+                                <a href="javascript:void(0);" data-bs-toggle="modal"
+                                   data-bs-target="#create_tag_modal">
+                                    <button type="button"
+                                            class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="right"
+                                            data-bs-original-title=" Create tag">
+                                        <i class="bx bx-plus"></i>
+                                    </button>
+                                </a>
+                                <a href="https://taskify-saas.taskhub.company/master-panel/tags/manage">
+                                    <button type="button"
+                                            class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="right"
+                                            data-bs-original-title="Manage tags">
+                                        <i class="bx bx-list-ul"></i>
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description                                <span class="asterisk">*</span></label>
+                            <textarea class="form-control" id="description" name="description" placeholder="Enter Description" rows="5">HGSD</textarea>
+                        </div>
+                    </div>
+
+
+                    <div class="mt-2">
+                        <button type="submit" class="btn btn-primary me-2"
+                                id="submit_btn">
+                            Update
+                        </button>
+                        <button type="reset"
+                                class="btn btn-outline-secondary">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="create_status_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/status/store" method="POST">
+                <input type="hidden" name="dnr">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Create status                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameBasic" class="form-label">
+                                Title <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" id="nameBasic" class="form-control" name="title"
+                                   placeholder="Please enter title" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameBasic" class="form-label">
+                                Color <span class="asterisk">*</span>
+                            </label>
+                            <select class="form-select" id="color" name="color">
+                                <option class="badge bg-label-primary" value="primary">
+                                    Primary
+                                </option>
+                                <option class="badge bg-label-secondary" value="secondary">
+                                    Secondary
+                                </option>
+                                <option class="badge bg-label-success" value="success">
+                                    Success
+                                </option>
+                                <option class="badge bg-label-danger" value="danger">
+                                    Danger
+                                </option>
+                                <option class="badge bg-label-warning" value="warning">
+                                    Warning
+                                </option>
+                                <option class="badge bg-label-info" value="info">Info                                </option>
+                                <option class="badge bg-label-dark" value="dark">Dark                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close</label>
+                    </button>
+                    <button type="submit" class="btn btn-primary"
+                            id="submit_btn">
+                        Create</label>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="edit_status_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form action="https://taskify-saas.taskhub.company/master-panel/status/update" class="modal-content form-submit-event" method="POST">
+                <input type="hidden" name="id" id="status_id">
+                <input type="hidden" name="dnr">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Update status                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameBasic" class="form-label">
+                                Title <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" id="status_title" class="form-control" name="title"
+                                   placeholder="Please enter title" required />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameBasic" class="form-label">
+                                Color <span class="asterisk">*</span>
+                            </label>
+                            <select class="form-select" id="status_color" name="color" required>
+                                <option class="badge bg-label-primary" value="primary">
+                                    Primary
+                                </option>
+                                <option class="badge bg-label-secondary" value="secondary">
+                                    Secondary
+                                </option>
+                                <option class="badge bg-label-success" value="success">
+                                    Success
+                                </option>
+                                <option class="badge bg-label-danger" value="danger">
+                                    Danger
+                                </option>
+                                <option class="badge bg-label-warning" value="warning">
+                                    Warning
+                                </option>
+                                <option class="badge bg-label-info" value="info">Info                                </option>
+                                <option class="badge bg-label-dark" value="dark">Dark                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close</label>
+                    </button>
+                    <button type="submit" class="btn btn-primary"
+                            id="submit_btn">
+                        Update</label>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="create_tag_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/tags/store" method="POST">
+                <input type="hidden" name="dnr">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Create tag</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="nameBasic" class="form-label">
+                                Title <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" id="nameBasic" class="form-control" name="title"
+                                   placeholder="Please enter title" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameBasic" class="form-label">
+                                Color <span class="asterisk">*</span>
+                            </label>
+                            <select class="form-select" id="color" name="color">
+                                <option class="badge bg-label-primary" value="primary">
+                                    Primary
+                                </option>
+                                <option class="badge bg-label-secondary" value="secondary">
+                                    Secondary
+                                </option>
+                                <option class="badge bg-label-success" value="success">
+                                    Success
+                                </option>
+                                <option class="badge bg-label-danger" value="danger">
+                                    Danger
+                                </option>
+                                <option class="badge bg-label-warning" value="warning">
+                                    Warning
+                                </option>
+                                <option class="badge bg-label-info" value="info">Info                                </option>
+                                <option class="badge bg-label-dark" value="dark">Dark                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close</label>
+                    </button>
+                    <button type="submit" class="btn btn-primary"
+                            id="submit_btn">
+                        Create</label>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="edit_tag_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/tags/update" method="POST">
+                <input type="hidden" name="dnr">
+                <input type="hidden" name="id" id="tag_id">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Update tag</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameBasic" class="form-label">
+                                Title <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" id="tag_title" class="form-control" name="title"
+                                   placeholder="Please enter title" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameBasic" class="form-label">
+                                Color <span class="asterisk">*</span>
+                            </label>
+                            <select class="form-select" id="tag_color" name="color">
+                                <option class="badge bg-label-primary" value="primary">
+                                    Primary
+                                </option>
+                                <option class="badge bg-label-secondary" value="secondary">
+                                    Secondary
+                                </option>
+                                <option class="badge bg-label-success" value="success">
+                                    Success
+                                </option>
+                                <option class="badge bg-label-danger" value="danger">
+                                    Danger
+                                </option>
+                                <option class="badge bg-label-warning" value="warning">
+                                    Warning
+                                </option>
+                                <option class="badge bg-label-info" value="info">Info                                </option>
+                                <option class="badge bg-label-dark" value="dark">Dark                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close</label>
+                    </button>
+                    <button type="submit" class="btn btn-primary"
+                            id="submit_btn">
+                        Update</label>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="default_language_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="exampleModalLabel2">Confirm!</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you want to set as your primary language?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="confirm">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="leaveWorkspaceModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="exampleModalLabel2">Warning</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want leave this workspace?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-danger" id="confirm">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="create_language_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/superadmin/settings/languages/store" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Create language                </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">            <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameBasic" class="form-label">
+                                Title <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" class="form-control" name="name"
+                                   placeholder="For Example: English" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameBasic" class="form-label">
+                                Code <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" class="form-control" name="code" placeholder="For Example: en" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" id="submit_btn"
+                            class="btn btn-primary">
+                        Create
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="create_contract_type_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/contracts/store-contract-type"
+                  method="POST">
+                <input type="hidden" name="dnr">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">
+                        Create contract type
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameBasic" class="form-label">
+                                Type <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" class="form-control" name="type"
+                                   placeholder="Please enter contract type" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" id="submit_btn"
+                            class="btn btn-primary">
+                        Create
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="edit_contract_type_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/contracts/update-contract-type"
+                  method="POST">
+                <input type="hidden" name="dnr">
+                <input type="hidden" id="update_contract_type_id" name="id">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">
+                        Update contract type
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="nameBasic" class="form-label">
+                                Type <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" class="form-control" name="type" id="contract_type"
+                                   placeholder="Please enter contract type" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" id="submit_btn"
+                            class="btn btn-primary">
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+

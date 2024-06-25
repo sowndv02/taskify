@@ -22,9 +22,15 @@ namespace taskify_font_end.Controllers
             _userService = userService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId)) return RedirectToAction("AccessDenied", "Auth");
+
+            List<WorkspaceDTO> list = await GetWorkspaceByUserIdAsync(userId);
+
+            return View(list);
         }
 
         public async Task<IActionResult> CreateAsync()
@@ -34,6 +40,42 @@ namespace taskify_font_end.Controllers
             ViewBag.users = users;
             WorkspaceDTO workspaceDTO = new WorkspaceDTO();
             return View(workspaceDTO);
+        }
+
+        public async Task<IActionResult> RemoveMe(int id)
+        {
+            int newWorkspaceId = await GetNewIdWorkspace();
+            if (id == 0)
+            {
+                return RedirectToAction("Dashboard", "Home", new { id = newWorkspaceId });
+            }
+            var response = await _workspaceService.GetAsync<APIResponse>(id);
+            WorkspaceDTO workspace = new();
+            if(response != null && response.IsSuccess)
+            {
+                workspace = JsonConvert.DeserializeObject<WorkspaceDTO>(Convert.ToString(response.Result));
+            }
+            workspace.IsDeleted = true;
+            var res = await _workspaceService.UpdateAsync<APIResponse>(workspace);
+            if(res != null && res.IsSuccess)
+            {
+                TempData["success"] = "You have successfully left the workspace!";
+                return RedirectToAction("Dashboard", "Home", new { id = newWorkspaceId });
+            }
+            else
+            {
+                TempData["error"] = $"You have failed to leave the workspace! {res.ErrorMessages.FirstOrDefault()}";
+                return RedirectToAction("Dashboard", "Home", new { id });
+            }
+        }
+
+        private async Task<int> GetNewIdWorkspace()
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var list = await GetWorkspaceByUserIdAsync(userId);
+            if (list.Count > 0)
+                return (int)(list.FirstOrDefault()?.Id);
+            else return 0;
         }
 
         [HttpPost]
@@ -55,6 +97,12 @@ namespace taskify_font_end.Controllers
                     var workspace = JsonConvert.DeserializeObject<WorkspaceDTO>(Convert.ToString(result.Result));
                     await AddUserToWorkSpace(obj.WorkspaceUserIds, workspace.Id);
                     TempData["success"] = "Create new workspace successfully";
+                    List<WorkspaceDTO> workspaces = new List<WorkspaceDTO>();
+                    if (!string.IsNullOrEmpty(userId))
+                    {
+                        workspaces = await GetWorkspaceByUserIdAsync(userId);
+                        ViewBag.workspaces = workspaces;
+                    }
                     return RedirectToAction("Index", "Workspace");
                 }
                 else
@@ -123,6 +171,24 @@ namespace taskify_font_end.Controllers
                 TempData["error"] = $"Internal Server Error! {ex.Message}";
                 return false;
             }
+        }
+
+
+        private async Task<List<WorkspaceDTO>> GetWorkspaceByUserIdAsync(string userId)
+        {
+            var response = await _workspaceService.GetByUserIdAsync<APIResponse>(userId);
+            List<WorkspaceDTO> workspaces = new();
+            if (response != null && response.IsSuccess)
+            {
+                workspaces = JsonConvert.DeserializeObject<List<WorkspaceDTO>>(Convert.ToString(response.Result));
+            }
+            if (workspaces.Count > 0)
+            {
+                workspaces = workspaces.OrderByDescending(x => x.CreatedDate)
+                   .ThenByDescending(x => x.UpdatedDate)
+                   .ToList();
+            }
+            return workspaces;
         }
 
     }

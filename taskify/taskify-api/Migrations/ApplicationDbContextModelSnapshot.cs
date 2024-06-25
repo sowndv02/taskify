@@ -253,6 +253,13 @@ namespace taskify_api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -314,6 +321,9 @@ namespace taskify_api.Migrations
 
                     b.Property<int>("ColorId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -378,6 +388,29 @@ namespace taskify_api.Migrations
                     b.HasIndex("WorkspaceId");
 
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("taskify_api.Models.ProjectTag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("ProjectTags");
                 });
 
             modelBuilder.Entity("taskify_api.Models.ProjectUser", b =>
@@ -449,6 +482,9 @@ namespace taskify_api.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -479,6 +515,9 @@ namespace taskify_api.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -913,6 +952,25 @@ namespace taskify_api.Migrations
                     b.Navigation("Workspace");
                 });
 
+            modelBuilder.Entity("taskify_api.Models.ProjectTag", b =>
+                {
+                    b.HasOne("taskify_api.Models.Project", "Project")
+                        .WithMany("ProjectTags")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("taskify_api.Models.Tag", "Tag")
+                        .WithMany("ProjectTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+
+                    b.Navigation("Tag");
+                });
+
             modelBuilder.Entity("taskify_api.Models.ProjectUser", b =>
                 {
                     b.HasOne("taskify_api.Models.Project", "Project")
@@ -1075,6 +1133,8 @@ namespace taskify_api.Migrations
 
             modelBuilder.Entity("taskify_api.Models.Project", b =>
                 {
+                    b.Navigation("ProjectTags");
+
                     b.Navigation("ProjectUsers");
 
                     b.Navigation("TaskModels");
@@ -1083,6 +1143,11 @@ namespace taskify_api.Migrations
             modelBuilder.Entity("taskify_api.Models.Status", b =>
                 {
                     b.Navigation("TaskModels");
+                });
+
+            modelBuilder.Entity("taskify_api.Models.Tag", b =>
+                {
+                    b.Navigation("ProjectTags");
                 });
 
             modelBuilder.Entity("taskify_api.Models.TaskModel", b =>

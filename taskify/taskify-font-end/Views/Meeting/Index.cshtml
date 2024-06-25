@@ -1,0 +1,147 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="content-wrapper">
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1">
+                        <li class="breadcrumb-item">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Meetings
+                        </li>
+
+                    </ol>
+                </nav>
+            </div>
+            <div>
+                <a href="https://taskify-saas.taskhub.company/master-panel/meetings/create">
+                    <button type="button" class="btn btn-sm btn-primary"
+                            data-bs-toggle="tooltip" data-bs-placement="left"
+                            data-bs-original-title="Create meeting">
+                        <i class='bx bx-plus'></i>
+                    </button>
+                </a>
+            </div>
+        </div>
+        <!-- meetings -->
+
+        <div class="card">
+            <div class="table-responsive text-nowrap">
+
+                <div class="row mt-4 mx-2">
+                    <div class="mb-3 col-md-3">
+                        <div class="input-group input-group-merge">
+                            <input type="text" id="meeting_start_date_between" class="form-control"
+                                   placeholder="Start date between" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="mb-3 col-md-3">
+                        <div class="input-group input-group-merge">
+                            <input type="text" id="meeting_end_date_between" class="form-control"
+                                   placeholder="End date between" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="meeting_user_filter" aria-label="Default select example">
+                            <option value="">Select user</option>
+                            <option value="5">
+                                Sid gor
+                            </option>
+                            <option value="7">
+                                Team Member 1
+                            </option>
+                            <option value="14">
+                                King Lost
+                            </option>
+                            <option value="15">
+                                jimy karter
+                            </option>
+                            <option value="16">
+                                kenny blinder
+                            </option>
+                            <option value="34">
+                                Akash Dhaman
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <select class="form-select" id="meeting_client_filter" aria-label="Default select example">
+                            <option value="">Select client</option>
+                            <option value="2">
+                                same parker
+                            </option>
+                            <option value="3">
+                                Thomas bond
+                            </option>
+                            <option value="4">
+                                shie Waine
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="status_filter" aria-label="Default select example">
+                            <option value="">Select status</option>
+                            <option value="ongoing">Ongoing</option>
+                            <option value="yet_to_start">Yet to start</option>
+                            <option value="ended">Ended</option>
+                        </select>
+                    </div>
+                </div>
+
+                <input type="hidden" id="meeting_start_date_from">
+                <input type="hidden" id="meeting_start_date_to">
+
+                <input type="hidden" id="meeting_end_date_from">
+                <input type="hidden" id="meeting_end_date_to">
+
+                <input type="hidden" id="data_type" value="meetings">
+                <input type="hidden" id="data_table" value="meetings_table">
+
+                <div class="card-body">
+                    <table id="meetings_table" data-toggle="table" data-loading-template="loadingTemplate"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/meetings/list" data-icons-prefix="bx" data-icons="icons"
+                           data-route-prefix="/master-panel" data-show-refresh="true"
+                           data-total-field="total" data-trim-on-search="false" data-data-field="rows"
+                           data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true" data-side-pagination="server"
+                           data-show-columns="true" data-pagination="true" data-sort-name="id" data-sort-order="desc"
+                           data-mobile-responsive="true" data-query-params="queryParams">
+
+                        <thead>
+                            <tr>
+                                <th data-checkbox="true"></th>
+                                <th data-sortable="true" data-field="id">ID</th>
+                                <th data-sortable="true" data-field="title">Title</th>
+                                <th data-field="users" data-formatter="userFormatter">Users                            </th>
+                                <th data-field="clients" data-formatter="clientFormatter">
+                                    Clients
+                                </th>
+                                <th data-sortable="true" data-field="start_date_time">
+                                    Starts at
+                                </th>
+                                <th data-sortable="true" data-field="end_date_time">
+                                    Ends at
+                                </th>
+                                <th data-sortable="true" data-field="status">Status</th>
+                                <th data-formatter="actionsFormatter">Actions</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var label_update = 'Update';
+        var label_delete = 'Delete';
+        var label_duplicate = 'Duplicate';
+        var label_not_assigned = 'Not assigned';
+    </script>
+    <script src="https://taskify-saas.taskhub.company/assets/js/pages/meetings.js"></script>

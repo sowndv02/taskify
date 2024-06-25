@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using taskify_api.Models;
 using taskify_api.Models.DTO;
+using taskify_api.Repository;
 using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Controllers
@@ -12,12 +13,12 @@ namespace taskify_api.Controllers
     [ApiVersion("1.0")]
     public class TagController : ControllerBase
     {
-        private readonly IActivityTypeRepository _activityTypeRepository;
+        private readonly ITagRepository _tagTypeRepository;
         protected APIResponse _response;
         private readonly IMapper _mapper;
-        public TagController(IActivityTypeRepository activityTypeRepository, IMapper mapper)
+        public TagController(ITagRepository tagTypeRepository, IMapper mapper)
         {
-            _activityTypeRepository = activityTypeRepository;
+            _tagTypeRepository = tagTypeRepository;
             _mapper = mapper;
             _response = new();
         }
@@ -28,8 +29,8 @@ namespace taskify_api.Controllers
         {
             try
             {
-                List<ActivityType> list = await _activityTypeRepository.GetAllAsync();
-                _response.Result = _mapper.Map<List<ActivityTypeDTO>>(list);
+                List<Tag> list = await _tagTypeRepository.GetAllAsync();
+                _response.Result = _mapper.Map<List<TagDTO>>(list);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
@@ -41,6 +42,26 @@ namespace taskify_api.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, _response);
             }
         }
+
+        [HttpGet("{userId}", Name = "GetTagByUserId")]
+        public async Task<ActionResult<APIResponse>> GetAsyncByUserId(string userId)
+        {
+            try
+            {
+                List<Tag> list = await _tagTypeRepository.GetAllAsync(x => x.UserId.Equals(userId) || x.IsDefault, "Color");
+                _response.Result = _mapper.Map<List<TagDTO>>(list);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
 
         [HttpGet("{id:int}", Name = "GetTagById")]
         public async Task<ActionResult<APIResponse>> GetByIdAsync(int id)
@@ -54,8 +75,8 @@ namespace taskify_api.Controllers
                     _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
                     return BadRequest(_response);
                 }
-                ActivityType model = await _activityTypeRepository.GetAsync(x => x.Id == id);
-                _response.Result = _mapper.Map<ActivityTypeDTO>(model);
+                Tag model = await _tagTypeRepository.GetAsync(x => x.Id == id);
+                _response.Result = _mapper.Map<TagDTO>(model);
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -68,14 +89,14 @@ namespace taskify_api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<APIResponse>> CreateAsync([FromBody] ActivityTypeDTO createDTO)
+        public async Task<ActionResult<APIResponse>> CreateAsync([FromBody] TagDTO createDTO)
         {
             try
             {
 
                 if (createDTO == null) return BadRequest(createDTO);
-                ActivityType model = _mapper.Map<ActivityType>(createDTO);
-                await _activityTypeRepository.CreateAsync(model);
+                Tag model = _mapper.Map<Tag>(createDTO);
+                await _tagTypeRepository.CreateAsync(model);
                 _response.Result = _mapper.Map<TagDTO>(model);
                 _response.StatusCode = HttpStatusCode.Created;
                 return CreatedAtRoute("GetTagById", new { model.Id }, _response);
@@ -92,7 +113,7 @@ namespace taskify_api.Controllers
 
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<APIResponse>> UpdateAsync(int id, [FromBody] ActivityTypeDTO updateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateAsync(int id, [FromBody] TagDTO updateDTO)
         {
             try
             {
@@ -103,8 +124,8 @@ namespace taskify_api.Controllers
                     _response.ErrorMessages = new List<string>() { "Id invalid!" };
                     return BadRequest(_response);
                 }
-                ActivityType model = _mapper.Map<ActivityType>(updateDTO);
-                await _activityTypeRepository.UpdateAsync(model);
+                Tag model = _mapper.Map<Tag>(updateDTO);
+                await _tagTypeRepository.UpdateAsync(model);
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);

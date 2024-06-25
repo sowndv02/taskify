@@ -1,0 +1,122 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="content-wrapper">
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1">
+                        <li class="breadcrumb-item">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/meetings">Meetings</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Create
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <form action="https://taskify-saas.taskhub.company/master-panel/meetings/store" class="form-submit-event" method="POST">
+                    <input type="hidden" name="redirect_url" value="https://taskify-saas.taskhub.company/master-panel/meetings">
+                    <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                    <div class="row">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">
+                                Title <span class="asterisk">*</span>
+                            </label>
+                            <input class="form-control" type="text" id="title" name="title"
+                                   placeholder="Enter Title" value="">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-3 col-md-4">
+                            <label class="form-label" for="">
+                                Starts at <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" id="start_date" name="start_date" class="form-control" value="">
+                        </div>
+                        <div class="mb-3 col-md-2">
+                            <label class="form-label" for="">
+                                Time <span class="asterisk">*</span>
+                            </label>
+                            <input type="time" name="start_time" class="form-control" value="">
+                        </div>
+                        <div class="mb-3 col-md-4">
+                            <label class="form-label" for="end_date_time">
+                                Ends at <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" id="end_date" name="end_date" class="form-control" value="">
+                        </div>
+                        <div class="mb-3 col-md-2">
+                            <label class="form-label" for="">
+                                Time <span class="asterisk">*</span>
+                            </label>
+                            <input type="time" name="end_time" class="form-control" value="">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3">
+                            <label class="form-label" for="user_id">Select users</label>
+                            <div class="input-group">
+                                <select id="" class="form-control js-example-basic-multiple" name="user_ids[]"
+                                        multiple="multiple"
+                                        data-placeholder="Type to search">
+                                    <option value="5"
+                                            selected>Sid gor</option>
+                                    <option value="7">Team Member 1</option>
+                                    <option value="14">King Lost</option>
+                                    <option value="15">jimy karter</option>
+                                    <option value="16">kenny blinder</option>
+                                    <option value="34">Akash Dhaman</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="mb-3">
+                            <label class="form-label"
+                                   for="client_id">Select clients</label>
+                            <div class="input-group">
+
+                                <select id="" class="form-control js-example-basic-multiple" name="client_ids[]"
+                                        multiple="multiple"
+                                        data-placeholder="Type to search">
+                                    <option value="2">same parker</option>
+                                    <option value="3">Thomas bond</option>
+                                    <option value="4">shie Waine</option>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-primary alert-dismissible" role="alert">
+                        You will be meeting participant automatically.                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div class="mt-2">
+                        <button type="submit" id="submit_btn" class="btn btn-primary me-2"
+                                id="showToastPlacement">
+                            Create
+                        </button>
+                        <button type="reset"
+                                class="btn btn-outline-secondary">
+                            Cancel
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>

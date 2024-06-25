@@ -1,0 +1,790 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="content-wrapper">
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1">
+                        <li class="breadcrumb-item">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/projects">Projects</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/projects/information/24">projeto1</a>
+                        </li>
+                        <li class="breadcrumb-item active">View</li>
+                    </ol>
+                </nav>
+            </div>
+            <div>
+                <a href="https://taskify-saas.taskhub.company/master-panel/projects/tasks/create/24">
+                    <button type="button"
+                            class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="left"
+                            data-bs-original-title="Create task">
+                        <i class="bx bx-plus"></i>
+                    </button>
+                </a>
+                <a href="https://taskify-saas.taskhub.company/master-panel/projects/tasks/draggable/24">
+                    <button type="button"
+                            class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="left"
+                            data-bs-original-title="Tasks">
+                        <i class="bx bx-task"></i>
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="demo-inline-spacing">
+                                </div>
+                                <h2 class="fw-bold mt-4 mb-4">
+                                    projeto1 <a href="javascript:void(0);"
+                                                class="mx-2">
+                                        <i class='bx bxs-star favorite-icon text-warning'
+                                           data-route-prefix="/master-panel"
+                                           data-id="24" data-bs-toggle="tooltip"
+                                           data-bs-placement="right"
+                                           data-bs-original-title="Click to mark as favorite"
+                                           data-favorite="1"></i>
+
+                                    </a>
+                                </h2>
+                                <span class='badge bg-label-primary me-1'>
+                                    STARTED
+                                </span>
+                            </div>
+                            <div class="col-md-3 mt-4">
+                                <div class="mb-3 text-center">
+
+
+                                    <label class="form-label" for="start_date">Users</label>
+                                    <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center flex-wrap justify-content-center">
+                                        <li class="avatar avatar-sm pull-up"
+                                            title="super admin">
+                                            <a href="https://taskify-saas.taskhub.company/master-panel/users/profile/2" target="_blank">
+
+                                                <img src="https://taskify-saas.taskhub.company/storage/photos/c30yVZ6N2UrfkzLPoTsCAB9pcuzdEsKh2s3WUDoX.png"
+                                                     class="rounded-circle"
+                                                     alt="super admin">
+                                            </a>
+                                        </li>
+                                        <li class="avatar avatar-sm pull-up"
+                                            title="King Lost">
+                                            <a href="https://taskify-saas.taskhub.company/master-panel/users/profile/14" target="_blank">
+
+                                                <img src="https://taskify-saas.taskhub.company/storage/photos/1wlu7bVcVIzlnu7414XLeF0UmEQcZtiQOV2wzqYj.jpg"
+                                                     class="rounded-circle"
+                                                     alt="King Lost">
+                                            </a>
+                                        </li>
+                                        <li class="avatar avatar-sm pull-up"
+                                            title="jimy karter">
+                                            <a href="https://taskify-saas.taskhub.company/master-panel/users/profile/15" target="_blank">
+
+                                                <img src="https://taskify-saas.taskhub.company/storage/photos/kVCIwPCmoHmIFnkD5iuj3u7ZRWP809yQoRGpppb3.jpg"
+                                                     class="rounded-circle"
+                                                     alt="jimy karter">
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mt-4">
+                                <div class="mb-3 text-center">
+                                    <label class="form-label" for="end_date">Clients</label>
+                                    <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                        <li class="avatar avatar-sm pull-up"
+                                            title="same parker">
+                                            <a href="https://taskify-saas.taskhub.company/master-panel/clients/profile/2"
+                                               target="_blank">
+
+                                                <img src="https://taskify-saas.taskhub.company/storage/photos/87QYP6PE4eSjECMEhC5FCRSBiHePEA9ybZJHuqhg.jpg"
+                                                     class="rounded-circle"
+                                                     alt="same parker">
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-0" />
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
+                                <div class="card h-100">
+                                    <span class="badge bg-label-info m-2">Reload the page to change chart colors!</span>
+                                    <div class="card-header d-flex align-items-center justify-content-between pt-3 pb-1">
+                                        <div class="card-title mb-0">
+                                            <h5 class="m-0 me-2">Task statistics</h5>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <div id="taskStatisticsChart"></div>
+                                        </div>
+                                        <ul class="p-0 m-0">
+                                            <li class="d-flex mb-4 pb-1">
+                                                <div class="avatar flex-shrink-0 me-3">
+                                                    <span class="avatar-initial rounded bg-label-danger">
+                                                        <i class="bx bx-task"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                                    <div class="me-2">
+                                                        <a href="https://taskify-saas.taskhub.company/master-panel/tasks?project=24&amp;status=0">
+                                                            <h6 class="mb-0">Default</h6>
+                                                        </a>
+                                                    </div>
+
+
+                                                    <div class="user-progress">
+                                                        <div class="status-count">
+                                                            <small class="fw-semibold">1</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="d-flex mb-4 pb-1">
+                                                <div class="avatar flex-shrink-0 me-3">
+                                                    <span class="avatar-initial rounded bg-label-primary">
+                                                        <i class="bx bx-task"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                                    <div class="me-2">
+                                                        <a href="https://taskify-saas.taskhub.company/master-panel/tasks?project=24&amp;status=72">
+                                                            <h6 class="mb-0">STARTED</h6>
+                                                        </a>
+                                                    </div>
+
+
+                                                    <div class="user-progress">
+                                                        <div class="status-count">
+                                                            <small class="fw-semibold">0</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="d-flex mb-4 pb-1">
+                                                <div class="avatar flex-shrink-0 me-3">
+                                                    <span class="avatar-initial rounded bg-label-info">
+                                                        <i class="bx bx-task"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                                    <div class="me-2">
+                                                        <a href="https://taskify-saas.taskhub.company/master-panel/tasks?project=24&amp;status=73">
+                                                            <h6 class="mb-0">ON GOING</h6>
+                                                        </a>
+                                                    </div>
+
+
+                                                    <div class="user-progress">
+                                                        <div class="status-count">
+                                                            <small class="fw-semibold">2</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="d-flex mb-4 pb-1">
+                                                <div class="avatar flex-shrink-0 me-3">
+                                                    <span class="avatar-initial rounded bg-label-warning">
+                                                        <i class="bx bx-task"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                                    <div class="me-2">
+                                                        <a href="https://taskify-saas.taskhub.company/master-panel/tasks?project=24&amp;status=74">
+                                                            <h6 class="mb-0">IN REVIEW</h6>
+                                                        </a>
+                                                    </div>
+
+
+                                                    <div class="user-progress">
+                                                        <div class="status-count">
+                                                            <small class="fw-semibold">1</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                        <li class="d-flex mb-4 pb-1">
+                                            <div class="avatar flex-shrink-0 me-3">
+                                                <span class="avatar-initial rounded bg-label-primary">
+                                                    <i class="bx bx-menu"></i>
+                                                </span>
+                                            </div>
+                                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                                <div class="me-2">
+                                                    <h5 class="mb-0">Total</h5>
+                                                </div>
+                                                <div class="user-progress">
+                                                    <div class="status-count">
+                                                        <h5 class="mb-0">4</h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-12 col-6 mb-4">
+                                <!-- "Starts at" card -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-title d-flex align-items-start justify-content-between">
+                                            <div class="avatar flex-shrink-0">
+                                                <i class="menu-icon tf-iconsbx bx bx-calendar-check bx-md text-success"></i>
+                                            </div>
+                                        </div>
+                                        <span class="fw-semibold d-block mb-1">Starts at</span>
+                                        <h3 class="card-title mb-2">09-06-2024</h3>
+                                    </div>
+                                </div>
+                                <div class="card mt-4">
+                                    <div class="card-body">
+                                        <div class="card-title d-flex align-items-start justify-content-between">
+                                            <div class="avatar flex-shrink-0">
+                                                <i class="menu-icon tf-iconsbx bx bx-time bx-md text-primary"></i>
+                                            </div>
+                                        </div>
+                                        <span class="fw-semibold d-block mb-1">Duration</span>
+                                        <h3 class="card-title mb-2">
+                                            1 day
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4 col-md-12 col-6 mb-4">
+                                <!-- "Ends at" card -->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-title d-flex align-items-start justify-content-between">
+                                            <div class="avatar flex-shrink-0">
+                                                <i class="menu-icon tf-icons bx bx-calendar-x bx-md text-danger"></i>
+                                            </div>
+                                        </div>
+                                        <span class="fw-semibold d-block mb-1">Ends at</span>
+                                        <h3 class="card-title mb-2">09-06-2024</h3>
+                                    </div>
+                                </div>
+                                <div class="card mt-4">
+                                    <div class="card-body">
+                                        <div class="card-title d-flex align-items-start justify-content-between">
+                                            <div class="avatar flex-shrink-0">
+                                                <i class="menu-icon tf-icons bx bx-purchase-tag-alt bx-md text-warning"></i>
+                                            </div>
+                                        </div>
+                                        <span class="fw-semibold d-block mb-1">Budget</span>
+                                        <h3 class="card-title mb-2">
+                                            -
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="card-title">
+                                            <h5>Description</h5>
+                                        </div>
+                                        <p>
+                                            <!-- Add your project description here -->
+                                            HGSD
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <input type="hidden" id="media_type_id" value="24">
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="mb-5">Project media</h4>
+                        <div class="alert alert-primary alert-dismissible" role="alert">
+                            Storage type is set as local storage                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                                                                    aria-label="Close"></button>
+                        </div>
+                        <form class="form-horizontal" id="media-upload" action="https://taskify-saas.taskhub.company/master-panel/projects/upload-media"
+                              method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                            <div class="card-body">
+
+                                <div class="dropzone dz-clickable" id="media-upload-dropzone">
+                                </div>
+                                <div class="form-group mt-4 text-center">
+                                    <button class="btn btn-primary"
+                                            id="upload_media_btn">
+                                        Upload
+                                    </button>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <div class="form-group" id="error_box">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4 class="mb-5">Project Media Table</h4>
+                        <div class="table-responsive">
+
+
+                            <input type="hidden" id="data_type" value="project-media">
+
+                            <input type="hidden" id="data_table" value="table">
+                            <table id="table" data-toggle="table" data-loading-template="loadingTemplate" data-url="https://taskify-saas.taskhub.company/master-panel/projects/get-media/24" data-icons-prefix="bx" data-icons="icons" data-show-refresh="true" data-total-field="total" data-trim-on-search="false" data-data-field="rows" data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true" data-side-pagination="server" data-show-columns="true" data-pagination="true" data-sort-name="id" data-sort-order="desc" data-mobile-responsive="true" data-query-params="queryParamsProjectMedia">
+                                <thead>
+                                    <tr>
+                                        <th data-checkbox="true"></th>
+                                        <th data-sortable="true" data-field="id">ID</th>
+                                        <th data-sortable="true" data-field="file">File</th>
+                                        <th data-sortable="true" data-field="file_name">
+                                            File name
+                                        </th>
+                                        <th data-sortable="true" data-field="file_size">
+                                            File size
+                                        </th>
+                                        <th data-sortable="true" data-field="created_at" data-visible="false">
+                                            Created at
+                                        </th>
+                                        <th data-sortable="true" data-field="updated_at" data-visible="false">
+                                            Updated at
+                                        </th>
+                                        <th data-sortable="false" data-field="actions">Actions            </th>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between m-4">
+                            <h4 class="mb-4">Project milestones</h4>
+                            <a href="javascript:void(0);" data-bs-toggle="modal"
+                               data-bs-target="#create_milestone_modal">
+                                <button type="button"
+                                        class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="left"
+                                        data-bs-original-title="Create milestone">
+                                    <i class="bx bx-plus"></i>
+                                </button>
+                            </a>
+                        </div>
+
+                        <div class="row mt-4 mx-2">
+                            <div class="mb-3 col-md-4">
+                                <div class="input-group input-group-merge">
+                                    <input type="text" id="start_date_between" name="start_date_between"
+                                           class="form-control"
+                                           placeholder="Start date between"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="mb-3 col-md-4">
+                                <div class="input-group input-group-merge">
+                                    <input type="text" id="end_date_between" name="end_date_between"
+                                           class="form-control"
+                                           placeholder="End date between"
+                                           autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-select" id="status_filter" aria-label="Default select example">
+                                    <option value="">Select status</option>
+                                    <option value="incomplete">Incomplete</option>
+                                    <option value="complete">Complete</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="start_date_from" id="start_date_from">
+                        <input type="hidden" name="start_date_to" id="start_date_to">
+
+                        <input type="hidden" name="end_date_from" id="end_date_from">
+                        <input type="hidden" name="end_date_to" id="end_date_to">
+
+                        <div class="table-responsive">
+                            <input type="hidden" id="data_type" value="milestone">
+                            <input type="hidden" id="data_table" value="project_milestones_table">
+
+                            <table id="project_milestones_table" data-toggle="table" data-loading-template="loadingTemplate" data-url="https://taskify-saas.taskhub.company/master-panel/projects/get-milestones/24" data-icons-prefix="bx" data-icons="icons" data-show-refresh="true" data-total-field="total" data-trim-on-search="false" data-data-field="rows" data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true" data-side-pagination="server" data-show-columns="true" data-pagination="true" data-sort-name="id" data-sort-order="desc" data-mobile-responsive="true" data-query-params="queryParamsProjectMilestones">
+                                <thead>
+                                    <tr>
+                                        <th data-checkbox="true"></th>
+                                        <th data-sortable="true" data-field="id">ID</th>
+                                        <th data-sortable="true" data-field="title">Title            </th>
+                                        <th data-sortable="true" data-field="start_date">
+                                            Start date
+                                        </th>
+                                        <th data-sortable="true" data-field="end_date">
+                                            End Date
+                                        </th>
+                                        <th data-sortable="true" data-field="cost">Cost</th>
+                                        <th data-sortable="true" data-field="progress">
+                                            Progress
+                                        </th>
+                                        <th data-sortable="true" data-field="status">Status            </th>
+                                        <th data-sortable="true" data-field="description" data-visible="false">
+                                            Description
+                                        </th>
+                                        <th data-sortable="true" data-field="created_by" data-visible="false">
+                                            Created by
+                                        </th>
+                                        <th data-sortable="true" data-field="created_at" data-visible="false">
+                                            Created at
+                                        </th>
+                                        <th data-sortable="true" data-field="updated_at" data-visible="false">
+                                            Updated at
+                                        </th>
+                                        <th data-formatter="actionsFormatterProjectMilestones">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h4 class="mb-5">Project activity log</h4>
+                        <div class="table-responsive text-nowrap">
+
+                            <div class="row mt-4 mx-2">
+                                <div class="mb-3 col-md-3">
+                                    <div class="input-group input-group-merge">
+                                        <input type="text" id="activity_log_between_date" class="form-control"
+                                               placeholder="Date between"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <select class="form-select" id="user_filter"
+                                            aria-label="Default select example">
+                                        <option value="">Select user                                                </option>
+                                        <option value="2">
+                                            super admin
+                                        </option>
+                                        <option value="14">
+                                            King Lost
+                                        </option>
+                                        <option value="15">
+                                            jimy karter
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <select class="form-select" id="client_filter"
+                                            aria-label="Default select example">
+                                        <option value="">Select client                                                </option>
+                                        <option value="2">
+                                            same parker
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <select class="form-select" id="activity_filter"
+                                            aria-label="Default select example">
+                                        <option value="">Select activity                                            </option>
+                                        <option value="created">Created</option>
+                                        <option value="updated">Updated</option>
+                                        <option value="duplicated">Duplicated                                            </option>
+                                        <option value="deleted">Deleted</option>
+                                    </select>
+                                </div>
+
+                            </div>
+
+                            <input type="hidden" id="activity_log_between_date_from">
+                            <input type="hidden" id="activity_log_between_date_to">
+
+                            <input type="hidden" id="data_type" value="activity-log">
+                            <input type="hidden" id="data_table" value="activity_log_table">
+
+
+                            <input type="hidden" id="type_id" value="24">
+
+
+                            <table id="activity_log_table" data-toggle="table"
+                                   data-loading-template="loadingTemplate" data-url="https://taskify-saas.taskhub.company/master-panel/activity-log/list"
+                                   data-icons-prefix="bx" data-icons="icons" data-show-refresh="true"
+                                   data-total-field="total" data-trim-on-search="false" data-data-field="rows"
+                                   data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true"
+                                   data-side-pagination="server" data-show-columns="true" data-pagination="true"
+                                   data-sort-name="id" data-sort-order="desc" data-mobile-responsive="true"
+                                   data-query-params="queryParams">
+                                <thead>
+                                    <tr>
+                                        <th data-checkbox="true"></th>
+                                        <th data-sortable="true" data-field="id">ID</th>
+                                        <th data-sortable="true" data-visible="false" data-field="actor_id">
+                                            Actor ID
+                                        </th>
+                                        <th data-sortable="true" data-field="actor_name">
+                                            Actor name
+                                        </th>
+                                        <th data-sortable="true" data-visible="false" data-field="actor_type">
+                                            Actor type
+                                        </th>
+                                        <th data-sortable="true" data-visible="false" data-field="type_id">
+                                            Type ID
+                                        </th>
+                                        <th data-sortable="true" data-visible="false" data-field="parent_type_id">
+                                            Parent type ID
+                                        </th>
+                                        <th data-sortable="true" data-field="activity">
+                                            Activity
+                                        </th>
+                                        <th data-sortable="true" data-field="type">
+                                            Type
+                                        </th>
+                                        <th data-sortable="true" data-field="parent_type" data-visible="false">
+                                            Parent type
+                                        </th>
+                                        <th data-sortable="true" data-field="type_title">
+                                            Type title
+                                        </th>
+                                        <th data-sortable="true" data-field="parent_type_title" data-visible="false">
+                                            Parent type title
+                                        </th>
+                                        <th data-sortable="true" data-visible="false" data-field="message">
+                                            Message
+                                        </th>
+                                        <th data-sortable="true" data-field="created_at" data-visible="false">
+                                            Created at
+                                        </th>
+                                        <th data-sortable="true" data-field="updated_at" data-visible="false">
+                                            Updated at
+                                        </th>
+                                        <th data-formatter="actionsFormatter">
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="create_milestone_modal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+                    <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/projects/store-milestone"
+                          method="POST">
+                        <input type="hidden" name="project_id" value="24">
+                        <input type="hidden" name="dnr">
+                        <input type="hidden" name="table" value="project_milestones_table">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel1">
+                                Create milestone
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal-body">
+                                <div class="row">
+
+                                    <div class="col-12 mb-3">
+                                        <label for="nameBasic" class="form-label">
+                                            Title <span class="asterisk">*</span>
+                                        </label>
+                                        <input type="text" name="title" class="form-control"
+                                               placeholder="Please enter title">
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <label for="nameBasic"
+                                               class="form-label">Starts at                                            <span class="asterisk">*</span></label>
+                                        <input type="text" id="start_date" name="start_date" class="form-control"
+                                               placeholder="" autocomplete="off">
+                                    </div>
+
+                                    <div class="col-6 mb-3">
+                                        <label for="nameBasic" class="form-label">Ends at                                            <span class="asterisk">*</span></label>
+                                        <input type="text" id="end_date" name="end_date" class="form-control"
+                                               placeholder="" autocomplete="off">
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <label for="nameBasic" class="form-label">Status                                            <span class="asterisk">*</span></label>
+                                        <select class="form-select" name="status">
+                                            <option value="incomplete">Incomplete                                            </option>
+                                            <option value="complete">Complete</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <label for="nameBasic" class="form-label">
+                                            Cost <span class="asterisk">*</span>
+                                        </label>
+                                        <div class="input-group input-group-merge">
+                                            <span class="input-group-text">₹</span>
+                                            <input type="number" name="cost" class="form-control"
+                                                   placeholder="Please enter cost">
+                                        </div>
+                                        <p class="text-danger text-xs mt-1 error-message"></p>
+                                    </div>
+
+                                </div>
+                                <label for="description"
+                                       class="form-label">Description</label>
+                                <textarea class="form-control" name="description"
+                                          placeholder="Please enter description"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" id="submit_btn"
+                                    class="btn btn-primary">
+                                Create
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal fade" id="edit_milestone_modal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-md" role="document">
+                    <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/projects/update-milestone"
+                          method="POST">
+                        <input type="hidden" name="id" id="milestone_id">
+                        <input type="hidden" name="project_id" value="24">
+                        <input type="hidden" name="dnr">
+                        <input type="hidden" name="table" value="project_milestones_table">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel1">
+                                Update milestone
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal-body">
+                                <div class="row">
+
+                                    <div class="col-12 mb-3">
+                                        <label for="nameBasic" class="form-label">
+                                            Title <span class="asterisk">*</span>
+                                        </label>
+                                        <input type="text" name="title" id="milestone_title" class="form-control"
+                                               placeholder="Please enter title">
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <label for="nameBasic"
+                                               class="form-label">Starts at                                            <span class="asterisk">*</span></label>
+                                        <input type="text" id="update_milestone_start_date" name="start_date"
+                                               class="form-control" placeholder="" autocomplete="off">
+                                    </div>
+
+                                    <div class="col-6 mb-3">
+                                        <label for="nameBasic" class="form-label">Ends at                                            <span class="asterisk">*</span></label>
+                                        <input type="text" id="update_milestone_end_date" name="end_date"
+                                               class="form-control" placeholder="" autocomplete="off">
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <label for="nameBasic" class="form-label">Status                                            <span class="asterisk">*</span></label>
+                                        <select class="form-select" id="milestone_status" name="status">
+                                            <option value="incomplete">Incomplete                                            </option>
+                                            <option value="complete">Complete</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6 mb-3">
+                                        <label for="nameBasic" class="form-label">
+                                            Cost <span class="asterisk">*</span>
+                                        </label>
+                                        <div class="input-group input-group-merge">
+                                            <span class="input-group-text">₹</span>
+                                            <input type="number" name="cost" id="milestone_cost"
+                                                   class="form-control"
+                                                   placeholder="Please enter cost">
+                                        </div>
+                                        <p class="text-danger text-xs mt-1 error-message"></p>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label for="nameBasic"
+                                               class="form-label">Progress</label>
+                                        <input type="range" name="progress" id="milestone_progress"
+                                               class="form-range">
+                                        <h6 class="mt-2 milestone-progress"></h6>
+                                        <p class="text-danger text-xs mt-1 error-message"></p>
+                                    </div>
+
+                                </div>
+                                <label for="description"
+                                       class="form-label">Description</label>
+                                <textarea class="form-control" name="description" id="milestone_description"
+                                          placeholder="Please enter description"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" id="submit_btn"
+                                    class="btn btn-primary">
+                                Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        var labels = ['Default', 'STARTED', 'ON GOING', 'IN REVIEW'];
+        var task_data = [1, 0, 2, 1];
+        var bg_colors = ['#ffa426', '#ffcc00', '#3333cc', '#53ff1a'];
+        var total_tasks = [4];
+        //labels
+        var total = 'Total ';
+        var add_favorite = 'Click to mark as favorite ';
+        var remove_favorite = 'Click to remove from favorite ';
+        var label_delete = ' Delete ';
+        var label_download = 'Download ';
+        var label_update = 'Update ';
+    </script>
+
+    <script src="https://taskify-saas.taskhub.company/assets/js/apexcharts.js"></script>
+    <script src="https://taskify-saas.taskhub.company/assets/js/pages/project-information.js"></script>

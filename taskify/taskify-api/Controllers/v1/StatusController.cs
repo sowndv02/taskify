@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using taskify_api.Models;
 using taskify_api.Models.DTO;
+using taskify_api.Repository;
 using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Controllers
@@ -22,6 +23,24 @@ namespace taskify_api.Controllers
             _response = new();
         }
 
+        [HttpGet("{userId}", Name = "GetStatusByUserId")]
+        public async Task<ActionResult<APIResponse>> GetAsyncByUserId(string userId)
+        {
+            try
+            {
+                List<Status> list = await _statusRepository.GetAllAsync(x => x.UserId.Equals(userId) || x.IsDefault, "Color");
+                _response.Result = _mapper.Map<List<StatusDTO>>(list);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
 
         [HttpGet]
         public async Task<ActionResult<APIResponse>> GetAllAsync()

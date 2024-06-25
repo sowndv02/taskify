@@ -8,8 +8,9 @@ namespace taskify_api.Models.DTO
         [Required]
         public string Title { get; set; }
         public string? Description { get; set; }
-        public ColorDTO color { get; set; }
+        public ColorDTO Color { get; set; }
         public UserDTO User { get; set; }
-
+        public bool IsDefault {  get; set; }
+        public List<ProjectTagDTO> ProjectTags { get; set; } = new List<ProjectTagDTO>();
     }
 }

@@ -1,0 +1,446 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+div class="content-wrapper">
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between mt-4">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style1">
+                    <li class="breadcrumb-item">
+                        <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        Notes
+                    </li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <span data-bs-toggle="modal" data-bs-target="#create_note_modal">
+                <a href="javascript:void(0);" class="btn btn-sm btn-primary" data-bs-toggle="tooltip"
+                   data-bs-placement="left" data-bs-original-title="Create note">
+                    <i class='bx bx-plus'></i>
+                </a>
+            </span>
+        </div>
+    </div>
+
+    <div class="card">
+
+        <div class="row  mt-4 sticky-notes">
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-info">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/2"
+                           data-id='2' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='2' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>Working On Database</h4>
+                    <p>
+                        Creating the customer's database
+                        sadbasgdasgdhas
+                        asfajkfha
+                        asdasfnsajkf
+                        asdasjfjksaf
+                        asdaslkfnasf
+                        asf
+                        ssd
+                        s
+                        das
+                        das
+                        da
+                        sd
+                        asd
+                        asd
+                        asdadsasd
+                        aSdasd
+                        asd
+                        asd
+                        as
+                        da
+                        sd
+                        asd
+                        asd
+                        as
+                        dsdhggfgfg
+                        dfh
+                        fh
+
+                        h
+                        dfgdfgdf
+                        gdf
+                        gd
+                        fg
+                        zfg
+                        fdg
+                        df
+                        gzdf
+                        g
+                        dfg
+                        dzfg
+                        zdf
+                        gdfz
+                        g
+                        zdfg
+                        zdfg
+                        dfz
+                        gzdfgzdfgdzfgzdfg
+                    </p>
+                    <b>Created at : </b><span class="text-primary">19-03-2024</span>
+                </div>
+            </div>
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-danger">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/3"
+                           data-id='3' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='3' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>Have to compelte the task by Monday</h4>
+                    <p>Complete the task with all the functinality</p>
+                    <b>Created at : </b><span class="text-primary">19-03-2024</span>
+                </div>
+            </div>
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-info">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/4"
+                           data-id='4' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='4' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>Give the task to the interns</h4>
+                    <p>Handover the tasks to new interns</p>
+                    <b>Created at : </b><span class="text-primary">19-03-2024</span>
+                </div>
+            </div>
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-danger">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/5"
+                           data-id='5' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='5' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>UI Design</h4>
+                    <p>dashboard panel</p>
+                    <b>Created at : </b><span class="text-primary">09-04-2024</span>
+                </div>
+            </div>
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-info">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/6"
+                           data-id='6' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='6' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>Client meeting</h4>
+                    <p>app discussion</p>
+                    <b>Created at : </b><span class="text-primary">09-04-2024</span>
+                </div>
+            </div>
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-info">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/7"
+                           data-id='7' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='7' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>Fun event</h4>
+                    <p>celebration</p>
+                    <b>Created at : </b><span class="text-primary">09-04-2024</span>
+                </div>
+            </div>
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-info">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/8"
+                           data-id='8' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='8' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>Remind everyone</h4>
+                    <p>for today's upload</p>
+                    <b>Created at : </b><span class="text-primary">09-04-2024</span>
+                </div>
+            </div>
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-danger">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/9"
+                           data-id='9' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='9' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>Important work</h4>
+                    <p>In web development</p>
+                    <b>Created at : </b><span class="text-primary">09-04-2024</span>
+                </div>
+            </div>
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-warning">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/10"
+                           data-id='10' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='10' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>Client issue</h4>
+                    <p>web error</p>
+                    <b>Created at : </b><span class="text-primary">09-04-2024</span>
+                </div>
+            </div>
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-danger">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/23"
+                           data-id='23' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='23' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>Probar script</h4>
+                    <p>Esta estupendo</p>
+                    <b>Created at : </b><span class="text-primary">16-05-2024</span>
+                </div>
+            </div>
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-danger">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/32"
+                           data-id='32' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='32' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>gvgv</h4>
+                    <p>gvgv</p>
+                    <b>Created at : </b><span class="text-primary">25-05-2024</span>
+                </div>
+            </div>
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-warning">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/33"
+                           data-id='33' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='33' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>fdhgzfgfgs</h4>
+                    <p>fg</p>
+                    <b>Created at : </b><span class="text-primary">26-05-2024</span>
+                </div>
+            </div>
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-info">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/36"
+                           data-id='36' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='36' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>hello pay</h4>
+                    <p>venda yes</p>
+                    <b>Created at : </b><span class="text-primary">28-05-2024</span>
+                </div>
+            </div>
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-info">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/44"
+                           data-id='44' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='44' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>Test</h4>
+                    <p>test</p>
+                    <b>Created at : </b><span class="text-primary">12-06-2024</span>
+                </div>
+            </div>
+            <div class="col-md-4 sticky-note">
+                <div class="sticky-content sticky-note-bg-warning">
+                    <div class="text-end">
+
+                        <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
+                           data-url="https://taskify-saas.taskhub.company/master-panel/notes/get/56"
+                           data-id='56' data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Update">
+                            <i class="bx bx-edit"></i>
+                        </a>
+
+                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                           data-id='56' data-type='notes' data-reload='true'
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           data-bs-original-title="Delete">
+                            <i class="bx bx-trash"></i>
+                        </a>
+
+                    </div>
+                    <h4>Not a problem</h4>
+                    <p>Could be a problem</p>
+                    <b>Created at : </b><span class="text-primary">19-06-2024</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

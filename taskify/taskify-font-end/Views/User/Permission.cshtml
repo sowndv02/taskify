@@ -1,0 +1,617 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="content-wrapper">
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1">
+                        <li class="breadcrumb-item">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                        </li>
+                        <li class="breadcrumb-item ">
+                            <a href="https://taskify-saas.taskhub.company/master-panel/users">Users</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Permissions
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+            <div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                User Permissions - Akash Dhaman
+            </div>
+            <div class="card-body">
+
+                <div class="alert alert-primary alert-dismissible">
+                    <span class="text-primary">
+                        Default Checked Permissions Are Those Assigned to the User&#039;s Role
+                    </span>
+                </div>
+
+                <div class="table-responsive text-nowrap">
+                    <form id="UserPermissions" method="POST"
+                          action="https://taskify-saas.taskhub.company/master-panel/users/34/permissions">
+                        <input type="hidden" name="_method" value="put">                            <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                            <table class="table my-2">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectAllColumnPermissions"
+                                                   class="form-check-input">
+                                            <label class="form-check-label" for="selectAllColumnPermissions">
+                                                Select all
+                                            </label>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectRowProjects"
+                                                   class="form-check-input row-permission-checkbox"
+                                                   data-module="Projects">
+                                            <label class="form-check-label"
+                                                   for="selectRowProjects">Projects</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex flex-wrap justify-content-between">
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="8"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Projects">
+                                                <label class="form-check-label text-capitalize">create</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="14"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Projects"
+                                                       checked>
+                                                <label class="form-check-label text-capitalize">manage</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="4"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Projects">
+                                                <label class="form-check-label text-capitalize">edit</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="5"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Projects">
+                                                <label class="form-check-label text-capitalize">delete</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectRowTasks"
+                                                   class="form-check-input row-permission-checkbox"
+                                                   data-module="Tasks">
+                                            <label class="form-check-label"
+                                                   for="selectRowTasks">Tasks</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex flex-wrap justify-content-between">
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="9"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Tasks"
+                                                       checked>
+                                                <label class="form-check-label text-capitalize">create</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="15"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Tasks"
+                                                       checked>
+                                                <label class="form-check-label text-capitalize">manage</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="1"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Tasks"
+                                                       checked>
+                                                <label class="form-check-label text-capitalize">edit</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="3"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Tasks"
+                                                       checked>
+                                                <label class="form-check-label text-capitalize">delete</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectRowUsers"
+                                                   class="form-check-input row-permission-checkbox"
+                                                   data-module="Users">
+                                            <label class="form-check-label"
+                                                   for="selectRowUsers">Users</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex flex-wrap justify-content-between">
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="17"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Users">
+                                                <label class="form-check-label text-capitalize">create</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="13"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Users">
+                                                <label class="form-check-label text-capitalize">manage</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="11"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Users">
+                                                <label class="form-check-label text-capitalize">edit</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="12"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Users">
+                                                <label class="form-check-label text-capitalize">delete</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectRowClients"
+                                                   class="form-check-input row-permission-checkbox"
+                                                   data-module="Clients">
+                                            <label class="form-check-label"
+                                                   for="selectRowClients">Clients</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex flex-wrap justify-content-between">
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="10"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Clients">
+                                                <label class="form-check-label text-capitalize">create</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="16"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Clients">
+                                                <label class="form-check-label text-capitalize">manage</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="6"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Clients">
+                                                <label class="form-check-label text-capitalize">edit</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="7"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Clients">
+                                                <label class="form-check-label text-capitalize">delete</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectRowWorkspaces"
+                                                   class="form-check-input row-permission-checkbox"
+                                                   data-module="Workspaces">
+                                            <label class="form-check-label"
+                                                   for="selectRowWorkspaces">Workspaces</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex flex-wrap justify-content-between">
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="22"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Workspaces">
+                                                <label class="form-check-label text-capitalize">create</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="23"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Workspaces">
+                                                <label class="form-check-label text-capitalize">manage</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="24"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Workspaces">
+                                                <label class="form-check-label text-capitalize">edit</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="25"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Workspaces">
+                                                <label class="form-check-label text-capitalize">delete</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectRowMeetings"
+                                                   class="form-check-input row-permission-checkbox"
+                                                   data-module="Meetings">
+                                            <label class="form-check-label"
+                                                   for="selectRowMeetings">Meetings</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex flex-wrap justify-content-between">
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="26"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Meetings">
+                                                <label class="form-check-label text-capitalize">create</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="27"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Meetings">
+                                                <label class="form-check-label text-capitalize">manage</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="28"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Meetings">
+                                                <label class="form-check-label text-capitalize">edit</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="29"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Meetings">
+                                                <label class="form-check-label text-capitalize">delete</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectRowContracts"
+                                                   class="form-check-input row-permission-checkbox"
+                                                   data-module="Contracts">
+                                            <label class="form-check-label"
+                                                   for="selectRowContracts">Contracts</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex flex-wrap justify-content-between">
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="68"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Contracts">
+                                                <label class="form-check-label text-capitalize">create</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="67"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Contracts">
+                                                <label class="form-check-label text-capitalize">manage</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="66"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Contracts">
+                                                <label class="form-check-label text-capitalize">edit</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="65"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Contracts">
+                                                <label class="form-check-label text-capitalize">delete</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectRowTimesheet"
+                                                   class="form-check-input row-permission-checkbox"
+                                                   data-module="Timesheet">
+                                            <label class="form-check-label"
+                                                   for="selectRowTimesheet">Timesheet</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex flex-wrap justify-content-between">
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="69"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Timesheet"
+                                                       checked>
+                                                <label class="form-check-label text-capitalize">create</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="71"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Timesheet"
+                                                       checked>
+                                                <label class="form-check-label text-capitalize">manage</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="70"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Timesheet"
+                                                       checked>
+                                                <label class="form-check-label text-capitalize">delete</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectRowPayslips"
+                                                   class="form-check-input row-permission-checkbox"
+                                                   data-module="Payslips">
+                                            <label class="form-check-label"
+                                                   for="selectRowPayslips">Payslips</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex flex-wrap justify-content-between">
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="79"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Payslips">
+                                                <label class="form-check-label text-capitalize">create</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="82"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Payslips">
+                                                <label class="form-check-label text-capitalize">manage</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="80"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Payslips">
+                                                <label class="form-check-label text-capitalize">edit</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="81"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Payslips">
+                                                <label class="form-check-label text-capitalize">delete</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectRowActivity Log"
+                                                   class="form-check-input row-permission-checkbox"
+                                                   data-module="Activity Log">
+                                            <label class="form-check-label"
+                                                   for="selectRowActivity Log">Activity Log</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex flex-wrap justify-content-between">
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="86"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Activity Log"
+                                                       checked>
+                                                <label class="form-check-label text-capitalize">manage</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="87"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Activity Log"
+                                                       checked>
+                                                <label class="form-check-label text-capitalize">delete</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectRowEstimates/Invoices"
+                                                   class="form-check-input row-permission-checkbox"
+                                                   data-module="Estimates/Invoices">
+                                            <label class="form-check-label"
+                                                   for="selectRowEstimates/Invoices">Estimates/Invoices</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex flex-wrap justify-content-between">
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="91"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Estimates/Invoices">
+                                                <label class="form-check-label text-capitalize">create</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="90"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Estimates/Invoices">
+                                                <label class="form-check-label text-capitalize">manage</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="92"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Estimates/Invoices">
+                                                <label class="form-check-label text-capitalize">edit</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="93"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Estimates/Invoices">
+                                                <label class="form-check-label text-capitalize">delete</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectRowExpenses"
+                                                   class="form-check-input row-permission-checkbox"
+                                                   data-module="Expenses">
+                                            <label class="form-check-label"
+                                                   for="selectRowExpenses">Expenses</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex flex-wrap justify-content-between">
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="99"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Expenses">
+                                                <label class="form-check-label text-capitalize">create</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="98"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Expenses">
+                                                <label class="form-check-label text-capitalize">manage</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="100"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Expenses">
+                                                <label class="form-check-label text-capitalize">edit</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="101"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Expenses">
+                                                <label class="form-check-label text-capitalize">delete</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" id="selectRowMilestones"
+                                                   class="form-check-input row-permission-checkbox"
+                                                   data-module="Milestones">
+                                            <label class="form-check-label"
+                                                   for="selectRowMilestones">Milestones</label>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex flex-wrap justify-content-between">
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="107"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Milestones">
+                                                <label class="form-check-label text-capitalize">create</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="106"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Milestones">
+                                                <label class="form-check-label text-capitalize">manage</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="108"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Milestones">
+                                                <label class="form-check-label text-capitalize">edit</label>
+                                            </div>
+                                            <div class="form-check mx-4">
+                                                <input type="checkbox" name="permissions[]"
+                                                       value="109"
+                                                       class="form-check-input permission-checkbox"
+                                                       data-module="Milestones">
+                                                <label class="form-check-label text-capitalize">delete</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="d-flex justify-content-start">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
