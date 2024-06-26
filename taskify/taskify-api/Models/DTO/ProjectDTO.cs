@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using taskify_api.Validation;
 
 namespace taskify_api.Models.DTO
@@ -20,11 +20,14 @@ namespace taskify_api.Models.DTO
         public DateTime EndAt { get; set; }
         public DateTime? ActualEndAt { get; set; }
         public string OwnerId { get; set; }
+        [JsonIgnore]
         public UserDTO? Owner { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime? UpdatedDate { get; set; }
+        [JsonIgnore]
         public List<ProjectUserDTO>? ProjectUsers { get; set; } = new List<ProjectUserDTO>();
         public List<TaskDTO>? TaskModels { get; set; } = new List<TaskDTO>();
+        [JsonIgnore]
         public List<ProjectTagDTO>? ProjectTags { get; set; } = new List<ProjectTagDTO>();
     }
 }

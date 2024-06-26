@@ -24,7 +24,7 @@ namespace taskify_font_end.Controllers
 
         public async Task<IActionResult> Index()
         {
-            
+
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId)) return RedirectToAction("AccessDenied", "Auth");
 
@@ -51,13 +51,13 @@ namespace taskify_font_end.Controllers
             }
             var response = await _workspaceService.GetAsync<APIResponse>(id);
             WorkspaceDTO workspace = new();
-            if(response != null && response.IsSuccess)
+            if (response != null && response.IsSuccess)
             {
                 workspace = JsonConvert.DeserializeObject<WorkspaceDTO>(Convert.ToString(response.Result));
             }
             workspace.IsDeleted = true;
             var res = await _workspaceService.UpdateAsync<APIResponse>(workspace);
-            if(res != null && res.IsSuccess)
+            if (res != null && res.IsSuccess)
             {
                 TempData["success"] = "You have successfully left the workspace!";
                 return RedirectToAction("Dashboard", "Home", new { id = newWorkspaceId });
@@ -97,12 +97,6 @@ namespace taskify_font_end.Controllers
                     var workspace = JsonConvert.DeserializeObject<WorkspaceDTO>(Convert.ToString(result.Result));
                     await AddUserToWorkSpace(obj.WorkspaceUserIds, workspace.Id);
                     TempData["success"] = "Create new workspace successfully";
-                    List<WorkspaceDTO> workspaces = new List<WorkspaceDTO>();
-                    if (!string.IsNullOrEmpty(userId))
-                    {
-                        workspaces = await GetWorkspaceByUserIdAsync(userId);
-                        ViewBag.workspaces = workspaces;
-                    }
                     return RedirectToAction("Index", "Workspace");
                 }
                 else
@@ -157,7 +151,7 @@ namespace taskify_font_end.Controllers
                 {
                     var workspaceUser = new WorkspaceUserDTO { UserId = user, WorkspaceId = workspaceId };
                     var response = await _workspaceUserService.CreateAsync<APIResponse>(workspaceUser);
-                    if (response == null && !response.IsSuccess)
+                    if (response == null && response.IsSuccess)
                     {
                         TempData["error"] = response.ErrorMessages.FirstOrDefault();
                         return false;

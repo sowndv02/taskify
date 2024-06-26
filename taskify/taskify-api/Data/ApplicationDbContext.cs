@@ -74,17 +74,17 @@ namespace taskify_api.Data
                .OnDelete(DeleteBehavior.NoAction);
 
 
-            modelBuilder.Entity<Color>()
-               .HasOne(n => n.Owner)
-               .WithMany(w => w.Colors)
-               .HasForeignKey(n => n.UserId)
-               .OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<Color>()
+            //   .HasOne(n => n.Owner)
+            //   .WithMany(w => w.Colors)
+            //   .HasForeignKey(n => n.UserId)
+            //   .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<Project>()
-                .HasOne(p => p.Owner)
-                .WithMany(u => u.Projects)
-                .HasForeignKey(p => p.OwnerId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<Project>()
+            //    .HasOne(p => p.Owner)
+            //    .WithMany(u => u.Projects)
+            //    .HasForeignKey(p => p.OwnerId)
+            //    .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Project>()
                 .HasOne(p => p.Workspace)
@@ -92,11 +92,11 @@ namespace taskify_api.Data
                 .HasForeignKey(p => p.WorkspaceId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<ProjectUser>()
-                .HasOne(pu => pu.User)
-                .WithMany(u => u.ProjectUsers)
-                .HasForeignKey(pu => pu.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<ProjectUser>()
+            //    .HasOne(pu => pu.User)
+            //    .WithMany(u => u.ProjectUsers)
+            //    .HasForeignKey(pu => pu.UserId)
+            //    .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<ProjectUser>()
                 .HasOne(pu => pu.Project)
@@ -116,11 +116,11 @@ namespace taskify_api.Data
                 .HasForeignKey(t => t.StatusId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<TaskUser>()
-                .HasOne(tu => tu.User)
-                .WithMany(u => u.TaskUsers)
-                .HasForeignKey(tu => tu.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<TaskUser>()
+            //    .HasOne(tu => tu.User)
+            //    .WithMany(u => u.TaskUsers)
+            //    .HasForeignKey(tu => tu.UserId)
+            //    .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<TaskUser>()
                 .HasOne(tu => tu.Task)
@@ -143,6 +143,86 @@ namespace taskify_api.Data
                     entityType.SetTableName(tableName.Substring(6));
                 }
             }
+            //SeedData(modelBuilder);
         }
+
+        private void SeedData(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = "1",
+                FirstName = "Admin",
+                LastName = "Admin",
+                UserName = "admin@admin.com",
+                NormalizedUserName = "admin@admin.com",
+                Email = "admin@admin.com",
+                NormalizedEmail = "admin@admin.com",
+                EmailConfirmed = false,
+                PasswordHash = "admin@admin.com",
+                SecurityStamp = "admin@admin.com",
+                ConcurrencyStamp = "admin@admin.com",
+                PhoneNumber = "0000000000",
+                PhoneNumberConfirmed = false,
+                TwoFactorEnabled = false,
+                LockoutEnabled = true,
+                AccessFailedCount = 0
+            });
+
+            modelBuilder.Entity<Activity>().HasData(
+                new Activity { Title = "Created", Description = "Created" },
+                new Activity { Title = "Updated", Description = "Updated" },
+                new Activity { Title = "Duplicated", Description = "Duplicated" },
+                new Activity { Title = "Uploaded", Description = "Uploaded" },
+                new Activity { Title = "Deleted", Description = "Deleted" },
+                new Activity { Title = "Updated Status", Description = "Updated Status" },
+                new Activity { Title = "Signed", Description = "Signed" },
+                new Activity { Title = "Unsigned", Description = "Unsigned" }
+            );
+
+            modelBuilder.Entity<ActivityType>().HasData(
+                new ActivityType { Title = "Meeting", Description = "Meeting" },
+                new ActivityType { Title = "Note", Description = "Note" },
+                new ActivityType { Title = "Project", Description = "Project" },
+                new ActivityType { Title = "Status", Description = "Status" },
+                new ActivityType { Title = "Tag", Description = "Tag" },
+                new ActivityType { Title = "Task", Description = "Task" },
+                new ActivityType { Title = "Todo", Description = "Todo" },
+                new ActivityType { Title = "Activity", Description = "Activity" },
+                new ActivityType { Title = "Color", Description = "Color" }
+            );
+
+            modelBuilder.Entity<Color>().HasData(
+                new Color { Title = "warning", ColorCode = "#ade1f5", UserId = "1", IsDefault = true, Description = "Warning" },
+                new Color { Title = "primary", ColorCode = "#e7e7ff", UserId = "1", IsDefault = true, Description = "Primary" },
+                new Color { Title = "secondary", ColorCode = "#ebeef0", UserId = "1", IsDefault = true, Description = "Secondary" },
+                new Color { Title = "success", ColorCode = "#e8fadf", UserId = "1", IsDefault = true, Description = "Success" },
+                new Color { Title = "danger", ColorCode = "#ade1f5", UserId = "1", IsDefault = true, Description = "Danger" },
+                new Color { Title = "info", ColorCode = "#d7f5fc", UserId = "1", IsDefault = true, Description = "Info" },
+                new Color { Title = "dark", ColorCode = "#dcdfe1", UserId = "1", IsDefault = true, Description = "Dark" }
+            );
+
+            modelBuilder.Entity<Status>().HasData(
+                new Status { ColorId = 1, Title = "In Review", Description = "Warning", UserId = "1", IsDefault = true },
+                new Status { ColorId = 6, Title = "On Going", Description = "Info", UserId = "1", IsDefault = true },
+                new Status { ColorId = 2, Title = "Started", Description = "Primary", UserId = "1", IsDefault = true },
+                new Status { ColorId = 5, Title = "Default", Description = "Danger", UserId = "1", IsDefault = true }
+            );
+
+            modelBuilder.Entity<Priority>().HasData(
+                new Priority { Title = "Default", ColorId = 5, IsDefault = true }
+            );
+
+            modelBuilder.Entity<Tag>().HasData(
+                new Tag { Title = "WEBDESIGN", Description = "WEBDESIGN", ColorId = 2, UserId = "1", IsDefault = true },
+                new Tag { Title = "BOOKING AND RESERVATION", Description = "BOOKING AND RESERVATION", ColorId = 7, UserId = "1", IsDefault = true },
+                new Tag { Title = "LEARNING AND EDUCATION", Description = "LEARNING AND EDUCATION", ColorId = 6, UserId = "1", IsDefault = true },
+                new Tag { Title = "PROJECT MANAGEMENT", Description = "PROJECT MANAGEMENT", ColorId = 1, UserId = "1", IsDefault = true },
+                new Tag { Title = "CONTENT MANAGEMENT", Description = "CONTENT MANAGEMENT", ColorId = 5, UserId = "1", IsDefault = true },
+                new Tag { Title = "SOCIAL NETWORKING", Description = "SOCIAL NETWORKING", ColorId = 4, UserId = "1", IsDefault = true },
+                new Tag { Title = "E-COMMERCE", Description = "E-COMMERCE", ColorId = 3, UserId = "1", IsDefault = true },
+                new Tag { Title = "WEB DEVELOPMENT", Description = "WEB DEVELOPMENT", ColorId = 2, UserId = "1", IsDefault = true }
+            );
+        }
+
     }
 }

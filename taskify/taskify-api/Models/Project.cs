@@ -5,6 +5,12 @@ namespace taskify_api.Models
 {
     public class Project
     {
+        public Project()
+        {
+            ProjectTags = new HashSet<ProjectTag>();
+            ProjectUsers = new HashSet<ProjectUser>();
+            TaskModels = new HashSet<TaskModel>();
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -13,7 +19,7 @@ namespace taskify_api.Models
         public Workspace? Workspace { get; set; }
         public int StatusId { get; set; }
         [ForeignKey(nameof(StatusId))]
-        public Status? Status { get; set; }
+        public Status? Status { get; set; } = null!;
         public string Title { get; set; }
         public string? Description { get; set; }
         public string? Notes { get; set; }
@@ -25,9 +31,9 @@ namespace taskify_api.Models
         public User? Owner { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime? UpdatedDate { get; set; }
-        public List<ProjectUser>? ProjectUsers { get; set; } = new List<ProjectUser>();
-        public List<TaskModel>? TaskModels { get; set; } = new List<TaskModel>();
-        public List<ProjectTag>? ProjectTags { get; set; } = new List<ProjectTag>();
+        public ICollection<ProjectUser> ProjectUsers { get; set; }
+        public ICollection<TaskModel> TaskModels { get; set; }
+        public ICollection<ProjectTag> ProjectTags { get; set; }
 
     }
 }

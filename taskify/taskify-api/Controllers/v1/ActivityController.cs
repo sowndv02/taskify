@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using taskify_api.Models;
@@ -8,9 +7,9 @@ using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Controllers.v1
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [ApiVersion("1.0")] 
+    [ApiVersion("1.0")]
     public class ActivityController : ControllerBase
     {
         private readonly IActivityRepository _activityRepository;

@@ -2,14 +2,13 @@
 
 namespace taskify_font_end.Service.IService
 {
-    public interface IProjectService
+    public interface IProjectTagService
     {
         Task<T> GetAllAsync<T>();
         Task<T> GetAsync<T>(int id);
-        Task<T> CreateAsync<T>(ProjectDTO dto);
-        Task<T> UpdateAsync<T>(ProjectDTO dto);
+        Task<T> CreateAsync<T>(ProjectTagDTO dto);
+        Task<T> UpdateAsync<T>(ProjectTagDTO dto);
         Task<T> DeleteAsync<T>(int id);
         Task<T> GetByUserIdAsync<T>(string userId);
-        Task<T> GetByUserIdAndWorkspaceIdAsync<T>(string userId, int workspaceId);
     }
 }

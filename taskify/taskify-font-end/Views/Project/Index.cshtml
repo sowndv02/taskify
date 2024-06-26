@@ -102,9 +102,10 @@
                     </div>
                 </div>
             </div>
-            @foreach (var item in Model)
-            {
+            
                 <div class="mt-4 d-flex row">
+                @foreach (var item in Model)
+                {
                     <div class="col-md-6">
                         <div class="card mb-3">
                             <div class="card-body">
@@ -152,7 +153,7 @@
                                 </div>
                                 <div class="my-4 d-flex justify-content-between">
                                     <span class='badge bg-label-@(item.Status?.Color?.Title) me-1'>
-                                        @item.Status.Title.ToUpper()
+                                        @item.Status?.Title.ToUpper()
                                     </span>
                                 </div>
                                 <div class="my-4 d-flex justify-content-between">
@@ -206,9 +207,7 @@
                             </div>
                         </div>
                     </div>
-
-
-
+                }
                     <div>
                         <nav class="d-flex justify-items-center justify-content-between">
                             <div class="d-flex justify-content-between flex-fill d-sm-none">
@@ -257,7 +256,6 @@
 
                     </div>
                 </div>
-            }
         </div>
     </div>
 }

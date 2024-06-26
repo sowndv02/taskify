@@ -23,7 +23,7 @@ namespace taskify_font_end.Validation
 
             var comparisonValue = (DateTime)property.GetValue(validationContext.ObjectInstance);
 
-            if (currentValue < comparisonValue)
+            if (currentValue <= comparisonValue)
                 return ValidationResult.Success;
 
             return new ValidationResult(ErrorMessage ?? $"{validationContext.DisplayName} must be earlier than {_comparisonProperty}.");

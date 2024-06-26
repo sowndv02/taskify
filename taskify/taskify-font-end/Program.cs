@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using taskify_font_end;
-using taskify_font_end.Middlewares;
 using taskify_font_end.Service;
 using taskify_font_end.Service.IService;
 
@@ -50,6 +49,9 @@ builder.Services.AddHttpClient<IPriorityService, PriorityService>();
 builder.Services.AddScoped<IPriorityService, PriorityService>();
 builder.Services.AddHttpClient<IProjectUserService, ProjectUserService>();
 builder.Services.AddScoped<IProjectUserService, ProjectUserService>();
+builder.Services.AddHttpClient<IProjectTagService, ProjectTagService>();
+builder.Services.AddScoped<IProjectTagService, ProjectTagService>();
+
 
 builder.Services.AddDistributedMemoryCache();
 

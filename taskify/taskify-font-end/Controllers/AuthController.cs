@@ -71,7 +71,7 @@ namespace taskify_font_end.Controllers
                     var principal = new ClaimsPrincipal(identity);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                     _tokenProvider.SetToken(model);
-                    if (ViewBag.SelectedWorkspaceId == 0)
+                    if (ViewBag.SelectedWorkspaceId == null || ViewBag.SelectedWorkspaceId == 0)
                     {
                         List<WorkspaceDTO> workspaces = await GetAllWorkspaceByUserIdAsync(jwt.Claims.FirstOrDefault(u => u.Type == "sub").Value);
                         if (workspaces.Count > 0)
@@ -89,7 +89,7 @@ namespace taskify_font_end.Controllers
                     {
                         return RedirectToAction("Dashboard", "Home", new { id = ViewBag.SelectedWorkspaceId });
                     }
-                    
+
                 }
                 else
                 {
