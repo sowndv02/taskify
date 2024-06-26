@@ -9,15 +9,15 @@ namespace taskify_api.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [Required]
-        public string Title {  get; set; }
+        public string Title { get; set; }
         public string? Description { get; set; }
-        public int ColorId {  get; set; }
+        public int ColorId { get; set; }
         [ForeignKey(nameof(ColorId))]
-        public virtual Color Color {  get; set; }
-        public string UserId {  get; set; }
+        public virtual Color Color { get; set; }
+        public string UserId { get; set; }
         [ForeignKey(nameof(UserId))]
-        public User Owner {  get; set; }
+        public User Owner { get; set; }
         public bool IsDefault { get; set; }
-        public List<ProjectTag> ProjectTags { get; set; } = new List<ProjectTag>();
+        //public List<ProjectTag> ProjectTags { get; set; } = new List<ProjectTag>();
     }
 }

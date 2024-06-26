@@ -30,11 +30,12 @@ namespace taskify_api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<ActivityLog>()
-            .HasOne(al => al.Workspace)
-            .WithMany()
-            .HasForeignKey(al => al.WorkspaceId)
-            .OnDelete(DeleteBehavior.NoAction);
+                .HasOne(al => al.Workspace)
+                .WithMany()
+                .HasForeignKey(al => al.WorkspaceId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<ActivityLog>()
                 .HasOne(al => al.Activity)
@@ -74,17 +75,17 @@ namespace taskify_api.Data
                .OnDelete(DeleteBehavior.NoAction);
 
 
-            //modelBuilder.Entity<Color>()
-            //   .HasOne(n => n.Owner)
-            //   .WithMany(w => w.Colors)
-            //   .HasForeignKey(n => n.UserId)
-            //   .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Color>()
+               .HasOne(n => n.Owner)
+               .WithMany(w => w.Colors)
+               .HasForeignKey(n => n.UserId)
+               .OnDelete(DeleteBehavior.NoAction);
 
-            //modelBuilder.Entity<Project>()
-            //    .HasOne(p => p.Owner)
-            //    .WithMany(u => u.Projects)
-            //    .HasForeignKey(p => p.OwnerId)
-            //    .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Project>()
+                .HasOne(p => p.Owner)
+                .WithMany(u => u.Projects)
+                .HasForeignKey(p => p.OwnerId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Project>()
                 .HasOne(p => p.Workspace)
@@ -92,11 +93,11 @@ namespace taskify_api.Data
                 .HasForeignKey(p => p.WorkspaceId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            //modelBuilder.Entity<ProjectUser>()
-            //    .HasOne(pu => pu.User)
-            //    .WithMany(u => u.ProjectUsers)
-            //    .HasForeignKey(pu => pu.UserId)
-            //    .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<ProjectUser>()
+                .HasOne(pu => pu.User)
+                .WithMany(u => u.ProjectUsers)
+                .HasForeignKey(pu => pu.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<ProjectUser>()
                 .HasOne(pu => pu.Project)
@@ -116,11 +117,11 @@ namespace taskify_api.Data
                 .HasForeignKey(t => t.StatusId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            //modelBuilder.Entity<TaskUser>()
-            //    .HasOne(tu => tu.User)
-            //    .WithMany(u => u.TaskUsers)
-            //    .HasForeignKey(tu => tu.UserId)
-            //    .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<TaskUser>()
+                .HasOne(tu => tu.User)
+                .WithMany(u => u.TaskUsers)
+                .HasForeignKey(tu => tu.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<TaskUser>()
                 .HasOne(tu => tu.Task)
@@ -129,11 +130,11 @@ namespace taskify_api.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
 
-            modelBuilder.Entity<ProjectTag>()
-                .HasOne(pt => pt.Tag)
-                .WithMany(t => t.ProjectTags)
-                .HasForeignKey(pt => pt.TagId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<ProjectTag>()
+            //    .HasOne(pt => pt.Tag)
+            //    .WithMany(t => t.ProjectTags)
+            //    .HasForeignKey(pt => pt.TagId)
+            //    .OnDelete(DeleteBehavior.NoAction);
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {

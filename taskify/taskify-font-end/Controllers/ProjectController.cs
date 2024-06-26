@@ -19,10 +19,11 @@ namespace taskify_font_end.Controllers
         private readonly IProjectUserService _projectUserService;
         private readonly IProjectTagService _projectTagService;
         private readonly IMapper _mapper;
+        private readonly int ITEM_PER_PAGE = 0;
         public ProjectController(IProjectService projectService, IMapper mapper,
             IWorkspaceService workspaceService, IUserService userService,
             IStatusService statusService, ITagService tagService,
-            IProjectUserService projectUserService, IProjectTagService projectTagService) : base(workspaceService)
+            IProjectUserService projectUserService, IProjectTagService projectTagService, IConfiguration configuration) : base(workspaceService)
         {
             _workspaceService = workspaceService;
             _mapper = mapper;
@@ -32,9 +33,11 @@ namespace taskify_font_end.Controllers
             _tagService = tagService;
             _projectUserService = projectUserService;
             _projectTagService = projectTagService;
+            ITEM_PER_PAGE = configuration.GetValue<int>("ItemPerPage");
         }
-        public async Task<IActionResult> IndexAsync(int? page, string? sort, int? status)
+        public async Task<IActionResult> IndexAsync(int? page, string? sort, int? status, int[]? tagIds)
         {
+
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId)) return RedirectToAction("AccessDenied", "Auth");
             if (ViewBag.selectedWorkspaceId == null || ViewBag.selectedWorkspaceId == 0)
@@ -44,6 +47,63 @@ namespace taskify_font_end.Controllers
             }
             List<ProjectDTO> list = await GetProjectByUserIdAndWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
 
+            if (status != null)
+            {
+                list = list.Where(x => x.StatusId == status).ToList();
+                ViewBag.Status = status;
+            }
+            if (sort != null && !string.IsNullOrEmpty(sort))
+            {
+                switch (sort.ToLower())
+                {
+                    case "newest":
+                        list = list.OrderByDescending(x => x.CreatedDate).ToList();
+                        break;
+                    case "oldest":
+                        list = list.OrderBy(x => x.CreatedDate).ToList();
+                        break;
+                    case "recently-updated":
+                        list = list.OrderByDescending(x => x.UpdatedDate).ToList();
+                        break;
+                    case "earliest-updated":
+                        list = list.OrderBy(x => x.UpdatedDate).ToList();
+                        break;
+                    default:
+                        list = list.OrderByDescending(x => x.CreatedDate).ToList();
+                        break;
+                }
+                ViewBag.sort = sort;
+            }
+            if (tagIds != null && tagIds.Length > 0)
+            {
+                list = list.Where(p => p.ProjectTags.Any(pt => tagIds.Contains(pt.TagId))).ToList();
+                ViewBag.tagIds = tagIds;
+            }
+            if (list.Count > 0) ViewBag.total = list.Count;
+            if (page != null && ITEM_PER_PAGE > 0 && list.Count > 0)
+            {
+                int totalPage = ((int)list.Count / 6) + 1;
+                if (page <= 0) page = 1;
+                if (page > totalPage) page = totalPage;
+                ViewBag.page = page;
+                ViewBag.totalPage = totalPage;
+                list = list.Skip((int)(page - 1) * ITEM_PER_PAGE).Take(ITEM_PER_PAGE).ToList();
+            }
+            else if (list.Count > 0 && ITEM_PER_PAGE > 0)
+            {
+                int totalPage = ((int)list.Count / 6) + 1;
+                list = list.Take(ITEM_PER_PAGE).ToList();
+                ViewBag.page = 1;
+                ViewBag.totalPage = totalPage;
+            }
+            else
+            {
+                ViewBag.page = 1;
+                ViewBag.totalPage = 0;
+            }
+            if (ITEM_PER_PAGE > 0) ViewBag.perPage = ITEM_PER_PAGE;
+            ViewBag.tags = await GetTagsByUserIdAsync(userId);
+            ViewBag.statuses = await GetStatusesByUserIdAsync(userId);
             return View(list);
         }
 
@@ -228,6 +288,7 @@ namespace taskify_font_end.Controllers
         {
             var response = await _projectService.GetByUserIdAndWorkspaceIdAsync<APIResponse>(userId, workspaceId);
             List<ProjectDTO> list = new();
+            List<ProjectTagDTO> tags = new();
             if (response != null && response.IsSuccess)
             {
                 list = JsonConvert.DeserializeObject<List<ProjectDTO>>(Convert.ToString(response.Result));
@@ -237,6 +298,17 @@ namespace taskify_font_end.Controllers
                 list = list.OrderByDescending(x => x.CreatedDate)
                    .ThenByDescending(x => x.UpdatedDate)
                    .ToList();
+
+                foreach (var item in list)
+                {
+                    var res = await _projectTagService.GetAsync<APIResponse>(item.Id);
+
+                    if (res != null && res.IsSuccess)
+                    {
+                        tags = JsonConvert.DeserializeObject<List<ProjectTagDTO>>(Convert.ToString(res.Result));
+                        item.ProjectTags = tags;
+                    }
+                }
             }
             return list;
         }

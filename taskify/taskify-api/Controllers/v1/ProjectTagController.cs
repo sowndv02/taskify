@@ -13,13 +13,16 @@ namespace taskify_api.Controllers.v1
     public class ProjectTagController : ControllerBase
     {
         private readonly IProjectTagRepository _projectTagRepository;
+        private readonly IColorRepository _colorRepository;
+
         protected APIResponse _response;
         private readonly IMapper _mapper;
-        public ProjectTagController(IProjectTagRepository projectTagRepository, IMapper mapper)
+        public ProjectTagController(IProjectTagRepository projectTagRepository, IMapper mapper, IColorRepository colorRepository)
         {
             _projectTagRepository = projectTagRepository;
             _mapper = mapper;
             _response = new();
+            _colorRepository = colorRepository;
         }
 
 
@@ -42,7 +45,7 @@ namespace taskify_api.Controllers.v1
             }
         }
 
-        [HttpGet("{id:int}", Name = "GetProjectTagById")]
+        [HttpGet("{id:int}", Name = "GetProjectTagByProjectId")]
         public async Task<ActionResult<APIResponse>> GetByIdAsync(int id)
         {
             try
@@ -54,8 +57,15 @@ namespace taskify_api.Controllers.v1
                     _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
                     return BadRequest(_response);
                 }
-                ProjectTag model = await _projectTagRepository.GetAsync(x => x.Id == id);
-                _response.Result = _mapper.Map<ProjectTagDTO>(model);
+                List<ProjectTag> model = await _projectTagRepository.GetAllAsync(x => x.ProjectId == id, "Tag");
+                foreach (var item in model)
+                {
+                    if (item.Tag != null)
+                    {
+                        item.Tag.Color = await _colorRepository.GetAsync(x => x.Id == item.Tag.ColorId);
+                    }
+                }
+                _response.Result = _mapper.Map<List<ProjectTagDTO>>(model);
                 return Ok(_response);
             }
             catch (Exception ex)

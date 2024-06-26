@@ -19,6 +19,5 @@ namespace taskify_api.Models
         public string Description { get; set; }
         public bool IsDefault { get; set; }
 
-
     }
 }

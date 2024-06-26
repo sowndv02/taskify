@@ -12,7 +12,7 @@ namespace taskify_api.Models.DTO
         public string ColorCode { get; set; }
         public string Description { get; set; }
         public bool IsDefault { get; set; }
-        public UserDTO User { get; set; }
+        public UserDTO? User { get; set; }
 
     }
 }

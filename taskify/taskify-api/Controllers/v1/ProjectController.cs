@@ -13,13 +13,15 @@ namespace taskify_api.Controllers.v1
     public class ProjectController : ControllerBase
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly IColorRepository _colorRepository;
         protected APIResponse _response;
         private readonly IMapper _mapper;
-        public ProjectController(IProjectRepository projectRepository, IMapper mapper)
+        public ProjectController(IProjectRepository projectRepository, IMapper mapper, IColorRepository colorRepository)
         {
             _projectRepository = projectRepository;
             _mapper = mapper;
             _response = new();
+            _colorRepository = colorRepository;
         }
 
 
@@ -173,7 +175,15 @@ namespace taskify_api.Controllers.v1
         {
             try
             {
-                List<Project> list = await _projectRepository.GetAllAsync(x => x.OwnerId.Equals(userId) && x.WorkspaceId == workspaceId, "Status,Workspace,Owner");
+                List<Project> list = await _projectRepository.GetAllAsync(x => x.OwnerId.Equals(userId) && x.WorkspaceId == workspaceId, "Status");
+                foreach (var project in list)
+                {
+                    if (project.Status != null)
+                    {
+                        project.Status.Color = await _colorRepository.GetAsync(x => x.Id == project.Status.ColorId);
+                    }
+                }
+
                 _response.Result = _mapper.Map<List<ProjectDTO>>(list);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);

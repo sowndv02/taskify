@@ -17,7 +17,7 @@ $('#tags_filter').click(function () {
     var selectedTags = $('#selected_tags').val();
 
     // Form the URL with the selected filters
-    var url = "/projects";
+    var url = "/Project/Index";
     var params = [];
 
     if (status) {
@@ -29,7 +29,7 @@ $('#tags_filter').click(function () {
     }
 
     if (selectedTags && selectedTags.length > 0) {
-        params.push("tags[]=" + selectedTags.join("&tags[]="));
+        params.push("tagIds=" + selectedTags.join("&tagIds="));
     }
 
     if (params.length > 0) {
