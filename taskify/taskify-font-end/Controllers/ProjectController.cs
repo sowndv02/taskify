@@ -20,6 +20,7 @@ namespace taskify_font_end.Controllers
         private readonly IProjectTagService _projectTagService;
         private readonly IMapper _mapper;
         private readonly int ITEM_PER_PAGE = 0;
+
         public ProjectController(IProjectService projectService, IMapper mapper,
             IWorkspaceService workspaceService, IUserService userService,
             IStatusService statusService, ITagService tagService,
@@ -103,6 +104,7 @@ namespace taskify_font_end.Controllers
             }
             if (ITEM_PER_PAGE > 0) ViewBag.perPage = ITEM_PER_PAGE;
             ViewBag.tags = await GetTagsByUserIdAsync(userId);
+            //ViewBag.tags = new SelectList(await GetTagsByUserIdAsync(userId), "Id", "Id");
             ViewBag.statuses = await GetStatusesByUserIdAsync(userId);
             return View(list);
         }

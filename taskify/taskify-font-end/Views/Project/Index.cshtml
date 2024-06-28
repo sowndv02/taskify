@@ -4,12 +4,12 @@
 
     string status = ViewBag.Status != null ? $"status={ViewBag.Status}" : null;
     string sort = ViewBag.Sort != null ? $"sort={ViewBag.Sort}" : null;
-    int[] tagIds = ViewBag.TagIds != null ? ViewBag.TagIds : new int[] { };
+    List<int> tagIds = ViewBag.TagIds != null ? ((int[])ViewBag.TagIds).ToList() : new List<int>();
     List<string> queryParameters = new List<string>();
     int startResult = (ViewBag.page - 1) * ViewBag.perPage + 1;
     int endResult = ViewBag.page * ViewBag.perPage;
     if (endResult > ViewBag.total) endResult = ViewBag.total;
-
+    string selected = "selected";
 
     if (!string.IsNullOrEmpty(status))
     {
@@ -78,7 +78,7 @@
                         {
                             @foreach (var item in ViewBag.statuses)
                             {
-                                <option value="@item.Id" class="@(ViewBag.Status != null && item.Id == ViewBag.Status ? "selected" : "")">@item.Title.ToUpper()</option>
+                                <option value="@item.Id" selected="@(ViewBag.Status != null && item.Id == ViewBag.Status)">@item.Title.ToUpper()</option>
                             }
                         }
                     </select>
@@ -86,16 +86,16 @@
                 <div class="col-md-3">
                     <select class="form-select" id="sort" aria-label="Default select example">
                         <option value="">Sort by</option>
-                        <option class="@(ViewBag.sort != null && ViewBag.sort.Equals("newest") ? "selected" :"")" value="newest">
+                        <option selected="@(ViewBag.sort != null && ViewBag.sort.Equals("newest"))" value="newest">
                             Newest
                         </option>
-                        <option class="@(ViewBag.sort != null && ViewBag.sort.Equals("oldest") ? "selected" :"")" value="oldest">
+                        <option selected="@(ViewBag.sort != null && ViewBag.sort.Equals("oldest"))" value="oldest">
                             Oldest
                         </option>
-                        <option class="@(ViewBag.sort != null && ViewBag.sort.Equals("recently-updated") ? "selected" :"")" value="recently-updated">
+                        <option selected="@(ViewBag.sort != null && ViewBag.sort.Equals("recently-updated"))" value="recently-updated">
                             Most recently updated
                         </option>
-                        <option class="@(ViewBag.sort != null && ViewBag.sort.Equals("earliest-updated") ? "selected" :"")" value="earliest-updated">
+                        <option selected="@(ViewBag.sort != null && ViewBag.sort.Equals("earliest-updated"))" value="earliest-updated">
                             Least recently updated
                         </option>
                     </select>
@@ -107,8 +107,8 @@
                         {
                             @foreach (var item in ViewBag.tags)
                             {
-                                bool isSelected = ViewBag.tagIds != null && ViewBag.tagIds.Contains(item.Id);
-                                <option class="@(isSelected ? "selected" :"")" value="@item.Id">
+                                bool isSelected = tagIds != null && tagIds.Contains(item.Id);
+                                <option value="@item.Id" selected="@(isSelected)">
                                     @item.Title.ToUpper()
                                 </option>
                             }
@@ -294,7 +294,10 @@
                                         }
                                         @if(ViewBag.page == ViewBag.totalPage)
                                         {
-                                            <li class="page-item active" aria-current="page"><span class="page-link">@ViewBag.totalPage</span></li>
+                                            if(ViewBag.totalPage != 1)
+                                            {
+                                                <li class="page-item active" aria-current="page"><span class="page-link">@ViewBag.totalPage</span></li>
+                                            }
                                         }else{
                                             <li class="page-item">
                                                 <a class="page-link" href="@nextUrl" rel="next" aria-label="Next &raquo;">&rsaquo;</a>
