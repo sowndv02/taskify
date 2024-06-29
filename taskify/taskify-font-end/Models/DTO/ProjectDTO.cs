@@ -23,7 +23,7 @@ namespace taskify_font_end.Models.DTO
         public UserDTO? Owner { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime? UpdatedDate { get; set; }
-        public List<ProjectUserDTO>? ProjectUsers { get; set; }
+        public List<ProjectUserDTO>? ProjectUsers { get; set; } = new List<ProjectUserDTO>();
         public List<string>? ProjectUserIds { get; set; } = new List<string>();
         public List<int>? ProjectTagIds { get; set; } = new List<int>();
         public List<TaskDTO>? TaskModels { get; set; } = new List<TaskDTO>();

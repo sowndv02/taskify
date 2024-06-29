@@ -15,37 +15,29 @@ $(document).on('click', '.delete', function (e) {
     }
     console.log(reload);
     console.log(type);
+    
     // return;
     var tableID = $(this).data('table') || 'table';
     var destroy = type == 'users' ? 'delete_user' : (type == 'contract-type' ? 'delete-contract-type' : (type == 'project-media' || type == 'task-media' ? 'delete-media' : (type == 'expense-type' ? 'delete-expense-type' : (type == 'milestone' ? 'delete-milestone' : 'destroy'))));
     type = type == 'contract-type' ? 'contracts' : (type == 'project-media' ? 'projects' : (type == 'task-media' ? 'tasks' : (type == 'expense-type' ? 'expenses' : (type == 'milestone' ? 'projects' : type))));
     var urlPrefix = window.location.pathname.split('/')[1];
+    console.log(urlPrefix);
     $('#deleteModal').modal('show'); // show the confirmation modal
     $('#deleteModal').off('click', '#confirmDelete');
     $('#deleteModal').on('click', '#confirmDelete', function (e) {
         $('#confirmDelete').html(label_please_wait).attr('disabled', true);
         $.ajax({
-            url: '/' + urlPrefix + '/' + type + '/' + destroy + '/' + id,
+            url: '/' + urlPrefix + '/Delete' + '/' + id,
             type: 'DELETE',
             headers: {
-                'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
             },
             success: function (response) {
                 console.log(response);
                 $('#confirmDelete').html(label_yes).attr('disabled', false);
                 $('#deleteModal').modal('hide');
                 if (response.error == false) {
-                    if (reload) {
-                        location.reload();
-                    } else {
-                        toastr.success(response.message);
-                        if (tableID) {
-                            $('#' + tableID).bootstrapTable('refresh');
-                        }
-                        else {
-                            location.reload();
-                        }
-                    }
+                    toastr.success(response.message);
+                    location.reload();
                 } else {
                     toastr.error(response.message);
                 }
@@ -87,7 +79,6 @@ $(document).on('click', '.delete-selected', function (e) {
                     'ids': selectedIds,
                 },
                 headers: {
-                    'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
                 },
                 success: function (response) {
                     $('#confirmDeleteSelections').html(label_yes).attr('disabled', false);
@@ -126,7 +117,6 @@ function update_status(e) {
         url: url,
         type: 'PUT',
         headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
         },
         data: {
             id: id,
@@ -151,7 +141,6 @@ $(document).on('click', '.edit-todo', function () {
         url: url,
         type: 'get',
         headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
         },
         dataType: 'json',
         success: function (response) {
@@ -170,14 +159,15 @@ $(document).on('click', '.edit-note', function () {
         url: url,
         type: 'get',
         headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
         },
         dataType: 'json',
         success: function (response) {
-            $('#note_id').val(response.note.id)
-            $('#note_title').val(response.note.title)
-            $('#note_color').val(response.note.color)
-            $('#note_description').val(response.note.description)
+            console.log(response)
+            $('#note_id').val(response.id)
+            $('#note_createdDate').val(response.createdDate)
+            $('#note_title').val(response.title)
+            $('#note_color').val(response.colorId)
+            $('#note_description').val(response.description)
         },
     });
 });
@@ -186,16 +176,17 @@ $(document).on('click', '.edit-status', function () {
     var routePrefix = $("#table").data('routePrefix');
     $('#edit_status_modal').modal('show');
     $.ajax({
-        url: routePrefix + '/status/get/' + id,
+        url: routePrefix + '/get/' + id,
         type: 'get',
         headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
         },
         dataType: 'json',
         success: function (response) {
-            $('#status_id').val(response.status.id)
-            $('#status_title').val(response.status.title)
-            $('#status_color').val(response.status.color)
+            console.log(response)
+            $('#status_id').val(response.id)
+            $('#status_title').val(response.title)
+            $('#status_color').val(response.colorId)
+            $('#status_description').val(response.description)
         },
     });
 });
@@ -204,16 +195,17 @@ $(document).on('click', '.edit-tag', function () {
     var routePrefix = $("#table").data('routePrefix');
     $('#edit_tag_modal').modal('show');
     $.ajax({
-        url: routePrefix + '/tags/get/' + id,
+        url: routePrefix + '/get/' + id,
         type: 'get',
         headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
         },
         dataType: 'json',
         success: function (response) {
-            $('#tag_id').val(response.tag.id)
-            $('#tag_title').val(response.tag.title)
-            $('#tag_color').val(response.tag.color)
+            console.log(response)
+            $('#tag_id').val(response.id)
+            $('#tag_title').val(response.title)
+            $('#tag_color').val(response.colorId)
+            $('#tag_description').val(response.description)
         },
     });
 });
@@ -225,7 +217,6 @@ $(document).on('click', '.edit-leave-request', function () {
         url: routePrefix + '/leave-requests/get/' + id,
         type: 'get',
         headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
         },
         dataType: 'json',
         success: function (response) {
@@ -242,7 +233,6 @@ $(document).on('click', '.edit-contract-type', function () {
         url: '' + routePrefix + '/contracts/get-contract-type/' + id,
         type: 'get',
         headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
         },
         dataType: 'json',
         success: function (response) {
@@ -260,7 +250,6 @@ $(document).on('click', '.edit-contract', function () {
         url: routePrefix + "/contracts/get/" + id,
         type: 'get',
         headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
         },
         dataType: 'json',
         success: function (response) {
@@ -307,7 +296,6 @@ $(document).on('click', '#set-as-default', function (e) {
             url: url,
             type: 'PUT',
             headers: {
-                'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
             },
             data: {
                 lang: lang
@@ -331,7 +319,6 @@ $(document).on('click', '#remove-participant', function (e) {
             url: routePrefix + '/workspaces/remove_participant',
             type: 'GET',
             headers: {
-                'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
             },
             success: function (response) {
                 location.reload();
@@ -560,7 +547,6 @@ $('textarea#footer_text,textarea#contract_description,textarea#update_contract_d
 //        url: $(this).attr('action'),
 //        data: formData,
 //        headers: {
-//            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
 //        },
 //        beforeSend: function () {
 //            submit_btn.html(label_please_wait);
@@ -818,7 +804,6 @@ if (document.getElementById("system-update-dropzone")) {
             timeout: 360000,
             autoDiscover: false,
             headers: {
-                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"), // Pass the CSRF token as a header
             },
             addRemoveLinks: true,
             dictRemoveFile: "x",
@@ -882,7 +867,6 @@ if (document.getElementById("media-upload-dropzone")) {
         timeout: 360000,
         autoDiscover: false,
         headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"), // Pass the CSRF token as a header
         },
         addRemoveLinks: true,
         dictRemoveFile: "x",
@@ -1024,7 +1008,6 @@ $(document).on('click', '.edit-milestone', function () {
         url: '/' + urlPrefix + '/projects/get-milestone/' + id,
         type: 'get',
         headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
         },
         dataType: 'json',
         success: function (response) {
@@ -1060,7 +1043,6 @@ $(document).on('click', '.edit-expense-type', function () {
         url: '/' + urlPrefix + "/expenses/get-expense-type/" + id,
         type: 'get',
         headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
         },
         dataType: 'json',
         success: function (response) {
@@ -1078,7 +1060,6 @@ $(document).on('click', '.edit-expense', function () {
         url: '/' + urlPrefix + '/expenses/get/' + id,
         type: 'get',
         headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
         },
         dataType: 'json',
         success: function (response) {
@@ -1102,7 +1083,6 @@ $(document).on('click', '.edit-payment', function () {
         url: '/' + urlPrefix + '/payments/get/' + id,
         type: 'get',
         headers: {
-            'X-CSRF-TOKEN': $('input[name="_token"]').attr('value') // Replace with your method of getting the CSRF token
         },
         dataType: 'json',
         success: function (response) {
@@ -1240,3 +1220,6 @@ $(document).on('hidden.bs.modal', '.modal', function () {
         clearModalContents($modal);
     }
 });
+
+
+     

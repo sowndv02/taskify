@@ -42,7 +42,7 @@ namespace taskify_api.Controllers.v1
             }
         }
 
-        [HttpGet("{id:int}", Name = "GetProjectUserById")]
+        [HttpGet("{id:int}", Name = "GetProjectUserByProjectId")]
         public async Task<ActionResult<APIResponse>> GetByIdAsync(int id)
         {
             try
@@ -54,8 +54,8 @@ namespace taskify_api.Controllers.v1
                     _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
                     return BadRequest(_response);
                 }
-                ProjectUser model = await _projectUserRepository.GetAsync(x => x.Id == id);
-                _response.Result = _mapper.Map<ProjectUserDTO>(model);
+                List<ProjectUser> model = await _projectUserRepository.GetAllAsync(x => x.ProjectId == id);
+                _response.Result = _mapper.Map<List<ProjectUser>>(model);
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -141,5 +141,30 @@ namespace taskify_api.Controllers.v1
                 return StatusCode((int)HttpStatusCode.InternalServerError, _response);
             }
         }
+
+        [HttpDelete("{projectId}/{userId}", Name = "DeleteProjectUserByProjectAndUser")]
+        public async Task<ActionResult<APIResponse>> DeleteProjectUserAsync(int projectId, string userId)
+        {
+            try
+            {
+                if (projectId == 0 || string.IsNullOrEmpty(userId)) return BadRequest();
+                var obj = await _projectUserRepository.GetAsync(x => x.ProjectId == projectId && x.UserId.Equals(userId));
+
+                if (obj == null) return NotFound();
+
+                await _projectUserRepository.RemoveAsync(obj);
+                _response.StatusCode = HttpStatusCode.NoContent;
+                _response.IsSuccess = true;
+                return Ok(_response);
+
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
     }
 }

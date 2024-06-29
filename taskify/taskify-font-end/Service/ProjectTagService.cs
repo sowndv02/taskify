@@ -37,6 +37,15 @@ namespace taskify_font_end.Service
             });
         }
 
+        public async Task<T> DeleteByProjectAndTagAsync<T>(int projectId, int tagId)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.DELETE,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/projectTag/" + projectId + "/" + tagId
+            });
+        }
+
         public async Task<T> GetAllAsync<T>()
         {
             return await _baseServices.SendAsync<T>(new APIRequest()
@@ -61,6 +70,15 @@ namespace taskify_font_end.Service
             {
                 ApiType = SD.ApiType.GET,
                 Url = API_URL + $"/api/{SD.CurrentAPIVersion}/projectTag/" + userId
+            });
+        }
+
+        public async Task<T> GetByTagIdAsync<T>(int id)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/projectTag/tag/" + id
             });
         }
 

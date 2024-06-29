@@ -22,13 +22,13 @@ INSERT INTO dbo.ActivityTypes (Title, Description) VALUES(N'Todo', N'Todo');
 INSERT INTO dbo.ActivityTypes (Title, Description) VALUES(N'Activity', N'Activity');
 INSERT INTO dbo.ActivityTypes (Title, Description) VALUES(N'Color', N'Color');
 
-INSERT INTO dbo.Colors(Title, ColorCode, UserId, IsDefault, Description) VALUES(N'warning', N'#ade1f5', N'1', 1, N'Warning');
-INSERT INTO dbo.Colors(Title, ColorCode, UserId, IsDefault, Description) VALUES(N'primary', N'#e7e7ff', N'1', 1, N'Primary');
-INSERT INTO dbo.Colors(Title, ColorCode, UserId, IsDefault, Description) VALUES(N'secondary', N'#ebeef0', N'1', 1, N'Secondary');
-INSERT INTO dbo.Colors(Title, ColorCode, UserId, IsDefault, Description) VALUES(N'success', N'#e8fadf', N'1', 1, N'Success');
-INSERT INTO dbo.Colors(Title, ColorCode, UserId, IsDefault, Description) VALUES(N'danger', N'#ade1f5', N'1', 1, N'Danger');
-INSERT INTO dbo.Colors(Title, ColorCode, UserId, IsDefault, Description) VALUES(N'info', N'#d7f5fc', N'1', 1, N'Info');
-INSERT INTO dbo.Colors(Title, ColorCode, UserId, IsDefault, Description) VALUES(N'dark', N'#dcdfe1', N'1', 1, N'Dark');
+INSERT INTO dbo.Colors(Title, ColorCode, UserId, IsDefault, Description) VALUES(N'warning', N'#ffc107', N'1', 1, N'Warning');
+INSERT INTO dbo.Colors(Title, ColorCode, UserId, IsDefault, Description) VALUES(N'primary', N'#0d6efd', N'1', 1, N'Primary');
+INSERT INTO dbo.Colors(Title, ColorCode, UserId, IsDefault, Description) VALUES(N'secondary', N'#6c757d', N'1', 1, N'Secondary');
+INSERT INTO dbo.Colors(Title, ColorCode, UserId, IsDefault, Description) VALUES(N'success', N'#198754', N'1', 1, N'Success');
+INSERT INTO dbo.Colors(Title, ColorCode, UserId, IsDefault, Description) VALUES(N'danger', N'#dc3545', N'1', 1, N'Danger');
+INSERT INTO dbo.Colors(Title, ColorCode, UserId, IsDefault, Description) VALUES(N'info', N'#0dcaf0', N'1', 1, N'Info');
+INSERT INTO dbo.Colors(Title, ColorCode, UserId, IsDefault, Description) VALUES(N'dark', N'#212529', N'1', 1, N'Dark');
 
 
 

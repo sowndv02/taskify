@@ -125,7 +125,7 @@ namespace taskify_font_end.Controllers
                     obj.RegisterationRequest.Role = SD.Client;
                 }
                 APIResponse result = await _authService.RegisterAsync<APIResponse>(obj.RegisterationRequest);
-                if (result != null && result.IsSuccess)
+                if (result != null && result.IsSuccess && result.ErrorMessages.Count == 0)
                 {
                     TempData["success"] = "Register successfully";
                 }

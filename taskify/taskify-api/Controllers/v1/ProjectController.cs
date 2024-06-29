@@ -30,7 +30,7 @@ namespace taskify_api.Controllers.v1
         {
             try
             {
-                List<Project> list = await _projectRepository.GetAllAsync(null, "Status");
+                List<Project> list = await _projectRepository.GetAllAsync(null, "Status, ProjectTags");
                 _response.Result = _mapper.Map<List<ProjectDTO>>(list);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -186,6 +186,31 @@ namespace taskify_api.Controllers.v1
 
                 _response.Result = _mapper.Map<List<ProjectDTO>>(list);
                 _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+        [HttpGet("status/{id:int}", Name = "GetProjectByStatusId")]
+        public async Task<ActionResult<APIResponse>> GetByStatusIdAsync(int id)
+        {
+            try
+            {
+                if (id < 0)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
+                    return BadRequest(_response);
+                }
+                List<Project> model = await _projectRepository.GetAllAsync(x => x.StatusId == id);
+                _response.Result = _mapper.Map<ProjectDTO>(model);
                 return Ok(_response);
             }
             catch (Exception ex)

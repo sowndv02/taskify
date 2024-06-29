@@ -54,8 +54,33 @@ namespace taskify_api.Controllers.v1
                     _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
                     return BadRequest(_response);
                 }
-                Note model = await _noteRepository.GetAsync(x => x.Id == id);
+                Note model = await _noteRepository.GetAsync(x => x.Id == id, true, "Color");
                 _response.Result = _mapper.Map<NoteDTO>(model);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+        [HttpGet("workspace/{id:int}", Name = "GetNoteByWorkspaceId")]
+        public async Task<ActionResult<APIResponse>> GetByWorkspaceIdAsync(int id)
+        {
+            try
+            {
+                if (id < 0)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
+                    return BadRequest(_response);
+                }
+                List<Note> model = await _noteRepository.GetAllAsync(x => x.WorkspaceId == id, "Color");
+                _response.Result = _mapper.Map<List<NoteDTO>>(model);
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -143,7 +168,7 @@ namespace taskify_api.Controllers.v1
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<APIResponse>> DeleteAsync(int id)
         {
             try

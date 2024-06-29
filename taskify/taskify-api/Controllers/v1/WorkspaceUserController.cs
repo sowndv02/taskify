@@ -5,6 +5,7 @@ using System.Net;
 using taskify_api.Models.DTO;
 using taskify_api.Models;
 using taskify_api.Repository.IRepository;
+using taskify_api.Repository;
 
 namespace taskify_api.Controllers.v1
 {
@@ -63,7 +64,7 @@ namespace taskify_api.Controllers.v1
         }
 
 
-        [HttpGet("{id:int}", Name = "GetWorkspaceUserById")]
+        [HttpGet("{id:int}", Name = "GetWorkspaceUserByWorkspaceId")]
         public async Task<ActionResult<APIResponse>> GetByIdAsync(int id)
         {
             try
@@ -75,8 +76,8 @@ namespace taskify_api.Controllers.v1
                     _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
                     return BadRequest(_response);
                 }
-                WorkspaceUser model = await _workspaceUserRepository.GetAsync(x => x.Id == id);
-                _response.Result = _mapper.Map<WorkspaceUserDTO>(model);
+                List<WorkspaceUser> model = await _workspaceUserRepository.GetAllAsync(x => x.WorkspaceId == id);
+                _response.Result = _mapper.Map<List<WorkspaceUserDTO>>(model);
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -147,6 +148,30 @@ namespace taskify_api.Controllers.v1
             {
                 if (id == 0) return BadRequest();
                 var obj = await _workspaceUserRepository.GetAsync(x => x.Id == id);
+
+                if (obj == null) return NotFound();
+
+                await _workspaceUserRepository.RemoveAsync(obj);
+                _response.StatusCode = HttpStatusCode.NoContent;
+                _response.IsSuccess = true;
+                return Ok(_response);
+
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+        [HttpDelete("{workspaceId}/{userId}", Name = "DeleteWorkspaceUserByWorkspaceAndUser")]
+        public async Task<ActionResult<APIResponse>> DeleteProjectUserAsync(int workspaceId, string userId)
+        {
+            try
+            {
+                if (workspaceId == 0 || string.IsNullOrEmpty(userId)) return BadRequest();
+                var obj = await _workspaceUserRepository.GetAsync(x => x.WorkspaceId == workspaceId && x.UserId.Equals(userId));
 
                 if (obj == null) return NotFound();
 

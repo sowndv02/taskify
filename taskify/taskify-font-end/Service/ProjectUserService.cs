@@ -37,6 +37,15 @@ namespace taskify_font_end.Service
             });
         }
 
+        public async Task<T> DeleteByProjectAndUserAsync<T>(int projectId, string userId)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.DELETE,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/projectUser/" + projectId + "/" + userId
+            });
+        }
+
         public async Task<T> GetAllAsync<T>()
         {
             return await _baseServices.SendAsync<T>(new APIRequest()

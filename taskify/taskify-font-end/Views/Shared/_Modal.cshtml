@@ -1,4 +1,373 @@
-﻿<div class="modal fade" id="create_todo_modal" tabindex="-1" aria-hidden="true">
+﻿@using System.Security.Claims;
+@{
+    var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+    var workspaceId = ViewBag.selectedWorkspaceId;
+}
+
+<div class="modal fade" id="create_note_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form class="modal-content form-submit-event" asp-action="Create" asp-controller="Note" method="POST">
+            <input type="hidden" name="noteDTO.UserId" value="@userId" />
+            <input type="hidden" name="noteDTO.WorkspaceId" value="@workspaceId" />
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Create note                    </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" id="nameBasic" class="form-control" name="noteDTO.Title"
+                               placeholder="Enter Title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic"
+                               class="form-label">Description</label>
+                        <textarea class="form-control" name="noteDTO.Description" placeholder="Please enter description"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Color <span class="asterisk">*</span>
+                        </label>
+                        <select class="form-select" name="noteDTO.ColorId">
+                            @if (ViewBag.colors != null && ViewBag.colors.Count > 0)
+                            {
+                                @foreach (var item in ViewBag.colors)
+                                {
+                                    <option class="badge bg-label-@item.Title" value="@item.Id">
+                                        @item.Description
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close</label>
+                </button>
+                <button type="submit" class="btn btn-primary"
+                        id="submit_btn">
+                    Create</label>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="edit_note_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form class="modal-content form-submit-event" asp-action="Update" asp-controller="Note" method="POST">
+            <input type="hidden" name="noteDTO.UserId" value="@userId" />
+            <input type="hidden" name="noteDTO.Id" id="note_id">
+            <input type="hidden" name="noteDTO.CreatedDate" id="note_createdDate">
+            <input type="hidden" name="noteDTO.WorkspaceId" value="@workspaceId" />
+            <input type="hidden" name="id" id="note_id">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Update note                    </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" class="form-control" id="note_title" name="noteDTO.Title"
+                               placeholder="Enter Title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic"
+                               class="form-label">Description</label>
+                        <textarea class="form-control" id="note_description" name="noteDTO.Description" placeholder="Please enter description"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Color <span class="asterisk">*</span>
+                        </label>
+                        <select class="form-select" id="note_color" name="noteDTO.ColorId">
+                            @if (ViewBag.colors != null && ViewBag.colors.Count > 0)
+                            {
+                                @foreach (var item in ViewBag.colors)
+                                {
+                                    <option class="badge bg-label-@item.Title" value="@item.Id">
+                                        @item.Description
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close</label>
+                </button>
+                <button type="submit" class="btn btn-primary"
+                        id="submit_btn">
+                    Update</label>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="create_status_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form class="modal-content form-submit-event" asp-action="Create" asp-controller="Status" method="POST">
+            <input type="hidden" value="@userId" name="statusDTO.UserId" />
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Create status                    </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" id="nameBasic" class="form-control" name="statusDTO.Title"
+                               placeholder="Please enter title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            COLOR <span class="asterisk">*</span>
+                        </label>
+                        <select class="form-select" id="color" name="statusDTO.ColorId">
+                            @if (ViewBag.colors != null && ViewBag.colors.Count > 0)
+                            {
+                                @foreach (var item in ViewBag.colors)
+                                {
+                                    <option class="badge bg-label-@item.Title" value="@item.Id">
+                                        @item.Description
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="description" class="form-label">
+                            Description <span class="asterisk"></span>
+                        </label>
+                        <textarea type="text" id="description" class="form-control" name="statusDTO.Description"
+                                  placeholder="Please enter description"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close</label>
+                </button>
+                <button type="submit" class="btn btn-primary"
+                        id="submit_btn">
+                    Create</label>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="edit_status_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="Update" asp-controller="Status" class="modal-content form-submit-event" method="POST">
+            <input type="hidden" name="statusDTO.Id" id="status_id">
+            <input type="hidden" name="statusDTO.UserId" value="@userId">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Update status                    </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" id="status_title" class="form-control" name="statusDTO.Title"
+                               placeholder="Please enter title" required />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Color <span class="asterisk">*</span>
+                        </label>
+                        <select class="form-select" id="status_color" name="statusDTO.ColorId" required>
+                            @if (ViewBag.colors != null && ViewBag.colors.Count > 0)
+                            {
+                                @foreach (var item in ViewBag.colors)
+                                {
+                                    <option class="badge bg-label-@item.Title" value="@item.Id">
+                                        @item.Description
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Description
+                        </label>
+                        <textarea type="text" id="status_description" class="form-control" name="statusDTO.Description"
+                                  placeholder="Please enter description"></textarea>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close</label>
+                </button>
+                <button type="submit" class="btn btn-primary"
+                        id="submit_btn">
+                    Update</label>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="create_tag_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <form class="modal-content form-submit-event" asp-action="Create" asp-controller="Tag" method="POST">
+            <input type="hidden" value="@userId" name="tagDTO.UserId" />
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Create tag</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" id="nameBasic" class="form-control" name="tagDTO.Title"
+                               placeholder="Please enter title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Color <span class="asterisk">*</span>
+                        </label>
+                        <select class="form-select" id="color" name="tagDTO.ColorId">
+                            @if(ViewBag.colors != null && ViewBag.colors.Count > 0)
+                            {
+                                @foreach(var item in ViewBag.colors)
+                                {
+                                    <option class="badge bg-label-@item.Title" value="@item.Id">
+                                        @item.Description
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="description" class="form-label">
+                            Description <span class="asterisk"></span>
+                        </label>
+                        <textarea type="text" id="description" class="form-control" name="tagDTO.Description"
+                            placeholder="Please enter description" ></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close</label>
+                </button>
+                <button type="submit" class="btn btn-primary"
+                        id="submit_btn">
+                    Create</label>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="edit_tag_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <form class="modal-content form-submit-event" asp-action="Update" asp-controller="Tag" method="POST">
+            <input type="hidden" name="tagDTO.UserId" value="@userId">
+            <input type="hidden" name="tagDTO.Id" id="tag_id">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Update tag</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" id="tag_title" class="form-control" name="tagDTO.Title"
+                               placeholder="Please enter title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Color <span class="asterisk">*</span>
+                        </label>
+                        <select class="form-select" id="tag_color" name="tagDTO.ColorId">
+                            @if (ViewBag.colors != null && ViewBag.colors.Count > 0)
+                            {
+                                @foreach (var item in ViewBag.colors)
+                                {
+                                    <option class="badge bg-label-@item.Title" value="@item.Id">
+                                        @item.Description
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Description
+                        </label>
+                        <textarea type="text" id="tag_description" class="form-control" name="tagDTO.Description"
+                                  placeholder="Please enter description"></textarea>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close</label>
+                </button>
+                <button type="submit" class="btn btn-primary"
+                        id="submit_btn">
+                    Update</label>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="create_todo_modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/todos/store" method="POST">
             <div class="modal-header">
@@ -44,6 +413,59 @@
                 <button type="submit" id="submit_btn"
                         class="btn btn-primary">
                     Create
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="edit_tag_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <form class="modal-content form-submit-event" asp-action="Update" asp-controller="Tag" method="POST">
+            <input type="hidden" name="dnr">
+            <input type="hidden" name="id" id="tag_id">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Update tag</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" id="tag_title" class="form-control" name="title"
+                               placeholder="Please enter title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Color <span class="asterisk">*</span>
+                        </label>
+                        <select class="form-select" id="tag_color" name="color">
+
+                            @if (ViewBag.colors != null && ViewBag.colors.Count > 0)
+                            {
+                                @foreach (var item in ViewBag.colors){
+                                    <option class="badge bg-label-@item.Title" value="@item.Id">
+                                        @item.Description
+                                    </option>
+                                }
+                           
+                            }
+                            
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close</label>
+                </button>
+                <button type="submit" class="btn btn-primary"
+                        id="submit_btn">
+                    Update</label>
                 </button>
             </div>
         </form>

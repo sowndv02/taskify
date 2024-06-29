@@ -25,7 +25,7 @@
     <link href="~/css/theme-default.css" rel="stylesheet" />
     <link href="~/css/demo.css" rel="stylesheet" />
     <link href="~/css/custom.css" rel="stylesheet" />
-
+    <link href="~/css/custom_2.css" rel="stylesheet" />
     <!-- Vendors CSS -->
     <link href="~/css/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" />
     <link href="~/css/vendor/css/page/pages-auth.css" rel="stylesheet" />
@@ -51,7 +51,6 @@
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-
 
 </head>
 
@@ -108,10 +107,35 @@
         var lable_min_0 = 'Value must be greater then 0';
         var lable_max_100 = 'Not greater Then 100';
     </script>
-    <script src="~/js/custom.js"></script> 
+    <script src="~/js/custom.js?v2"></script> 
     @await RenderSectionAsync("Scripts", required: false)
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        var label_please_wait = 'Please wait...';
+        var label_please_select_records_to_delete =
+            'Please select records to delete.';
+        var label_something_went_wrong = 'Something went wrong.';
+        var label_please_correct_errors = 'Please correct errors.';
+        var label_project_removed_from_favorite_successfully =
+            'Project removed from favorite successfully.';
+        var label_project_marked_as_favorite_successfully =
+            'Project marked as favorite successfully.';
+        var label_yes = 'Yes';
+        var label_upload = 'Upload';
+        var decimal_points = 1;
+        var label_update = 'Update';
+        var label_delete = 'Delete';
+        var label_view = 'View';
+        var label_not_assigned = 'Not assigned';
+        var label_delete_selected = 'Delete selected';
+        var label_search = 'Search';
+        var label_create = 'Create';
 
+        var label_min_0 = 'Value must be greater then 0';
+        var label_max_100 = 'Not greater Then 100';
+    </script>
 </body>
 
 </html>

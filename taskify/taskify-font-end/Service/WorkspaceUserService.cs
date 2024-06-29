@@ -46,7 +46,7 @@ namespace taskify_font_end.Service
             });
         }
 
-        public async Task<T> GetAsync<T>(int id)
+        public async Task<T> GetByWorkspaceIdAsync<T>(int id)
         {
             return await _baseServices.SendAsync<T>(new APIRequest()
             {
@@ -62,6 +62,15 @@ namespace taskify_font_end.Service
                 ApiType = SD.ApiType.PUT,
                 Data = dto,
                 Url = API_URL + $"/api/{SD.CurrentAPIVersion}/WorkspaceUser/" + dto.Id
+            });
+        }
+
+        public async Task<T> DeleteByWorkspaceAndUserAsync<T>(int workspaceId, string userId)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.DELETE,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/workspaceUser/" + workspaceId + "/" + userId
             });
         }
     }

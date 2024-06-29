@@ -9,6 +9,7 @@ namespace taskify_font_end.Service.IService
         Task<T> CreateAsync<T>(ProjectUserDTO dto);
         Task<T> UpdateAsync<T>(ProjectUserDTO dto);
         Task<T> DeleteAsync<T>(int id);
+        Task<T> DeleteByProjectAndUserAsync<T>(int projectId, string userId);
         Task<T> GetByUserIdAsync<T>(string userId);
     }
 }

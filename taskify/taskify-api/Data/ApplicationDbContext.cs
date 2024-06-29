@@ -136,6 +136,12 @@ namespace taskify_api.Data
             //    .HasForeignKey(pt => pt.TagId)
             //    .OnDelete(DeleteBehavior.NoAction);
 
+            //modelBuilder.Entity<ProjectTag>()
+            //    .HasOne(pt => pt.Project)
+            //    .WithMany(p => p.ProjectTags)
+            //    .HasForeignKey(pt => pt.ProjectId)
+            //    .OnDelete(DeleteBehavior.NoAction);
+
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 var tableName = entityType.GetTableName();

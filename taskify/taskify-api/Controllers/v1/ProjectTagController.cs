@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using taskify_api.Models;
 using taskify_api.Models.DTO;
+using taskify_api.Repository;
 using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Controllers.v1
@@ -34,6 +35,31 @@ namespace taskify_api.Controllers.v1
                 List<ProjectTag> list = await _projectTagRepository.GetAllAsync();
                 _response.Result = _mapper.Map<List<ProjectTagDTO>>(list);
                 _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+        [HttpGet("tag/{id:int}", Name = "GetProjectTagByTagId")]
+        public async Task<ActionResult<APIResponse>> GetByTagIdAsync(int id)
+        {
+            try
+            {
+                if (id < 0)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
+                    return BadRequest(_response);
+                }
+                List<ProjectTag> model = await _projectTagRepository.GetAllAsync(x => x.TagId == id);
+                _response.Result = _mapper.Map<List<ProjectTagDTO>>(model);
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -151,5 +177,31 @@ namespace taskify_api.Controllers.v1
                 return StatusCode((int)HttpStatusCode.InternalServerError, _response);
             }
         }
+
+
+        [HttpDelete("{projectId}/{tagId}", Name = "DeleteProjecTagByProjectAndTag")]
+        public async Task<ActionResult<APIResponse>> DeleteProjectTagAsync(int projectId, int tagId)
+        {
+            try
+            {
+                if (projectId == 0 || tagId == 0) return BadRequest();
+                var obj = await _projectTagRepository.GetAsync(x => x.ProjectId == projectId && x.TagId == tagId);
+
+                if (obj == null) return NotFound();
+
+                await _projectTagRepository.RemoveAsync(obj);
+                _response.StatusCode = HttpStatusCode.NoContent;
+                _response.IsSuccess = true;
+                return Ok(_response);
+
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
     }
 }

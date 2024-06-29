@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Linq;
 using System.Security.Claims;
 using taskify_font_end.Models;
 using taskify_font_end.Models.DTO;
+using taskify_font_end.Service;
 using taskify_font_end.Service.IService;
 
 namespace taskify_font_end.Controllers
@@ -13,11 +15,13 @@ namespace taskify_font_end.Controllers
     public class HomeController : BaseController
     {
         private readonly IWorkspaceService _workspaceService;
+        private readonly IProjectService _projectService;
         private readonly IMapper _mapper;
-        public HomeController(IWorkspaceService workspaceService, IMapper mapper) : base(workspaceService)
+        public HomeController(IWorkspaceService workspaceService, IMapper mapper, IProjectService projectService) : base(workspaceService)
         {
             _workspaceService = workspaceService;
             _mapper = mapper;
+            _projectService = projectService;
         }
 
         public IActionResult LandingPage()
@@ -26,7 +30,7 @@ namespace taskify_font_end.Controllers
         }
 
 
-        public async Task<IActionResult> DashboardAsync(int id)
+        public async Task<IActionResult> DashboardAsync(int? id)
         {
             if(ViewBag.SelectedWorkspaceId == 0 && id != 0)
                 HttpContext.Response.Cookies.Append("SelectedWorkspaceId", id.ToString());
@@ -40,15 +44,22 @@ namespace taskify_font_end.Controllers
             {
                 workspaces = await GetWorkspaceByUserIdAsync(userId);
                 ViewBag.workspaces = workspaces;
-                if (id == 0)
+                if (id == null || id == 0)
                 {
                     if (workspaces.Count > 0)
                     {
+                        var projects = await GetProjectByUserIdAndWorkspaceIdAsync(userId, workspaces.First().Id);
+                        ViewBag.totalProjects = projects.Count;
                         return View(workspaces.First());
                     }
                     return View(null);
                 }
                 var workspace = workspaces.FirstOrDefault(x => x.Id == id);
+                if(workspace != null)
+                {
+                    var projects = await GetProjectByUserIdAndWorkspaceIdAsync(userId, workspace.Id);
+                    ViewBag.totalProjects = projects.Count;
+                }
                 return View(workspace);
             }
             return View(null);
@@ -84,16 +95,16 @@ namespace taskify_font_end.Controllers
 
 
 
-        //private async Task<List<ProjectDTO> GetProjectByUserIdAsync(string userId)
-        //{
-        //    var response = await _projectService.GetByUserIdAsync<APIResponse>(userId);
-        //    List<ProjectDTO> projects = new();
-        //    if (response != null && response.IsSuccess)
-        //    {
-        //        projects = JsonConvert.DeserializeObject<List<ProjectDTO>>(Convert.ToString(response.Result));
-        //    }
-        //    return projects;
-        //}
+        private async Task<List<ProjectDTO>> GetProjectByUserIdAndWorkspaceIdAsync(string userId, int workspaceId)
+        {
+            var response = await _projectService.GetByUserIdAndWorkspaceIdAsync<APIResponse>(userId, workspaceId);
+            List<ProjectDTO> list = new();
+            if (response != null && response.IsSuccess)
+            {
+                list = JsonConvert.DeserializeObject<List<ProjectDTO>>(Convert.ToString(response.Result));
+            }
+            return list;
+        }
 
     }
 }

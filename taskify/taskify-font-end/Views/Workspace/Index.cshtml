@@ -1,6 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
 @{
 }
 @model List<taskify_font_end.Models.DTO.WorkspaceDTO>
@@ -32,151 +30,119 @@
             </div>
         </div>
         <!-- workspaces -->
-        @if (Model.Count > 0)
+        
+        @if (Model != null && Model.Count > 0)
         {
-            <div class="card">
-                <div class="table-responsive text-nowrap">
-                    <div class="row mt-4 mx-2">
-                        <div class="col-md-3">
-                            <select class="form-select" id="workspace_user_filter" aria-label="Default select example">
-                                <option value="">Select user</option>
+            
+                <div class="card">
+                    <div class="table-responsive text-nowrap">
+                        <div class="row mt-4 mx-2">
+                            <div class="col-md-3">
+                                <select class="form-select" id="workspace_user_filter" aria-label="Default select example">
+                                    <option value="">Select user</option>
+                                @if(ViewBag.users != null && ViewBag.users.Count > 0)
+                                {
+                                    foreach(var item in ViewBag.users)
+                                    {
+                                        <option value="@item.Id">@item.FirstName @item.LastName</option>
+                                    }
+                                }
                                 <option value="2">
-                                    super admin
-                                </option>
-                                <option value="5">
-                                    Sid gor
-                                </option>
-                                <option value="7">
-                                    Team Member 1
-                                </option>
-                                <option value="14">
-                                    King Lost
-                                </option>
-                                <option value="15">
-                                    jimy karter
-                                </option>
-                                <option value="16">
-                                    kenny blinder
-                                </option>
-                                <option value="17">
-                                    teets teets
-                                </option>
-                                <option value="18">
-                                    awd das
-                                </option>
-                                <option value="19">
-                                    yhzf fmfm
-                                </option>
-                                <option value="20">
-                                    asdasd asdas
-                                </option>
-                                <option value="21">
-                                    werwe werwer
-                                </option>
-                                <option value="22">
-                                    Shady Khan
-                                </option>
-                                <option value="23">
-                                    Mohibbur Rahman
-                                </option>
-                                <option value="24">
-                                    muhammed faahir
-                                </option>
-                                <option value="25">
-                                    Abc xyz
-                                </option>
-                                <option value="26">
-                                    Waqas Maqbool
-                                </option>
-                                <option value="27">
-                                    c c
-                                </option>
-                                <option value="28">
-                                    Tanush Gupta
-                                </option>
-                                <option value="29">
-                                    Роман Мельник
-                                </option>
-                                <option value="30">
-                                    એનિસ મેકકેથે
-                                </option>
-                                <option value="31">
-                                    kumar raj
-                                </option>
-                                <option value="32">
-                                    test test
-                                </option>
-                                <option value="33">
-                                    Shady Khan
-                                </option>
-                                <option value="34">
-                                    Akash Dhaman
-                                </option>
-                                <option value="35">
-                                    dharmesh ladani
-                                </option>
-                                <option value="36">
-                                    Anand Behera
-                                </option>
-                                <option value="37">
-                                    Demo New
-                                </option>
-                                <option value="38">
-                                    jknjk jbjkhjk
-                                </option>
-                                <option value="39">
-                                    gurjap singh
-                                </option>
-                                <option value="40">
-                                    Clvois Oliveira
-                                </option>
-                                <option value="41">
-                                    CAIO CAIO
-                                </option>
-                            </select>
+                                        super admin
+                                    </option>
+                                    
+                                </select>
+                            </div>
                         </div>
 
-                        <div class="col-md-3">
-                            <select class="form-select" id="workspace_client_filter" aria-label="Default select example">
-                                <option value="">Select client</option>
-                                <option value="2">
-                                    same parker
-                                </option>
-                                <option value="3">
-                                    Thomas bond
-                                </option>
-                                <option value="4">
-                                    shie Waine
-                                </option>
-                            </select>
-                        </div>
-                    </div>
+                        <input type="hidden" id="data_type" value="workspaces">
+                       
+                            <div class="card-body">
+                                @* <table id="table" data-toggle="table" data-loading-template="loadingTemplate"
+                                       data-url="https://taskify-saas.taskhub.company/master-panel/workspaces/list" data-icons-prefix="bx" data-icons="icons"
+                                       data-show-refresh="true" data-total-field="total" data-trim-on-search="false" data-data-field="rows"
+                                       data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true" data-side-pagination="server"
+                                       data-show-columns="true" data-pagination="true" data-sort-name="id" data-sort-order="desc"
+                                       data-mobile-responsive="true" data-query-params="queryParams">
+                                    <thead>
+                                        <tr>
+                                            <th data-checkbox="true"></th>
+                                            <th data-sortable="true" data-field="id">ID</th>
+                                            <th data-sortable="true" data-field="title">Title</th>
+                                            <th data-field="users" data-formatter="userFormatter">Users                            </th>
+                                            <th data-field="clients" data-formatter="clientFormatter">
+                                                Clients
+                                            </th>
+                                            <th data-formatter="actionsFormatter">Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table> *@
 
-                    <input type="hidden" id="data_type" value="workspaces">
+                            <table data-mobile-responsive="true" data-route-prefix="/Workspace" id="table" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Title</th>
+                                        <th>User</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBody">
+                                    @if (Model != null && Model.Count > 0)
+                                    {
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@item.Id</td>
+                                                <td>@item.Title</td>
+                                                <td>
+                                                @if (item.WorkspaceUsers != null && item.WorkspaceUsers.Count > 0)
+                                                {
+                                                    <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                                        @foreach(var user in item.WorkspaceUsers)
+                                                        {
+                                                            <li>
+                                                                <a asp-action="Profile" asp-controller="User" asp-route-id="@user.Id" target="_blank"></a>
+                                                            </li>
+                                                            <li class="avatar avatar-sm pull-up" title="">
+                                                                <a asp-action="Profile" asp-controller="User" asp-route-id="@user.Id" target="_blank">
+                                                                    <img src="~/image/oZIhSJaP4lp4imBepBkvXv48amqt4ibWsDZxlhvq.png" class="rounded-circle">
+                                                                </a>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    
+                                                    <span class="badge bg-primary">Not assigned</span>
+                                                }
+                                                </td>
+                                                <td>
+                                                <a asp-controller="Workspace" asp-action="Update" asp-route-id="@item.Id" title="label_update">
+                                                    <i class="bx bx-edit mx-1"></i>
+                                                </a>
+                                                <a title="label_delete" type="button" class="btn delete" asp-action="RemoveMe" asp-controller="Workspace" asp-route-id="@item.Id">
+                                                    <i class="bx bx-trash text-danger mx-1"></i>
+                                                </a>
+                                                <a href="javascript:void(0);" class="duplicate" data-id="@item.Id" data-type="workspaces" data-table="table" title="label_duplicate">
+                                                    <i class="bx bx-copy text-warning mx-2"></i>
+                                                </a>
 
-                    <div class="card-body">
-                        <table id="table" data-toggle="table" data-loading-template="loadingTemplate"
-                               data-url="https://taskify-saas.taskhub.company/master-panel/workspaces/list" data-icons-prefix="bx" data-icons="icons"
-                               data-show-refresh="true" data-total-field="total" data-trim-on-search="false" data-data-field="rows"
-                               data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true" data-side-pagination="server"
-                               data-show-columns="true" data-pagination="true" data-sort-name="id" data-sort-order="desc"
-                               data-mobile-responsive="true" data-query-params="queryParams">
-                            <thead>
-                                <tr>
-                                    <th data-checkbox="true"></th>
-                                    <th data-sortable="true" data-field="id">ID</th>
-                                    <th data-sortable="true" data-field="title">Title</th>
-                                    <th data-field="users" data-formatter="userFormatter">Users                            </th>
-                                    <th data-field="clients" data-formatter="clientFormatter">
-                                        Clients
-                                    </th>
-                                    <th data-formatter="actionsFormatter">Actions</th>
-                                </tr>
-                            </thead>
-                        </table>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p>Don't have any workspace'</p>
+                                    }
+                                </tbody>
+                            </table>
+                            </div>
                     </div>
                 </div>
-            </div>
+           
         }else{
             <div class="card text-center mt-4">
                 <div class="card-body">
@@ -202,6 +168,11 @@
         var label_delete = 'Delete';
         var label_not_assigned = 'Not assigned';
         var label_duplicate = 'Duplicate';
-        var routePrefix = '/master-panel';
     </script>
 <script src="~/js/workspaces.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#table').DataTable();
+    });
+</script>

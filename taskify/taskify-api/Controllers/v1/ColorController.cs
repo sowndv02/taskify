@@ -42,7 +42,7 @@ namespace taskify_api.Controllers
             }
         }
 
-        [HttpGet("{code}", Name = "GetColorByCode")]
+        [HttpGet("search/{code}", Name = "GetColorByCode")]
         public async Task<ActionResult<APIResponse>> GetColorByCodeAsync(string code)
         {
             try
@@ -56,6 +56,33 @@ namespace taskify_api.Controllers
                 }
                 List<Color> model = await _colorRepository.GetAllAsync(x => x.ColorCode.Equals(code));
                 _response.Result = _mapper.Map<List<ColorDTO>>(model);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+
+        [HttpGet("{userId}", Name = "GetColorByUserId")]
+        public async Task<ActionResult<APIResponse>> GetAsyncByUserId(string userId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(userId))
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{userId} is null or empty!" };
+                    return BadRequest(_response);
+                }
+                List<Color> list = await _colorRepository.GetAllAsync(x => x.UserId.Equals(userId) || x.IsDefault);
+                _response.Result = _mapper.Map<List<ColorDTO>>(list);
+                _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
             }
             catch (Exception ex)

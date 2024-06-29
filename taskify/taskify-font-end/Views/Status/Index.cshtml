@@ -1,6 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<taskify_font_end.Models.DTO.StatusDTO>
 @{
 }
 <div class="content-wrapper">
@@ -11,7 +9,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1">
                         <li class="breadcrumb-item">
-                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                            <a asp-action="Dashboard" asp-controller="Home">Home</a>
                         </li>
                         <li class="breadcrumb-item active">
                             Statuses
@@ -34,28 +32,49 @@
         <div class="card ">
             <div class="card-body">
                 <div class="table-responsive text-nowrap">
-
-                    <input type="hidden" id="data_type" value="status">
-
-                    <table id="table" data-toggle="table" data-loading-template="loadingTemplate"
-                           data-url="https://taskify-saas.taskhub.company/master-panel/status/list" data-icons-prefix="bx" data-icons="icons"
-                           data-show-refresh="true" data-total-field="total" data-trim-on-search="false"
-                           data-data-field="rows" data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true"
-                           data-side-pagination="server" data-show-columns="true" data-pagination="true"
-                           data-sort-name="id" data-sort-order="desc" data-mobile-responsive="true"
-                           data-query-params="queryParams" data-route-prefix="/master-panel">
-
+                    <table data-mobile-responsive="true" data-route-prefix="/Status" id="table" class="table table-bordered">
                         <thead>
                             <tr>
-                                <th data-checkbox="true"></th>
-                                <th data-sortable="true" data-field="id">ID</th>
-                                <th data-sortable="true" data-field="title">Title</th>
-                                <th data-sortable="true" data-field="color">Preview</th>
-                                <th data-formatter="actionsFormatter">Actions</th>
+                                <th>Id</th>
+                                <th>Title</th>
+                                <th>Preview</th>
+                                <th>Description</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
-                    </table>
+                        <tbody id="tableBody">
+                            @if (Model != null && Model.Count > 0)
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.Title</td>
+                                        <td><span class="badge bg-@item.Color?.Title">@item.Title.ToUpper()</span></td>
+                                        <td>@item.Description</td>
+                                        <td>
+                                            @if (!item.IsDefault)
+                                            {
+                                                <a href="javascript:void(0);" class="edit-status card-link" data-bs-toggle="modal" data-bs-target="#edit_status_modal" data-id="@item.Id" title="label_update"><i class="bx bx-edit mx-1"></i></a>
+                                                <button title="label_delete" type="button" class="btn delete" data-id="@item.Id" data-type="status">
+                                                    <i class="bx bx-trash text-danger mx-1"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <span>Default Status</span>
+                                            }
 
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <p>Don't have any Status'</p>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -64,4 +83,9 @@
         var label_update = 'Update';
         var label_delete = 'Delete';
     </script>
-    <script src="https://taskify-saas.taskhub.company/assets/js/pages/status.js"></script>
+    @* <script src="~/js/status.js"></script> *@
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        });
+    </script>

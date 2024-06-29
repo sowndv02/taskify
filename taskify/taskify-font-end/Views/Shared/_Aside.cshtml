@@ -32,7 +32,7 @@
                 {
                     <li>
                         <a class="dropdown-item"
-                           asp-action="Dashboard" asp-asp-controller="Home" asp-route-id="@item.Id"><i class='menu-icon tf-icons bx @(item.Id == workspaceId ? "bx-check-square" : "bx-square") @(modelIsNull && item.Id == workspaces.FirstOrDefault()?.Id ? "bx-check-square": "")  text-primary'></i>@item.Title</a>
+                           asp-action="Dashboard" asp-controller="Home" asp-route-id="@item.Id"><i class='menu-icon tf-icons bx @(item.Id == workspaceId ? "bx-check-square" : "bx-square") @(modelIsNull && item.Id == workspaces.FirstOrDefault()?.Id ? "bx-check-square": "")  text-primary'></i>@item.Title</a>
                     </li>
                 }
             }
