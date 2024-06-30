@@ -11,26 +11,19 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1">
                         <li class="breadcrumb-item">
-                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                            <a asp-action="Dashboard" asp-controller="Home">Home</a>
                         </li>
-                        <li class="breadcrumb-item">
-                            <a href="https://taskify-saas.taskhub.company/master-panel/tasks">Tasks</a>
+                        <li class="breadcrumb-item active">
+                            <a asp-action="Index" asp-controller="Task">Tasks</a>
                         </li>
-                        <li class="breadcrumb-item active">Draggable</li>
                     </ol>
                 </nav>
             </div>
             <div>
-                <a href="https://taskify-saas.taskhub.company/master-panel/tasks/create">
+                <a asp-action="Create" asp-controller="Task">
                     <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="left"
                             data-bs-original-title="Create task">
                         <i class='bx bx-plus'></i>
-                    </button>
-                </a>
-                <a href="https://taskify-saas.taskhub.company/master-panel/tasks">
-                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="left"
-                            data-bs-original-title="List view">
-                        <i class="bx bx-list-ul"></i>
                     </button>
                 </a>
             </div>
@@ -39,9 +32,6 @@
             Drag and drop to update task status !            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <div class="d-flex card flex-row overflow-x-y-hidden">
-
-
-
 
             <div class="my-4 status-row">
                 <h4 class="fw-bold mx-4 my-2">Default</h4>
@@ -4708,6 +4698,6 @@
     </div>
     <script>
         var statusArray = [{ "id": 0, "admin_id": null, "title": "Default", "slug": "default", "color": "danger", "created_at": "2023-09-16T05:14:30.000000Z", "updated_at": "2024-04-09T04:05:18.000000Z" }, { "id": 72, "admin_id": 2, "title": "STARTED", "slug": "started", "color": "primary", "created_at": "2024-03-26T17:36:49.000000Z", "updated_at": "2024-04-09T04:05:51.000000Z" }, { "id": 73, "admin_id": 2, "title": "ON GOING", "slug": "on-going", "color": "info", "created_at": "2024-04-09T04:06:19.000000Z", "updated_at": "2024-04-09T04:06:19.000000Z" }, { "id": 74, "admin_id": 2, "title": "IN REVIEW", "slug": "in-review", "color": "warning", "created_at": "2024-04-09T04:07:29.000000Z", "updated_at": "2024-04-09T04:07:29.000000Z" }];
-        var routePrefix = '/master-panel';
+        var routePrefix = '/Task';
     </script>
-    <script src="https://taskify-saas.taskhub.company/assets/js/pages/task-board.js"></script>
+    <script src="~/js/task-board.js"></script>

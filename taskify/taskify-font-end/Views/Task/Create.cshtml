@@ -1,6 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model taskify_font_end.Models.DTO.TaskDTO
 @{
 }
 <div class="content-wrapper">
@@ -12,10 +10,10 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1">
                         <li class="breadcrumb-item">
-                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                            <a asp-action="Dashboard" asp-controller="Home">Home</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="https://taskify-saas.taskhub.company/master-panel/tasks">Tasks</a>
+                            <a asp-action="Index" asp-controller="Task">Tasks</a>
                         </li>
                         <li class="breadcrumb-item active">
                             Create
@@ -27,9 +25,9 @@
 
         <div class="card">
             <div class="card-body">
-                <form action="https://taskify-saas.taskhub.company/master-panel/tasks/store" class="form-submit-event" method="POST">
-                    <input type="hidden" name="redirect_url" value="https://taskify-saas.taskhub.company/master-panel/tasks">
-                    <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                    <div class="row">
+                <form asp-action="Create" asp-controller="Task" class="form-submit-event" method="POST">
+
+                    <div class="row">
                         <div class="mb-3 col-md-6">
                             <label for="title" class="form-label">
                                 Title <span class="asterisk">*</span>
@@ -72,7 +70,7 @@
                                         <i class="bx bx-plus"></i>
                                     </button>
                                 </a>
-                                <a href="https://taskify-saas.taskhub.company/master-panel/status/manage" target="_blank">
+                                <a asp-action="Index" asp-controller="Status" target="_blank">
                                     <button type="button"
                                             class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="right"
                                             data-bs-original-title="Manage statuses">
@@ -212,3 +210,38 @@
             </div>
         </div>
     </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('select[name="project"]').change(function () {
+            const selectedProjectId = $(this).val();
+            updateUsersDropdown(selectedProjectId);
+        });
+
+        function updateUsersDropdown(projectId) {
+            const usersDropdown = $('select[name="user_id[]"]');
+            usersDropdown.empty(); // Clear current options
+
+            if (projectId) {
+                $.ajax({
+                    url: `/YourController/GetUsersByProject/${projectId}`,
+                    type: 'GET',
+                    success: function (response) {
+                        if (response && response.users) {
+                            response.users.forEach(user => {
+                                usersDropdown.append(new Option(user.name, user.id));
+                            });
+                        }
+
+                        usersDropdown.trigger('change');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Failed to fetch users:', error);
+                    }
+                });
+            }
+        }
+    });
+
+</script>

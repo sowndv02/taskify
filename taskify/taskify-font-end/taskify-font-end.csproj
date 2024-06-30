@@ -7,6 +7,18 @@
     <RootNamespace>taskify_font_end</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="wwwroot\js\task-board.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\task-board.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\task-board.js" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
