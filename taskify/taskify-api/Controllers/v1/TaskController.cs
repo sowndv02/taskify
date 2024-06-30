@@ -4,6 +4,7 @@ using System.Net;
 using taskify_api.Models;
 using taskify_api.Models.DTO;
 using taskify_api.Repository;
+using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Controllers.v1
 {
@@ -12,10 +13,10 @@ namespace taskify_api.Controllers.v1
     [ApiVersion("1.0")]
     public class TaskController : ControllerBase
     {
-        private readonly TaskRepository _taskRepository;
+        private readonly ITaskRepository _taskRepository;
         protected APIResponse _response;
         private readonly IMapper _mapper;
-        public TaskController(TaskRepository taskRepository, IMapper mapper)
+        public TaskController(ITaskRepository taskRepository, IMapper mapper)
         {
             _taskRepository = taskRepository;
             _mapper = mapper;
@@ -207,6 +208,31 @@ namespace taskify_api.Controllers.v1
                 }
                 List<TaskModel> model = await _taskRepository.GetAllAsync(x => x.ProjectId == id);
                 _response.Result = _mapper.Map<TaskDTO>(model);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+        [HttpGet("project/{id:int}/{statusId:int}", Name = "GetTaskByProjectIdAndStatusId")]
+        public async Task<ActionResult<APIResponse>> GetByProjectIdAndStatusIdAsync(int id, int statusId)
+        {
+            try
+            {
+                if (id < 0)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
+                    return BadRequest(_response);
+                }
+                List<TaskModel> model = await _taskRepository.GetAllAsync(x => x.ProjectId == id && x.StatusId == statusId);
+                _response.Result = _mapper.Map<List<TaskDTO>>(model);
                 return Ok(_response);
             }
             catch (Exception ex)

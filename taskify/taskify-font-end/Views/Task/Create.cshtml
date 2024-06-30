@@ -1,5 +1,6 @@
 ﻿@model taskify_font_end.Models.DTO.TaskDTO
 @{
+    var userId = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 }
 <div class="content-wrapper">
 
@@ -26,14 +27,14 @@
         <div class="card">
             <div class="card-body">
                 <form asp-action="Create" asp-controller="Task" class="form-submit-event" method="POST">
-
+                    <input type="hidden" asp-for="OwnerId" value="@userId" />
                     <div class="row">
                         <div class="mb-3 col-md-6">
                             <label for="title" class="form-label">
                                 Title <span class="asterisk">*</span>
                             </label>
-                            <input class="form-control" type="text" id="title" name="title"
-                                   placeholder="Enter Title" value="">
+                            <input class="form-control" type="text" id="title" asp-for="Title"
+                                   placeholder="Enter Title" >
                         </div>
                         <div class="mb-3 col-md-6">
                             <label class="form-label" for="status">
@@ -41,24 +42,17 @@
                             </label>
                             <div class="input-group">
 
-                                <select class="form-select" id="status_id" name="status_id">
-                                    <option value="0" class="badge bg-label-danger"
-                                            selected>
-                                        Default
-                                        (danger)
-                                    </option>
-                                    <option value="72" class="badge bg-label-primary">
-                                        STARTED
-                                        (primary)
-                                    </option>
-                                    <option value="73" class="badge bg-label-info">
-                                        ON GOING
-                                        (info)
-                                    </option>
-                                    <option value="74" class="badge bg-label-warning">
-                                        IN REVIEW
-                                        (warning)
-                                    </option>
+                                <select class="form-select" id="status_id" asp-for="StatusId">
+                                    @if (ViewBag.statuses != null && ViewBag.statuses.Count > 0)
+                                    {
+                                        @foreach(var item in ViewBag.statuses)
+                                        {
+                                            <option value="@item.Id" class="badge bg-label-@item.Color?.Title"
+                                                    selected>
+                                                @item.Title (@item.Description)
+                                            </option>
+                                        }
+                                    }
                                 </select>
                             </div>
                             <div class="mt-2">
@@ -85,13 +79,13 @@
                             <label class="form-label" for="start_date">
                                 Starts at <span class="asterisk">*</span>
                             </label>
-                            <input type="text" id="start_date" name="start_date" class="form-control" value="">
+                            <input type="text" id="start_date" asp-for="StartAt" class="form-control" >
                         </div>
                         <div class="mb-3 col-md-6">
                             <label class="form-label" for="due_date">
                                 Ends at <span class="asterisk">*</span>
                             </label>
-                            <input type="text" id="end_date" name="due_date" class="form-control" value="">
+                            <input type="text" id="end_date" asp-for="EndAt" class="form-control">
                         </div>
 
 
@@ -99,56 +93,20 @@
 
                     <div class="row">
                         <div class="mb-3">
-                            <label class="form-label" for="user_id">Select project                                <span class="asterisk">*</span></label>
+                            <label class="form-label" for="user_id">Select project<span class="asterisk">*</span></label>
                             <div class="input-group">
-                                <select id="" class="form-control js-example-basic-multiple" name="project"
+                                <select id="" class="form-control js-example-basic-multiple" asp-for="ProjectId"
                                         data-placeholder="Type to search">
                                     <option value=""></option>
-                                    <option value="11">
-                                        Software App
-                                    </option>
-                                    <option value="12">
-                                        Frontend development
-                                    </option>
-                                    <option value="13">
-                                        UI/UX Designing
-                                    </option>
-                                    <option value="14">
-                                        Client Issue in Web
-                                    </option>
-                                    <option value="15">
-                                        eShop Marketing
-                                    </option>
-                                    <option value="16">
-                                        Lot 1837
-                                    </option>
-                                    <option value="17">
-                                        Test
-                                    </option>
-                                    <option value="18">
-                                        Create a YouTube channel
-                                    </option>
-                                    <option value="19">
-                                        Webdesign - Pompom
-                                    </option>
-                                    <option value="20">
-                                        fsssds
-                                    </option>
-                                    <option value="21">
-                                        Background Check
-                                    </option>
-                                    <option value="22">
-                                        Testing
-                                    </option>
-                                    <option value="23">
-                                        HSER
-                                    </option>
-                                    <option value="24">
-                                        projeto1
-                                    </option>
-                                    <option value="25">
-                                        abc
-                                    </option>
+                                    @if (ViewBag.projects != null && ViewBag.projects.Count > 0)
+                                    {
+                                        foreach (var item in ViewBag.projects)
+                                        {
+                                            <option value="@item.Id">
+                                                @item.Title
+                                            </option>
+                                        }
+                                    }
                                 </select>
                             </div>
                         </div>
@@ -159,29 +117,11 @@
 
                     <div class="row">
                         <div class="mb-3">
-                            <label class="form-label" for="user_id">Select users                                </label>
+                            <label class="form-label" for="user_id">Select users</label>
                             <div class="input-group">
-                                <select id="" class="form-control js-example-basic-multiple" name="user_id[]"
+                                <select id="" class="form-control js-example-basic-multiple" asp-for="TaskUserIds"
                                         multiple="multiple"
                                         data-placeholder="Type to search">
-                                    <option value="5">
-                                        Sid gor
-                                    </option>
-                                    <option value="7">
-                                        Team Member 1
-                                    </option>
-                                    <option value="14">
-                                        King Lost
-                                    </option>
-                                    <option value="15">
-                                        jimy karter
-                                    </option>
-                                    <option value="16">
-                                        kenny blinder
-                                    </option>
-                                    <option value="34">
-                                        Akash Dhaman
-                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -190,8 +130,8 @@
                     <div class="row">
 
                         <div class="mb-3">
-                            <label for="description" class="form-label">Description                                <span class="asterisk">*</span></label>
-                            <textarea class="form-control" id="description" rows="5" name="description" placeholder="Enter Description"></textarea>
+                            <label for="description" class="form-label">Description<span class="asterisk">*</span></label>
+                            <textarea class="form-control" id="description" rows="5" asp-for="Description" placeholder="Enter Description"></textarea>
                         </div>
 
                     </div>
@@ -214,20 +154,21 @@
 
 <script>
     $(document).ready(function () {
-        $('select[name="project"]').change(function () {
+        $('select[name="ProjectId"]').change(function () {
             const selectedProjectId = $(this).val();
             updateUsersDropdown(selectedProjectId);
         });
 
         function updateUsersDropdown(projectId) {
-            const usersDropdown = $('select[name="user_id[]"]');
-            usersDropdown.empty(); // Clear current options
+            const usersDropdown = $('select[name="TaskUserIds"]');
+            usersDropdown.empty(); 
 
             if (projectId) {
                 $.ajax({
-                    url: `/YourController/GetUsersByProject/${projectId}`,
+                    url: `/Task/GetUsersByProject/${projectId}`,
                     type: 'GET',
                     success: function (response) {
+                        console.log(response)
                         if (response && response.users) {
                             response.users.forEach(user => {
                                 usersDropdown.append(new Option(user.name, user.id));

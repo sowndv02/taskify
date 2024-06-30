@@ -9,8 +9,6 @@ namespace taskify_api.Models.DTO
         public string Title { get; set; }
         public int StatusId { get; set; }
         public StatusDTO? Status { get; set; }
-        public int PriorityId { get; set; }
-        public PriorityDTO? Priority { get; set; }
         public string OwnerId { get; set; }
         public UserDTO? Owner { get; set; }
         public int ProjectId { get; set; }
@@ -18,8 +16,8 @@ namespace taskify_api.Models.DTO
         public DateTime StartAt { get; set; }
         public DateTime EndAt { get; set; }
         public string Description { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
-        public virtual List<TaskUserDTO> TaskUsers { get; set; } = new List<TaskUserDTO>();
+        public virtual List<TaskUserDTO>? TaskUsers { get; set; } = new List<TaskUserDTO>();
     }
 }

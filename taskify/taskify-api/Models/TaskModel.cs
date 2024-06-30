@@ -14,9 +14,6 @@ namespace taskify_api.Models
         public int StatusId {  get; set; }
         [ForeignKey(nameof(StatusId))]
         public Status? Status { get; set; }
-        public int PriorityId {  get; set; }
-        [ForeignKey(nameof(PriorityId))]
-        public Priority? Priority { get; set; }
         public string OwnerId { get; set; }
         [ForeignKey(nameof(OwnerId))]
         public User? Owner { get; set; }
@@ -28,7 +25,7 @@ namespace taskify_api.Models
         public string Description { get; set; }
         public DateTime CreatedDate {  get; set; } = DateTime.Now;
         public DateTime? UpdatedDate {  get; set; }
-        public virtual List<TaskUser> TaskUsers { get; set; } = new List<TaskUser>();
+        public virtual List<TaskUser>? TaskUsers { get; set; } = new List<TaskUser>();
 
     }
 }

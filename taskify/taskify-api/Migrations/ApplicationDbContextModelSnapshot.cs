@@ -570,9 +570,6 @@ namespace taskify_api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("PriorityId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
@@ -592,8 +589,6 @@ namespace taskify_api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
-
-                    b.HasIndex("PriorityId");
 
                     b.HasIndex("ProjectId");
 
@@ -1067,12 +1062,6 @@ namespace taskify_api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("taskify_api.Models.Priority", "Priority")
-                        .WithMany()
-                        .HasForeignKey("PriorityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("taskify_api.Models.Project", "Project")
                         .WithMany("TaskModels")
                         .HasForeignKey("ProjectId")
@@ -1086,8 +1075,6 @@ namespace taskify_api.Migrations
                         .IsRequired();
 
                     b.Navigation("Owner");
-
-                    b.Navigation("Priority");
 
                     b.Navigation("Project");
 

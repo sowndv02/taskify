@@ -9,6 +9,6 @@
         public bool IsDefault { get; set; }
         public string UserId { get; set; }
         public int ColorId { get; set; }
-        public List<TaskDTO>? TaskModels { get; set; } = new List<TaskDTO>();
+        public List<TaskDTO>? Tasks { get; set; } = new List<TaskDTO>();
     }
 }

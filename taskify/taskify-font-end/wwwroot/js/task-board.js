@@ -26,12 +26,11 @@ $(function () {
                 method: "PUT",
                 url: routePrefix + "/tasks/" + taskId + "/update-status/" + newStatus,
                 data: {
-                    _token: $('meta[name="csrf-token"]').attr('content'),
                     'flash_message_only': 1,
                 },
                 success: function (response) {
                     if (response.error == false) {
-                        toastr.success(response.message); // show a success message
+                        toastr.success(response.message); 
                     } else {
                         toastr.error(response.message);
                     }

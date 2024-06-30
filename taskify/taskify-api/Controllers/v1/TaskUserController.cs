@@ -42,8 +42,8 @@ namespace taskify_api.Controllers.v1
             }
         }
 
-        [HttpGet("{id:int}", Name = "GetTaskUserById")]
-        public async Task<ActionResult<APIResponse>> GetByIdAsync(int id)
+        [HttpGet("{id:int}", Name = "GetTaskUserByTaskId")]
+        public async Task<ActionResult<APIResponse>> GetByTaskIdAsync(int id)
         {
             try
             {
@@ -54,8 +54,8 @@ namespace taskify_api.Controllers.v1
                     _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
                     return BadRequest(_response);
                 }
-                TaskUser model = await _taskUserRepository.GetAsync(x => x.Id == id);
-                _response.Result = _mapper.Map<TaskUserDTO>(model);
+                List<TaskUser> model = await _taskUserRepository.GetAllAsync(x => x.TaskId == id, "User");
+                _response.Result = _mapper.Map<List<TaskUserDTO>>(model);
                 return Ok(_response);
             }
             catch (Exception ex)
