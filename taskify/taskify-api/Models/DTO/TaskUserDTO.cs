@@ -8,7 +8,7 @@ namespace taskify_api.Models.DTO
 
         public int TaskId { get; set; }
         public string UserId { get; set; }
-        public UserDTO User { get; set; }
-        public TaskDTO Task { get; set; }
+        public UserDTO? User { get; set; }
+        public TaskDTO? Task { get; set; }
     }
 }

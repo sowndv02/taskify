@@ -20,5 +20,6 @@ namespace taskify_font_end.Models.DTO
         public string Description { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime? UpdatedDate { get; set; }
+        public virtual List<TaskUserDTO> TaskUsers { get; set; } = new List<TaskUserDTO>();
     }
 }

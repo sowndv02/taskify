@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using taskify_font_end.Models;
 using taskify_font_end.Models.DTO;
+using taskify_font_end.Service;
 using taskify_font_end.Service.IService;
 
 namespace taskify_font_end.Controllers
@@ -18,13 +19,17 @@ namespace taskify_font_end.Controllers
         private readonly ITagService _tagService;
         private readonly IProjectUserService _projectUserService;
         private readonly IProjectTagService _projectTagService;
+        private readonly ITaskService _taskService;
+        private readonly ITaskUserService _taskUserService;
         private readonly IMapper _mapper;
         private readonly int ITEM_PER_PAGE = 0;
 
         public ProjectController(IProjectService projectService, IMapper mapper,
             IWorkspaceService workspaceService, IUserService userService,
             IStatusService statusService, ITagService tagService,
-            IProjectUserService projectUserService, IProjectTagService projectTagService, IConfiguration configuration) : base(workspaceService)
+            IProjectUserService projectUserService, IProjectTagService projectTagService, 
+            ITaskService taskService, ITaskUserService taskUserService, 
+            IConfiguration configuration) : base(workspaceService)
         {
             _workspaceService = workspaceService;
             _mapper = mapper;
@@ -32,9 +37,11 @@ namespace taskify_font_end.Controllers
             _userService = userService;
             _statusService = statusService;
             _tagService = tagService;
+            _taskService = taskService;
             _projectUserService = projectUserService;
             _projectTagService = projectTagService;
             ITEM_PER_PAGE = configuration.GetValue<int>("ItemPerPage");
+            _taskUserService = taskUserService;
         }
         public async Task<IActionResult> IndexAsync(int? page, string? sort, int? status, int[]? tagIds)
         {
@@ -250,9 +257,50 @@ namespace taskify_font_end.Controllers
             return View();
         }
 
-        public IActionResult Duplicate(int id)
+        public async Task<IActionResult> DuplicateAsync(int id)
         {
-            return View();
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("AccessDenied", "Auth");
+            }
+            var obj = await GetProjectByIdAsync(id);
+            if (obj == null)
+            {
+                return Json(new { error = true, message = "Project not found"});
+            }
+            if (!obj.OwnerId.Equals(userId))
+            {
+                return Json(new { error = true, message = "Access denied"});
+            }
+            try
+            {
+                obj.ActualEndAt = null;
+                obj.Id = 0;
+                obj.ProjectTags = new List<ProjectTagDTO>();
+                obj.ProjectUsers = new List<ProjectUserDTO>();
+                var duplicatedProject = obj;
+
+                APIResponse result = await _projectService.CreateAsync<APIResponse>(duplicatedProject);
+
+                if (result != null && result.IsSuccess && result.ErrorMessages.Count == 0)
+                {
+                    var project = JsonConvert.DeserializeObject<ProjectDTO>(Convert.ToString(result.Result));
+                    if (obj.ProjectUserIds != null && obj.ProjectUserIds.Count > 0)
+                        await AddUserToProject(obj.ProjectUserIds, project.Id);
+                    if (obj.ProjectTagIds != null && obj.ProjectTagIds.Count > 0)
+                        await AddTagToProject(obj.ProjectTagIds, project.Id);
+                    return Json(new { error = false, message = "Project duplicated successfully", duplicatedProject});
+                }
+                else
+                {
+                    return Json(new { error = false, message = result.ErrorMessages.FirstOrDefault()});
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = true, message = ex.Message});
+            }
         }
 
         public async Task<IActionResult> FinishAsync(int id)
@@ -289,9 +337,34 @@ namespace taskify_font_end.Controllers
         }
 
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            return View();
+            if (id <= 0)
+            {
+                return Json(new { error = true, message = "Invalid ID" });
+            }
+            try
+            {
+                bool resultDeleteTask = await DeleteTaskByProjectId(id);
+                if(!resultDeleteTask) return Json(new { error = true, message = "Internal server have error!" });
+
+                bool resultDeleteProjectUsers = await DeleteProjectUsersByProjectId(id);
+                if (!resultDeleteProjectUsers) return Json(new { error = true, message = "Internal server have error!" });
+                
+                bool resultDeleteProjectTags = await DeleteProjectTagsByProjectId(id);
+                if (!resultDeleteProjectTags) return Json(new { error = true, message = "Internal server have error!" });
+
+                APIResponse result = await _projectService.DeleteAsync<APIResponse>(id);
+
+                if (result != null && result.IsSuccess && result.ErrorMessages.Count == 0)
+                    return Json(new { error = false, message = "Project deleted successfully" });
+                else
+                    return Json(new { error = true, message = result?.ErrorMessages?.FirstOrDefault() ?? "An error occurred while deleting the todo" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = true, message = "An error occurred: " + ex.Message });
+            }
         }
 
         private async Task<bool> AddTagToProject(List<int> tagIds, int projectId)
@@ -355,13 +428,13 @@ namespace taskify_font_end.Controllers
             {
                 var res = await _projectTagService.GetAsync<APIResponse>(obj.Id);
 
-                if (res != null && res.IsSuccess && response.ErrorMessages.Count == 0)
+                if (res != null && res.IsSuccess && res.ErrorMessages.Count == 0)
                 {
                     obj.ProjectTags = JsonConvert.DeserializeObject<List<ProjectTagDTO>>(Convert.ToString(res.Result));
                     obj.ProjectTagIds = obj.ProjectTags.Select(x => x.TagId).ToList();
                 }
                 var resProjectUsers = await _projectUserService.GetAsync<APIResponse>(obj.Id);
-                if (resProjectUsers != null && resProjectUsers.IsSuccess && response.ErrorMessages.Count == 0)
+                if (resProjectUsers != null && resProjectUsers.IsSuccess && resProjectUsers.ErrorMessages.Count == 0)
                 {
                     obj.ProjectUsers = JsonConvert.DeserializeObject<List<ProjectUserDTO>>(Convert.ToString(resProjectUsers.Result));
                     obj.ProjectUserIds = obj.ProjectUsers.Select(x => x.UserId).ToList();
@@ -529,5 +602,81 @@ namespace taskify_font_end.Controllers
             }
         }
 
+        private async Task<bool> DeleteTaskByProjectId(int projectId)
+        {
+            var tasks = await GetTaskByProjectId(projectId);
+            foreach (var task in tasks)
+            {
+                var taskUsers = task.TaskUsers;
+                if(taskUsers != null && taskUsers.Count > 0)
+                {
+                    foreach(var item in taskUsers)
+                    {
+                        var result = await _taskUserService.DeleteAsync<APIResponse>(item.Id);
+                        if (result == null || !result.IsSuccess || result.ErrorMessages.Count != 0)
+                            return false;
+                    }
+                    
+                }
+                var taskResult = await _taskService.DeleteAsync<APIResponse>(task.Id);
+                if (taskResult == null || !taskResult.IsSuccess || taskResult.ErrorMessages.Count != 0)
+                    return false;
+            }
+            return true;
+        }
+
+        private async Task<List<TaskDTO>> GetTaskByProjectId(int id)
+        {
+            var response = await _taskService.GetByProjectIdAsync<APIResponse>(id);
+            List<TaskDTO> list = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<TaskDTO>>(Convert.ToString(response.Result));
+            }
+            return list;
+        }
+
+
+        private async Task<bool> DeleteProjectUsersByProjectId(int projectId)
+        {
+            var result = await _projectUserService.GetAsync<APIResponse>(projectId);
+            var list = new List<ProjectUserDTO>();
+            if (result != null && result.IsSuccess && result.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<ProjectUserDTO>>(Convert.ToString(result.Result));
+            }
+            if(list != null && list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    var deleteResult = await _projectUserService.DeleteAsync<APIResponse>(item.Id);
+                    if (deleteResult == null || !deleteResult.IsSuccess || deleteResult.ErrorMessages.Count != 0)
+                        return false;
+                }
+            }
+            
+            return true;
+        }
+
+        private async Task<bool> DeleteProjectTagsByProjectId(int projectId)
+        {
+            var result = await _projectTagService.GetAsync<APIResponse>(projectId);
+            var list = new List<ProjectTagDTO>();
+            if (result != null && result.IsSuccess && result.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<ProjectTagDTO>>(Convert.ToString(result.Result));
+            }
+            if (list != null && list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    var deleteResult = await _projectTagService.DeleteAsync<APIResponse>(item.Id);
+                    if (deleteResult == null || !deleteResult.IsSuccess || deleteResult.ErrorMessages.Count != 0)
+                        return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

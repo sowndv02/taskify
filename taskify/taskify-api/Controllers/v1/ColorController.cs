@@ -172,7 +172,7 @@ namespace taskify_api.Controllers
         }
 
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<APIResponse>> DeleteColor(int id)
         {
             try

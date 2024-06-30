@@ -682,7 +682,6 @@ $(document).on('click', '.favorite-icon', function () {
         url: routePrefix + '/projects/update-favorite/' + projectId,
         type: 'POST',
         headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
         data: {
             is_favorite: isFavorite
@@ -716,7 +715,6 @@ $(document).on('click', '.duplicate', function (e) {
     e.preventDefault();
     var urlPrefix = window.location.pathname.split('/')[1];
     var id = $(this).data('id');
-    var type = $(this).data('type');
     var reload = $(this).data('reload'); // Get the value of data-reload attribute
     if (typeof reload !== 'undefined' && reload === true) {
         reload = true;
@@ -730,7 +728,7 @@ $(document).on('click', '.duplicate', function (e) {
         e.preventDefault();
         $('#confirmDuplicate').html(label_please_wait).attr('disabled', true);
         $.ajax({
-            url: '/' + urlPrefix + '/' + type + '/duplicate/' + id + '?reload=' + reload,
+            url: '/' + urlPrefix + '/Duplicate' + '/' + id + '?reload=' + reload,
             type: 'GET',
             headers: {
             },
@@ -738,16 +736,11 @@ $(document).on('click', '.duplicate', function (e) {
                 $('#confirmDuplicate').html(label_yes).attr('disabled', false);
                 $('#duplicateModal').modal('hide');
                 if (response.error == false) {
-                    if (reload) {
+                    toastr.success(response.message);
+                    setTimeout(function () {
                         location.reload();
-                    } else {
-                        toastr.success(response.message);
-                        if (tableID) {
-                            $('#' + tableID).bootstrapTable('refresh');
-                        }
-                    }
+                    }, 3000); 
                 } else {
-                    console.log(response);
                     toastr.error(response.message);
                 }
             },

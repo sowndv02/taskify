@@ -154,7 +154,7 @@ namespace taskify_api.Controllers.v1
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<APIResponse>> DeleteAsync(int id)
         {
             try

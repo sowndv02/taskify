@@ -82,5 +82,14 @@ namespace taskify_font_end.Service
                 Url = API_URL + $"/api/{SD.CurrentAPIVersion}/task/status/" + statusId
             });
         }
+
+        public async Task<T> GetByProjectIdAsync<T>(int projectId)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/task/project/" + projectId
+            });
+        }
     }
 }

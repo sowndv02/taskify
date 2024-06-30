@@ -218,7 +218,7 @@
                                                             title="@user.User?.FirstName @user.User?.LastName">
                                                             <a asp-action="Profile" asp-controller="User" asp-route-id="@user.UserId"
                                                                target="_blank">
-                                                                <img src="@(!string.IsNullOrEmpty(user.User?.ImageUrl) ? @user.User?.ImageUrl : "~/image/oZIhSJaP4lp4imBepBkvXv48amqt4ibWsDZxlhvq.png")" onerror="~/image/oZIhSJaP4lp4imBepBkvXv48amqt4ibWsDZxlhvq.png"
+                                                                <img src="~/image/ozihsjap4lp4imbepbkvxv48amqt4ibwsdzxlhvq.png" onerror="~/image/oZIhSJaP4lp4imBepBkvXv48amqt4ibWsDZxlhvq.png"
                                                                      class="rounded-circle"
                                                                      alt="@user.User?.FirstName @user.User?.LastName">
                                                             </a>
@@ -236,11 +236,10 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <i class='bx bx-calendar text-danger'></i>Ends at : 
+                                        <i class='bx bx-calendar text-danger'></i>Ends at : <span>@item.EndAt.ToShortDateString()</span> <br />
                                         @if(item.ActualEndAt != null && !string.IsNullOrEmpty(item.ActualEndAt.ToString()))
                                         {
-                                            <span>@item.ActualEndAt?.ToShortDateString()</span> <br/>
-                                            <span class="text-danger">Estimated completion date: @item.EndAt.ToShortDateString()</span>
+                                            <span class="text-danger">Estimated completion date: @item.ActualEndAt?.ToShortDateString()</span>
                                         }
                                     </div>
                                 </div>

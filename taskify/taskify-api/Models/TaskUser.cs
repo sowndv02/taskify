@@ -13,8 +13,8 @@ namespace taskify_api.Models
         public string UserId { get; set; }
 
         [ForeignKey(nameof(UserId))]
-        public User User { get; set; }
+        public User? User { get; set; }
         [ForeignKey(nameof(TaskId))]
-        public TaskModel Task { get; set; }
+        public TaskModel? Task { get; set; }
     }
 }

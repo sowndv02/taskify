@@ -11,6 +11,7 @@ namespace taskify_font_end.Service.IService
         Task<T> DeleteAsync<T>(int id);
         Task<T> GetByUserIdAsync<T>(string userId);
         Task<T> GetByStatusIdAsync<T>(int statusId);
+        Task<T> GetByProjectIdAsync<T>(int projectId);
         
     }
 }
