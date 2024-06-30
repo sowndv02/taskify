@@ -67,7 +67,7 @@ namespace taskify_api.Controllers.v1
             }
         }
 
-        [HttpGet("{key}", Name = "GetPriorityByTitle")]
+        [HttpGet("search/{key}", Name = "GetPriorityByTitle")]
         public async Task<ActionResult<APIResponse>> GetPriorityByTitleAsync(string key)
         {
             try
@@ -162,6 +162,31 @@ namespace taskify_api.Controllers.v1
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+        [HttpGet("{userId}", Name = "GetPriorityByUserId")]
+        public async Task<ActionResult<APIResponse>> GetByUserIdAsync(string userId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(userId))
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{userId} is invalid!" };
+                    return BadRequest(_response);
+                }
+                List<Priority> model = await _priorityRepository.GetAllAsync(x => x.UserId.Equals(userId) || x.IsDefault, "Color");
+                _response.Result = _mapper.Map<List<PriorityDTO>>(model);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
                 return StatusCode((int)HttpStatusCode.InternalServerError, _response);
             }

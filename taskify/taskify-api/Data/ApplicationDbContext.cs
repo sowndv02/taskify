@@ -142,6 +142,12 @@ namespace taskify_api.Data
             //    .HasForeignKey(pt => pt.ProjectId)
             //    .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Priority>()
+                .HasOne(tu => tu.User)
+                .WithMany(t => t.Priorities)
+                .HasForeignKey(tu => tu.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 var tableName = entityType.GetTableName();
@@ -216,7 +222,10 @@ namespace taskify_api.Data
             );
 
             modelBuilder.Entity<Priority>().HasData(
-                new Priority { Title = "Default", ColorId = 5, IsDefault = true }
+                new Priority { Id = 1, Title = "Default", ColorId = 7, UserId = "1", IsDefault = true },
+                new Priority { Id = 2, Title = "Low", ColorId = 4, UserId = "1", IsDefault = true },
+                new Priority { Id = 3, Title = "Medium", ColorId = 1, UserId = "1", IsDefault = true },
+                new Priority { Id = 4, Title = "High", ColorId = 5, UserId = "1", IsDefault = true }
             );
 
             modelBuilder.Entity<Tag>().HasData(

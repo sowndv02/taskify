@@ -114,6 +114,13 @@
             </a>
         </li>
 
+        <li class="menu-item @(currentController == "Priority" ? "active" : "")">
+            <a asp-action="Index" asp-controller="Priority" class="menu-link">
+                <i class='menu-icon tf-icons bx bx-up-arrow-alt text-success'></i>
+                <div>Priorities</div>
+            </a>
+        </li>
+
         <li class="menu-item @(currentController == "Workspace" ? "active" : "")">
             <a asp-action="Index" asp-controller="Workspace" class="menu-link">
                 <i class='menu-icon tf-icons bx bx-check-square text-danger'></i>

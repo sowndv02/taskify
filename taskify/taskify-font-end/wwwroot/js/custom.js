@@ -37,7 +37,9 @@ $(document).on('click', '.delete', function (e) {
                 $('#deleteModal').modal('hide');
                 if (response.error == false) {
                     toastr.success(response.message);
-                    location.reload();
+                    setTimeout(function () {
+                        location.reload();
+                    }, 3000); 
                 } else {
                     toastr.error(response.message);
                 }
@@ -107,11 +109,12 @@ function update_status(e) {
     var name = e['name'];
     var status;
     var is_checked = $('input[name=' + name + ']:checked');
-    var url = $(e).data('url'); // Access data-url from the element
+    var url = $(e).data('url');
+    var userId = $(e).data('userid');
     if (is_checked.length >= 1) {
-        status = 1;
+        status = true;
     } else {
-        status = 0;
+        status = false;
     }
     $.ajax({
         url: url,
@@ -120,13 +123,17 @@ function update_status(e) {
         },
         data: {
             id: id,
-            status: status
+            status: status,
+            userId: userId
         },
         success: function (response) {
+            console.log(response)
             if (response.error == false) {
-                toastr.success(response.message); // show a success message
+                toastr.success(response.message);
                 $('#' + id + '_title').toggleClass('striked');
-                location.reload();
+                setTimeout(function () {
+                    location.reload();
+                }, 3000); 
             } else {
                 toastr.error(response.message);
             }
@@ -144,10 +151,15 @@ $(document).on('click', '.edit-todo', function () {
         },
         dataType: 'json',
         success: function (response) {
-            $('#todo_id').val(response.todo.id)
-            $('#todo_title').val(response.todo.title)
-            $('#todo_priority').val(response.todo.priority)
-            $('#todo_description').val(response.todo.description)
+            console.log(response)
+            $('#todo_id').val(response.id)
+            $('#todo_title').val(response.title)
+            $('#todo_priority').val(response.priorityId)
+            $('#todo_userId').val(response.userId)
+            $('#todo_workspaceId').val(response.workspaceId)
+            $('#todo_status').val(response.status)
+            $('#todo_createdDate').val(response.createdDate)
+            $('#todo_description').val(response.description)
         },
     });
 });
@@ -721,7 +733,6 @@ $(document).on('click', '.duplicate', function (e) {
             url: '/' + urlPrefix + '/' + type + '/duplicate/' + id + '?reload=' + reload,
             type: 'GET',
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function (response) {
                 $('#confirmDuplicate').html(label_yes).attr('disabled', false);

@@ -12,7 +12,10 @@ namespace taskify_api.Models
         public string Title {  get; set; }
         public int ColorId {  get; set; }
         [ForeignKey(nameof(ColorId))]
-        public Color Color { get; set; }
+        public Color? Color { get; set; }
         public bool IsDefault { get; set; }
+        public string UserId {  get; set; }
+        [ForeignKey(nameof(UserId))]
+        public User? User { get; set; }
     }
 }

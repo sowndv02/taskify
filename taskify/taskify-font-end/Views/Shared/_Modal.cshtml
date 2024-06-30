@@ -369,18 +369,20 @@
 
 <div class="modal fade" id="create_todo_modal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form class="modal-content form-submit-event" action="https://taskify-saas.taskhub.company/master-panel/todos/store" method="POST">
+        <form class="modal-content form-submit-event" asp-action="Create" asp-controller="Todo" method="POST">
+            <input type="hidden" name="todoDTO.UserId" value="@userId" />
+            <input type="hidden" name="todoDTO.WorkspaceId" value="@workspaceId" />
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel1">Create todo                    </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <input type="hidden" name="_token" value="M6Wba8w99x1u3xoJAxQykwHXuYs5B6iYbXNcUhhY" autocomplete="off">                <div class="modal-body">
+            <div class="modal-body">
                 <div class="row">
                     <div class="col mb-3">
                         <label for="nameBasic" class="form-label">
                             Title <span class="asterisk">*</span>
                         </label>
-                        <input type="text" class="form-control" name="title"
+                        <input type="text" class="form-control" name="todoDTO.Title"
                                placeholder="Please enter title" />
                     </div>
                 </div>
@@ -389,21 +391,21 @@
                         <label for="nameBasic" class="form-label">
                             Priority <span class="asterisk">*</span>
                         </label>
-                        <select class="form-select" name="priority">
-                            <option value="low">
-                                Low
-                            </option>
-                            <option value="medium">
-                                Medium
-                            </option>
-                            <option value="high">
-                                High
-                            </option>
+                        <select class="form-select" name="todoDTO.PriorityId">
+                            @if(ViewBag.priorities != null && ViewBag.priorities.Count > 0)
+                            {
+                                @foreach(var item in ViewBag.priorities)
+                                {
+                                    <option class="badge bg-label-@item.Color?.Title" value="@item.Id">
+                                        @item.Title
+                                    </option>
+                                }
+                            }
                         </select>
                     </div>
                 </div>
                 <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" name="description"
+                <textarea class="form-control" name="todoDTO.Description"
                           placeholder="Please enter description"></textarea>
             </div>
             <div class="modal-footer">
@@ -419,13 +421,19 @@
     </div>
 </div>
 
-<div class="modal fade" id="edit_tag_modal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-md" role="document">
-        <form class="modal-content form-submit-event" asp-action="Update" asp-controller="Tag" method="POST">
-            <input type="hidden" name="dnr">
-            <input type="hidden" name="id" id="tag_id">
+
+<div class="modal fade" id="edit_todo_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="Update" asp-controller="Todo" class="modal-content form-submit-event" method="POST">
+            <input type="hidden" name="todoDTO.Id" id="todo_id">
+            <input type="hidden" name="todoDTO.UserId" id="todo_userId">
+            <input type="hidden" name="todoDTO.WorkspaceId" id="todo_workspaceId">
+            <input type="hidden" name="todoDTO.Status" id="todo_status">
+            <input type="hidden" name="todoDTO.CreatedDate" id="todo_createdDate" />
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel1">Update tag</h5>
+                <h5 class="modal-title" id="exampleModalLabel1">
+                    Update todo</span>
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -434,61 +442,7 @@
                         <label for="nameBasic" class="form-label">
                             Title <span class="asterisk">*</span>
                         </label>
-                        <input type="text" id="tag_title" class="form-control" name="title"
-                               placeholder="Please enter title" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col mb-3">
-                        <label for="nameBasic" class="form-label">
-                            Color <span class="asterisk">*</span>
-                        </label>
-                        <select class="form-select" id="tag_color" name="color">
-
-                            @if (ViewBag.colors != null && ViewBag.colors.Count > 0)
-                            {
-                                @foreach (var item in ViewBag.colors){
-                                    <option class="badge bg-label-@item.Title" value="@item.Id">
-                                        @item.Description
-                                    </option>
-                                }
-                           
-                            }
-                            
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    Close</label>
-                </button>
-                <button type="submit" class="btn btn-primary"
-                        id="submit_btn">
-                    Update</label>
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="modal fade" id="edit_todo_modal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form action="https://taskify-saas.taskhub.company/master-panel/todos/update" class="modal-content form-submit-event" method="POST">
-            <input type="hidden" name="id" id="todo_id">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel1">
-                    Update todo</span>
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <input type="hidden" name="_token" value="M6Wba8w99x1u3xoJAxQykwHXuYs5B6iYbXNcUhhY" autocomplete="off">                <div class="modal-body">
-                <div class="row">
-                    <div class="col mb-3">
-                        <label for="nameBasic" class="form-label">
-                            Title <span class="asterisk">*</span>
-                        </label>
-                        <input type="text" id="todo_title" class="form-control" name="title"
+                        <input type="text" id="todo_title" class="form-control" name="todoDTO.Title"
                                placeholder="Please enter title" />
                     </div>
                 </div>
@@ -497,15 +451,21 @@
                         <label for="nameBasic" class="form-label">
                             Priority <span class="asterisk">*</span>
                         </label>
-                        <select class="form-select" id="todo_priority" name="priority">
-                            <option value="low">Low</option>
-                            <option value="medium">Medium</option>
-                            <option value="high">High</option>
+                        <select class="form-select" id="todo_priority" name="todoDTO.PriorityId">
+                            @if (ViewBag.priorities != null && ViewBag.priorities.Count > 0)
+                            {
+                                @foreach (var item in ViewBag.priorities)
+                                {
+                                    <option class="badge bg-label-@item.Color?.Title" value="@item.Id">
+                                        @item.Title
+                                    </option>
+                                }
+                            }
                         </select>
                     </div>
                 </div>
                 <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="todo_description" name="description"
+                <textarea class="form-control" id="todo_description" name="todoDTO.Description"
                           placeholder="Please enter description"></textarea>
             </div>
             <div class="modal-footer">

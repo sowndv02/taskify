@@ -335,9 +335,15 @@ namespace taskify_api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ColorId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Priorities");
                 });
@@ -628,8 +634,14 @@ namespace taskify_api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PriorityId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -637,6 +649,9 @@ namespace taskify_api.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -646,6 +661,8 @@ namespace taskify_api.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PriorityId");
 
                     b.HasIndex("UserId");
 
@@ -928,7 +945,15 @@ namespace taskify_api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("taskify_api.Models.User", "User")
+                        .WithMany("Priorities")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("Color");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("taskify_api.Models.Project", b =>
@@ -1090,6 +1115,12 @@ namespace taskify_api.Migrations
 
             modelBuilder.Entity("taskify_api.Models.Todo", b =>
                 {
+                    b.HasOne("taskify_api.Models.Priority", "Priority")
+                        .WithMany()
+                        .HasForeignKey("PriorityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("taskify_api.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -1101,6 +1132,8 @@ namespace taskify_api.Migrations
                         .HasForeignKey("WorkspaceId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Priority");
 
                     b.Navigation("User");
 
@@ -1164,6 +1197,8 @@ namespace taskify_api.Migrations
             modelBuilder.Entity("taskify_api.Models.User", b =>
                 {
                     b.Navigation("Colors");
+
+                    b.Navigation("Priorities");
 
                     b.Navigation("ProjectUsers");
 

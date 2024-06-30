@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using taskify_api.Models;
 using taskify_api.Models.DTO;
+using taskify_api.Repository;
 using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Controllers.v1
@@ -143,7 +144,7 @@ namespace taskify_api.Controllers.v1
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<APIResponse>> DeleteAsync(int id)
         {
             try
@@ -162,6 +163,26 @@ namespace taskify_api.Controllers.v1
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+
+        [HttpGet("{userId}/{workspaceId:int}", Name = "GetTodoByUserIdAndWorkspaceId")]
+        public async Task<ActionResult<APIResponse>> GetAsyncByUserIdAndWorkspaceId(string userId, int workspaceId)
+        {
+            try
+            {
+                List<Todo> list = await _todoRepository.GetAllAsync(x => x.UserId.Equals(userId) && x.WorkspaceId == workspaceId, "Priority");
+                _response.Result = _mapper.Map<List<TodoDTO>>(list);
+                _response.StatusCode = HttpStatusCode.OK;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
                 _response.ErrorMessages = new List<string>() { ex.ToString() };
                 return StatusCode((int)HttpStatusCode.InternalServerError, _response);
             }

@@ -16,6 +16,7 @@ namespace taskify_api.Models
         public virtual List<Project>? Projects { get; set; } = new List<Project>();
         public virtual List<ProjectUser>? ProjectUsers { get; set; } = new List<ProjectUser>();
         public virtual List<TaskUser>? TaskUsers { get; set; } = new List<TaskUser>();
+        public virtual List<Priority>? Priorities { get; set; } = new List<Priority>();
 
     }
 }

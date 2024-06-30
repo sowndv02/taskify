@@ -73,5 +73,15 @@ namespace taskify_font_end.Service
                 Url = API_URL + $"/api/{SD.CurrentAPIVersion}/todo/" + dto.Id
             });
         }
+
+
+        public async Task<T> GetByUserIdAndWorkspaceIdAsync<T>(string userId, int workspaceId)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/todo/" + userId + "/" + workspaceId
+            });
+        }
     }
 }

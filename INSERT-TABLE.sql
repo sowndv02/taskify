@@ -37,7 +37,10 @@ INSERT INTO dbo.Status(ColorId, Title, Description, UserId, IsDefault) VALUES (6
 INSERT INTO dbo.Status(ColorId, Title, Description, UserId, IsDefault) VALUES (2, N'Started', N'Primary', N'1', 1);
 INSERT INTO dbo.Status(ColorId, Title, Description, UserId, IsDefault) VALUES (5, N'Default', N'Danger', N'1', 1);
 
-INSERT INTO dbo.Priorities(Title, ColorId, IsDefault) VALUES(N'Default', 5, 1);
+INSERT INTO dbo.Priorities(Title, ColorId, UserId, IsDefault) VALUES(N'Default', 7, N'1', 1);
+INSERT INTO dbo.Priorities(Title, ColorId, UserId, IsDefault) VALUES(N'Low', 4, N'1', 1);
+INSERT INTO dbo.Priorities(Title, ColorId, UserId, IsDefault) VALUES(N'Medium', 1, N'1', 1);
+INSERT INTO dbo.Priorities(Title, ColorId, UserId, IsDefault) VALUES(N'High', 5, N'1', 1);
 
 INSERT INTO dbo.Tags (Title, Description, ColorId, UserId, IsDefault) VALUES(N'WEBDESIGN', N'WEBDESIGN', 2, N'1', 1);
 INSERT INTO dbo.Tags (Title, Description, ColorId, UserId, IsDefault) VALUES(N'BOOKING AND RESERVATION', N'BOOKING AND RESERVATION', 7, N'1', 1);
