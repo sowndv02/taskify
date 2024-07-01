@@ -26,6 +26,9 @@ namespace taskify_api.Data
         public DbSet<Project> Projects { get; set; }
         public DbSet<ProjectUser> ProjectUsers { get; set; }
         public DbSet<ProjectTag> ProjectTags { get; set; }
+        public DbSet<TaskMedia> TaskMedias { get; set; }
+        public DbSet<ProjectMedia> ProjectMedias { get; set; }
+        public DbSet<Milestone> Milestones { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -146,6 +149,24 @@ namespace taskify_api.Data
                 .HasOne(tu => tu.User)
                 .WithMany(t => t.Priorities)
                 .HasForeignKey(tu => tu.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Milestone>()
+                .HasOne(m => m.User)
+                .WithMany(u => u.Milestones)
+                .HasForeignKey(m => m.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProjectMedia>()
+                .HasOne(pm => pm.User)
+                .WithMany(u => u.ProjectMedias)
+                .HasForeignKey(pm => pm.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TaskMedia>()
+                .HasOne(pm => pm.User)
+                .WithMany(u => u.TaskMedias)
+                .HasForeignKey(pm => pm.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())

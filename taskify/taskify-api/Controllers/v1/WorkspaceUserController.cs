@@ -76,7 +76,7 @@ namespace taskify_api.Controllers.v1
                     _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
                     return BadRequest(_response);
                 }
-                List<WorkspaceUser> model = await _workspaceUserRepository.GetAllAsync(x => x.WorkspaceId == id);
+                List<WorkspaceUser> model = await _workspaceUserRepository.GetAllAsync(x => x.WorkspaceId == id, "User");
                 _response.Result = _mapper.Map<List<WorkspaceUserDTO>>(model);
                 return Ok(_response);
             }

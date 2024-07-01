@@ -24,7 +24,7 @@ $(function () {
             // Make an AJAX call to update the task status
             $.ajax({
                 method: "PUT",
-                url: routePrefix + "/tasks/" + taskId + "/update-status/" + newStatus,
+                url: routePrefix + "/UpdateStatus/" + taskId + "?status=" + newStatus,
                 data: {
                     'flash_message_only': 1,
                 },

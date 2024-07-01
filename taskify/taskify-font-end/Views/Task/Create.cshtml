@@ -47,8 +47,7 @@
                                     {
                                         @foreach(var item in ViewBag.statuses)
                                         {
-                                            <option value="@item.Id" class="badge bg-label-@item.Color?.Title"
-                                                    selected>
+                                            <option value="@item.Id" class="badge bg-label-@item.Color?.Title">
                                                 @item.Title (@item.Description)
                                             </option>
                                         }

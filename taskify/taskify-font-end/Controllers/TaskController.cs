@@ -58,9 +58,26 @@ namespace taskify_font_end.Controllers
             return View(statuses);
         }
 
-        public IActionResult Update(int id)
+        public async Task<IActionResult> Update(int id)
         {
-            return View();
+            if (id <= 0) return BadRequest();
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId)) return RedirectToAction("AccessDenied", "Auth");
+            TaskDTO obj = await GetTaskByIdAsync(id);
+            if (obj == null)
+            {
+                TempData["error"] = "Task not found!";
+                return RedirectToAction("Index", "Project");
+            }
+
+            List<UserDTO> users = await GetUsersByProjectIdAsync(obj.ProjectId);
+            users.Add(await GetUserByIdAsync(userId));
+            List<StatusDTO> statuses = await GetStatusesByUserIdAsync(userId);
+
+            ViewBag.users = users;
+            ViewBag.statuses = statuses;
+            return View(obj);
         }
 
         public async Task<IActionResult> CreateAsync()
@@ -123,6 +140,104 @@ namespace taskify_font_end.Controllers
             return View(statuses);
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateStatusAsync(int id, int status)
+        {
+            if (id == 0)
+            {
+                return Json(new { error = true, message = "Invalid task ID" });
+            }
+
+            var response = await _taskService.GetAsync<APIResponse>(id);
+            TaskDTO obj = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                obj = JsonConvert.DeserializeObject<TaskDTO>(Convert.ToString(response.Result));
+            }
+            else
+            {
+                return Json(new { error = true, message = "Task not found" });
+            }
+
+            obj.StatusId = status;
+            obj.UpdatedDate = DateTime.Now;
+            var res = await _taskService.UpdateAsync<APIResponse>(obj);
+
+            if (res != null && res.IsSuccess)
+            {
+                return Json(new { error = false, message = "Task status updated successfully!" });
+            }
+            else
+            {
+                return Json(new { error = true, message = $"Failed to update task status! {res.ErrorMessages.FirstOrDefault()}" });
+            }
+        }
+        public async Task<IActionResult> GetUsersByProject(int id)
+        {
+            var resUser = await _projectUserService.GetAsync<APIResponse>(id);
+            var users = new List<ProjectUserDTO>();
+            if (resUser != null && resUser.IsSuccess && resUser.ErrorMessages.Count == 0)
+            {
+                users = JsonConvert.DeserializeObject<List<ProjectUserDTO>>(Convert.ToString(resUser.Result));
+                foreach (var item in users)
+                {
+                    item.User = await GetUserByIdAsync(item.UserId);
+                }
+            }
+            var userList = users.Select(u => new { id = u.UserId, name = $"{u.User?.FirstName} {u.User?.LastName}" }).ToList();
+
+            return Json(new { users = userList });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateAsync(TaskDTO obj)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (ModelState.IsValid)
+            {
+                if (string.IsNullOrEmpty(userId) || !obj.OwnerId.Equals(userId))
+                {
+                    return RedirectToAction("AccessDenied", "Auth");
+                }
+                if (ViewBag.selectedWorkspaceId == null || ViewBag.selectedWorkspaceId == 0)
+                {
+                    TempData["error"] = "Internal server error!";
+                    return RedirectToAction("Dashboard", "Home");
+                }
+
+                obj.UpdatedDate = DateTime.Now;
+                APIResponse result = await _taskService.UpdateAsync<APIResponse>(obj);
+                TaskDTO existingTask = await GetTaskByIdAsync(obj.Id);
+                if (result != null && result.IsSuccess && result.ErrorMessages.Count == 0)
+                {
+                    var task = JsonConvert.DeserializeObject<ProjectDTO>(Convert.ToString(result.Result));
+                    if (obj.TaskUserIds != null && obj.TaskUserIds.Count > 0)
+                        await UpdateProjectUsers(obj.TaskUserIds, existingTask.TaskUsers.Select(x => x.UserId).ToList(), obj.Id);
+                    
+                    TempData["success"] = "Update task successfully";
+                    return RedirectToAction("Update", "Task", new { id = obj.Id });
+                }
+                else
+                {
+                    TempData["error"] = result.ErrorMessages.FirstOrDefault();
+                }
+            }
+            else
+            {
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors)
+                                                  .Select(e => e.ErrorMessage).FirstOrDefault();
+                TempData["error"] = errorMessages;
+            }
+
+            List<UserDTO> users = await GetUsersByProjectIdAsync(obj.ProjectId);
+            users.Add(await GetUserByIdAsync(userId));
+            List<StatusDTO> statuses = await GetStatusesByUserIdAsync(userId);
+
+            ViewBag.users = users;
+            ViewBag.statuses = statuses;
+            return View(obj);
+        }
 
         private async Task<List<StatusDTO>> GetTaskByProjectIdAndUserIdAsync(string userId, int projectId)
         {
@@ -205,22 +320,7 @@ namespace taskify_font_end.Controllers
             return list;
         }
 
-        public async Task<IActionResult> GetUsersByProject(int id)
-        {
-            var resUser = await _projectUserService.GetAsync<APIResponse>(id);
-            var users = new List<ProjectUserDTO>();
-            if (resUser != null && resUser.IsSuccess && resUser.ErrorMessages.Count == 0)
-            {
-                users = JsonConvert.DeserializeObject<List<ProjectUserDTO>>(Convert.ToString(resUser.Result));
-                foreach(var item in users)
-                {
-                    item.User = await GetUserByIdAsync(item.UserId);
-                }
-            }
-            var userList = users.Select(u => new { id = u.UserId, name = $"{u.User?.FirstName} {u.User?.LastName}" }).ToList();
-
-            return Json(new { users = userList });
-        }
+        
         private async Task<UserDTO> GetUserByIdAsync(string userId)
         {
             var response = await _userService.GetAsync<APIResponse>(userId);
@@ -280,6 +380,84 @@ namespace taskify_font_end.Controllers
                 }
             }
             return list;
+        }
+
+
+        private async Task<TaskDTO> GetTaskByIdAsync(int id)
+        {
+            var response = await _taskService.GetAsync<APIResponse>(id);
+            TaskDTO obj = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                obj = JsonConvert.DeserializeObject<TaskDTO>(Convert.ToString(response.Result));
+                obj.Project = await GetProjectByIdAsync(obj.ProjectId);
+            }
+            return obj;
+        }
+
+        private async Task<List<UserDTO>> GetUsersByProjectIdAsync(int projectId)
+        {
+            var response = await _projectUserService.GetByProjectIdAsync<APIResponse>(projectId);
+            List<ProjectUserDTO> list = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<ProjectUserDTO>>(Convert.ToString(response.Result));
+            }
+            var users = new List<UserDTO>(); 
+            if (list.Count > 0)
+            {
+                users = list.Select(x => x.User).ToList();
+            }
+            return users;
+        }
+
+
+        private async Task<ProjectDTO> GetProjectByIdAsync(int id)
+        {
+            var response = await _projectService.GetAsync<APIResponse>(id);
+            ProjectDTO obj = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                obj = JsonConvert.DeserializeObject<ProjectDTO>(Convert.ToString(response.Result));
+            }
+            return obj;
+        }
+
+        private async Task<bool> UpdateProjectUsers(List<string> userIdsNew, List<string> userIdsOld, int taskId)
+        {
+            try
+            {
+
+                var usersToAdd = userIdsNew.Except(userIdsOld).ToList();
+                var usersToRemove = userIdsOld.Except(userIdsNew).ToList();
+
+                foreach (var userId in usersToAdd)
+                {
+                    var response = await _taskUserService.CreateAsync<APIResponse>(new TaskUserDTO { TaskId = taskId, UserId = userId });
+                    if (response == null && response.IsSuccess && response.ErrorMessages.Count == 0)
+                    {
+                        TempData["error"] = response.ErrorMessages.FirstOrDefault();
+                        return false;
+                    }
+
+                }
+                foreach (var userId in usersToRemove)
+                {
+                    var response = await _taskUserService.DeleteByTaskAndUserAsync<APIResponse>(taskId, userId);
+                    if (response == null && response.IsSuccess && response.ErrorMessages.Count == 0)
+                    {
+                        TempData["error"] = response.ErrorMessages.FirstOrDefault();
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = $"Internal Server Error! {ex.Message}";
+                return false;
+            }
         }
     }
 }

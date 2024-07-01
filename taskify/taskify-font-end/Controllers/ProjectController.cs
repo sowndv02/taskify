@@ -14,6 +14,7 @@ namespace taskify_font_end.Controllers
 
         private readonly IProjectService _projectService;
         private readonly IWorkspaceService _workspaceService;
+        private readonly IWorkspaceUserService _workspaceUserService;
         private readonly IUserService _userService;
         private readonly IStatusService _statusService;
         private readonly ITagService _tagService;
@@ -29,8 +30,10 @@ namespace taskify_font_end.Controllers
             IStatusService statusService, ITagService tagService,
             IProjectUserService projectUserService, IProjectTagService projectTagService, 
             ITaskService taskService, ITaskUserService taskUserService, 
+            IWorkspaceUserService workspaceUserService,
             IConfiguration configuration) : base(workspaceService)
         {
+            _workspaceUserService = workspaceUserService;
             _workspaceService = workspaceService;
             _mapper = mapper;
             _projectService = projectService;
@@ -118,7 +121,7 @@ namespace taskify_font_end.Controllers
         public async Task<IActionResult> CreateAsync()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            List<UserDTO> users = await GetUsersAsync(userId);
+            List<UserDTO> users = await GetUsersByWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
             List<StatusDTO> statuses = await GetStatusesByUserIdAsync(userId);
             List<TagDTO> tags = await GetTagsByUserIdAsync(userId);
 
@@ -170,7 +173,7 @@ namespace taskify_font_end.Controllers
                                                   .Select(e => e.ErrorMessage).FirstOrDefault();
                 TempData["error"] = errorMessages;
             }
-            List<UserDTO> users = await GetUsersAsync(userId);
+            List<UserDTO> users = await GetUsersByWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
             List<StatusDTO> statuses = await GetStatusesByUserIdAsync(userId);
             List<TagDTO> tags = await GetTagsByUserIdAsync(userId);
 
@@ -188,7 +191,7 @@ namespace taskify_font_end.Controllers
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId)) return RedirectToAction("AccessDenied", "Auth");
 
-            List<UserDTO> users = await GetUsersAsync(userId);
+            List<UserDTO> users = await GetUsersByWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
             List<StatusDTO> statuses = await GetStatusesByUserIdAsync(userId);
             List<TagDTO> tags = await GetTagsByUserIdAsync(userId);
 
@@ -242,7 +245,7 @@ namespace taskify_font_end.Controllers
                                                   .Select(e => e.ErrorMessage).FirstOrDefault();
                 TempData["error"] = errorMessages;
             }
-            List<UserDTO> users = await GetUsersAsync(userId);
+            List<UserDTO> users = await GetUsersByWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
             List<StatusDTO> statuses = await GetStatusesByUserIdAsync(userId);
             List<TagDTO> tags = await GetTagsByUserIdAsync(userId);
 
@@ -475,20 +478,22 @@ namespace taskify_font_end.Controllers
             return list;
         }
 
-        private async Task<List<UserDTO>> GetUsersAsync(string userId)
+        private async Task<List<UserDTO>> GetUsersByWorkspaceIdAsync(string userId, int workspaceId)
         {
-            var response = await _userService.GetAllAsync<APIResponse>();
-            List<UserDTO> users = new();
+            var response = await _workspaceUserService.GetByWorkspaceIdAsync<APIResponse>(workspaceId);
+            List<WorkspaceUserDTO> workspaceUsers = new();
             if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
             {
-                users = JsonConvert.DeserializeObject<List<UserDTO>>(Convert.ToString(response.Result));
+                workspaceUsers = JsonConvert.DeserializeObject<List<WorkspaceUserDTO>>(Convert.ToString(response.Result));
             }
-            if (users.Count > 0) users = users.Where(x => !x.Id.Equals(userId)).ToList();
-
-
+            var users = new List<UserDTO>();
+            if (workspaceUsers.Count > 0)
+            {
+                users = workspaceUsers.Select(x => x.User).Where(x => !x.Id.Equals(userId)).ToList();
+                
+            }
             if (users.Count == 0)
                 TempData["warning"] = "No users are available.";
-
             return users;
         }
 

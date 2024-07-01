@@ -81,5 +81,13 @@ namespace taskify_font_end.Service
                 Url = API_URL + $"/api/{SD.CurrentAPIVersion}/taskUser/" + id
             });
         }
+        public async Task<T> DeleteByTaskAndUserAsync<T>(int taskId, string userId)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.DELETE,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/projectUser/" + taskId + "/" + userId
+            });
+        }
     }
 }

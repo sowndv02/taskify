@@ -1,6 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model taskify_font_end.Models.DTO.TaskDTO
 @{
 }
 <div class="content-wrapper">
@@ -11,13 +9,13 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1">
                         <li class="breadcrumb-item">
-                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                            <a asp-action="Dashboard" asp-controller="Home">Home</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="https://taskify-saas.taskhub.company/master-panel/tasks">Tasks</a>
+                            <a asp-action="Index" asp-controller="Task" asp-route-id="@Model.ProjectId">Tasks for @Model.Project?.Title</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="https://taskify-saas.taskhub.company/master-panel/tasks/information/5">Website Review</a>
+                            <a asp-controller="Task" asp-action="Detail" asp-route-id="@Model.Id">@Model.Title</a>
                         </li>
                         <li class="breadcrumb-item active">
                             Update
@@ -29,15 +27,18 @@
 
         <div class="card">
             <div class="card-body">
-                <form action="https://taskify-saas.taskhub.company/master-panel/tasks/update/5" class="form-submit-event" method="POST">
-                    <input type="hidden" name="_token" value="hdrplCybugP2hYYLBW3BeRJ9jPfaM00GvOrW10DU" autocomplete="off">                    <input type="hidden" name="_method" value="PUT">                                            <input type="hidden" name="redirect_url" value="https://taskify-saas.taskhub.company/master-panel/tasks">
+                <form asp-action="Update" asp-controller="Task" class="form-submit-event" method="POST">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="OwnerId" />
+                    <input type="hidden" asp-for="ProjectId" />
+                    <input type="hidden" asp-for="CreatedDate" />
                     <div class="row">
                         <div class="mb-3">
                             <label for="title" class="form-label">
                                 Title <span class="asterisk">*</span>
                             </label>
-                            <input class="form-control" type="text" id="title" name="title"
-                                   placeholder="Enter Title" value="Website Review">
+                            <input class="form-control" type="text" id="title" asp-for="Title"
+                                   placeholder="Enter Title">
                         </div>
                     </div>
 
@@ -47,38 +48,24 @@
                             <label for="project_title" class="form-label">
                                 Project <span class="asterisk">*</span>
                             </label>
-                            <input class="form-control" type="text" id="project_title" name="project_title"
-                                   placeholder="Enter Title" value="Client Issue in Web" readonly>
+                            <input class="form-control" type="text" id="project_title"
+                                   placeholder="Enter Title" value="@Model.Project?.Title" readonly>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label class="form-label" for="status">
                                 Status <span class="asterisk">*</span>
                             </label>
                             <div class="input-group">
-
-
-                                <select class="form-select" id="status_id" name="status_id">
-
-
-
-                                    <option value="0" class="badge bg-label-danger">Default (danger)</option>
-
-
-
-
-                                    <option value="72" class="badge bg-label-primary">STARTED (primary)</option>
-
-
-
-
-                                    <option value="73" class="badge bg-label-info">ON GOING (info)</option>
-
-
-
-
-                                    <option value="74" class="badge bg-label-warning"
-                                            selected>IN REVIEW (warning)</option>
-
+                                <select class="form-select" id="status_id" asp-for="StatusId">
+                                    @if(ViewBag.statuses != null && ViewBag.statuses.Count > 0)
+                                    {
+                                        @foreach (var item in ViewBag.statuses)
+                                        {
+                                            <option value="@item.Id" class="badge bg-label-@item.Color?.Title">
+                                                @item.Title (@item.Description)
+                                            </option>
+                                        }
+                                    }
                                 </select>
 
 
@@ -92,7 +79,7 @@
                                         <i class="bx bx-plus"></i>
                                     </button>
                                 </a>
-                                <a href="https://taskify-saas.taskhub.company/master-panel/status/manage" target="_blank">
+                                <a asp-action="Index" asp-controller="Status" target="_blank">
                                     <button type="button"
                                             class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="right"
                                             data-bs-original-title="Manage statuses">
@@ -109,38 +96,33 @@
                             <label class="form-label" for="start_date">
                                 Starts at <span class="asterisk">*</span>
                             </label>
-                            <input type="text" id="start_date" name="start_date" class="form-control"
-                                   value="09-04-2024">
+                            <input type="text" id="start_date" asp-for="StartAt" class="form-control" />
                         </div>
                         <div class="mb-3 col-md-6">
                             <label class="form-label" for="due_date">
                                 Ends at <span class="asterisk">*</span>
                             </label>
-                            <input type="text" id="end_date" name="due_date" class="form-control"
-                                   value="09-04-2024">
+                            <input type="text" id="end_date" asp-for="EndAt" class="form-control" />
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="mb-3">
-                            <label class="form-label" for="user_id">Select users                                (Users associated with project                                <b>Client Issue in Web</b>)</label>
+                            <label class="form-label" for="user_id">Select users (Users associated with project <b>@Model.Project?.Title</b>)</label>
                             <div class="input-group">
 
-                                <select id="" class="form-control js-example-basic-multiple" name="user_id[]"
+                                <select id="" class="form-control js-example-basic-multiple" asp-for="TaskUserIds"
                                         multiple="multiple"
                                         data-placeholder="Type to search">
-                                    <option value="5">
-                                        Sid
-                                        gor
-                                    </option>
-                                    <option value="7" selected>
-                                        Team Member
-                                        1
-                                    </option>
-                                    <option value="16">
-                                        kenny
-                                        blinder
-                                    </option>
+                                    @if (ViewBag.users != null && ViewBag.users.Count > 0)
+                                    {
+                                        foreach (var item in ViewBag.users)
+                                        {
+                                            <option value="@item.Id">
+                                                @item.FirstName @item.LastName
+                                            </option>
+                                        }
+                                    }
                                 </select>
                             </div>
                         </div>
@@ -149,8 +131,8 @@
                     <div class="row">
 
                         <div class="mb-3">
-                            <label for="description" class="form-label">Description                                <span class="asterisk">*</span></label>
-                            <textarea class="form-control" id="description" name="description" rows="5" placeholder="Enter Description">Asps</textarea>
+                            <label for="description" class="form-label">Description <span class="asterisk">*</span></label>
+                            <textarea class="form-control" id="description" asp-for="Description" rows="5" placeholder="Enter Description"></textarea>
                         </div>
                     </div>
 
@@ -169,3 +151,4 @@
             </div>
         </div>
     </div>
+</div>

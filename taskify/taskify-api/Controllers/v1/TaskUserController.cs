@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using taskify_api.Models;
 using taskify_api.Models.DTO;
+using taskify_api.Repository;
 using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Controllers.v1
@@ -125,6 +126,31 @@ namespace taskify_api.Controllers.v1
             {
                 if (id == 0) return BadRequest();
                 var obj = await _taskUserRepository.GetAsync(x => x.Id == id);
+
+                if (obj == null) return NotFound();
+
+                await _taskUserRepository.RemoveAsync(obj);
+                _response.StatusCode = HttpStatusCode.NoContent;
+                _response.IsSuccess = true;
+                return Ok(_response);
+
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+
+        [HttpDelete("{taskId}/{userId}", Name = "DeleteTaskUserByTaskAndUser")]
+        public async Task<ActionResult<APIResponse>> DeleteTaskUserAsync(int taskId, string userId)
+        {
+            try
+            {
+                if (taskId == 0 || string.IsNullOrEmpty(userId)) return BadRequest();
+                var obj = await _taskUserRepository.GetAsync(x => x.TaskId == taskId && x.UserId.Equals(userId));
 
                 if (obj == null) return NotFound();
 
