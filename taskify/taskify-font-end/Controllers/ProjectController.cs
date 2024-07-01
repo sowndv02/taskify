@@ -255,9 +255,10 @@ namespace taskify_font_end.Controllers
             return View(obj);
         }
 
-        public IActionResult Detail(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            return View();
+            ProjectDTO project = await GetProjectByIdAsync(id);
+            return View(project);
         }
 
         public async Task<IActionResult> DuplicateAsync(int id)

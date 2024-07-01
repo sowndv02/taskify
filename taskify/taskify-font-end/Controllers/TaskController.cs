@@ -65,6 +65,13 @@ namespace taskify_font_end.Controllers
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId)) return RedirectToAction("AccessDenied", "Auth");
             TaskDTO obj = await GetTaskByIdAsync(id);
+
+            var project = await GetProjectByIdAsync(obj.ProjectId);
+            if (project.ActualEndAt != null && !string.IsNullOrEmpty(project.ActualEndAt.ToString()))
+            {
+                TempData["error"] = "Cannot update task for project end";
+                return RedirectToAction("Index", "Task", new { id = project.Id });
+            }
             if (obj == null)
             {
                 TempData["error"] = "Task not found!";
@@ -80,7 +87,7 @@ namespace taskify_font_end.Controllers
             return View(obj);
         }
 
-        public async Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> CreateAsync(int? id)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId)) return RedirectToAction("AccessDenied", "Auth");
@@ -89,10 +96,26 @@ namespace taskify_font_end.Controllers
                 TempData["error"] = "You don't have any workspaces! Please create a workspace first!";
                 return RedirectToAction("Create", "Workspace");
             }
-            ViewBag.projects = await GetProjectByUserIdAndWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
+            TaskDTO task = new();
             ViewBag.statuses = await GetStatusesByUserIdAsync(userId);
+            if (id == null)
+            {
+                ViewBag.projects = await GetProjectByUserIdAndWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
+            }
+            else
+            {
+                
+                var project = await GetProjectByIdAsync((int)id);
+                if (project.ActualEndAt != null && !string.IsNullOrEmpty(project.ActualEndAt.ToString()))
+                {
+                    TempData["error"] = "Cannot create task for project end";
+                    return RedirectToAction("Index", "Task", new { id = project.Id });
+                }
+                ViewBag.projects = new List<ProjectDTO>() { project };
+                task.ProjectId = (int)id;
+            }
 
-            return View();
+            return View(task);
         }
 
         [HttpPost]
@@ -112,7 +135,14 @@ namespace taskify_font_end.Controllers
                     return RedirectToAction("Create", "Workspace");
                 }
                 obj.CreatedDate = DateTime.Now;
-
+                var project = await GetProjectByIdAsync(obj.ProjectId);
+                if(project.ActualEndAt != null && !string.IsNullOrEmpty(project.ActualEndAt.ToString()))
+                {
+                    TempData["error"] = "Cannot create task for project end";
+                    ViewBag.projects = await GetProjectByUserIdAndWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
+                    ViewBag.statuses = await GetStatusesByUserIdAsync(userId);
+                    return View(obj);
+                }
                 APIResponse result = await _taskService.CreateAsync<APIResponse>(obj);
 
                 if (result != null && result.IsSuccess && result.ErrorMessages.Count == 0)
@@ -136,8 +166,8 @@ namespace taskify_font_end.Controllers
                 TempData["error"] = errorMessages;
             }
             ViewBag.projects = await GetProjectByUserIdAndWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
-            var statuses = await GetStatusesByUserIdAsync(userId);
-            return View(statuses);
+            ViewBag.statuses = await GetStatusesByUserIdAsync(userId);
+            return View(obj);
         }
 
         [HttpPut]
@@ -153,6 +183,14 @@ namespace taskify_font_end.Controllers
             if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
             {
                 obj = JsonConvert.DeserializeObject<TaskDTO>(Convert.ToString(response.Result));
+                if(obj != null)
+                {
+                    var project = await GetProjectByIdAsync(obj.ProjectId);
+                    if (project.ActualEndAt != null && !string.IsNullOrEmpty(project.ActualEndAt.ToString()))
+                    {
+                        return Json(new { error = true, message = "Cannot update status task for project end" });
+                    }
+                }
             }
             else
             {
@@ -205,7 +243,13 @@ namespace taskify_font_end.Controllers
                     TempData["error"] = "Internal server error!";
                     return RedirectToAction("Dashboard", "Home");
                 }
-
+                var project = await GetProjectByIdAsync(obj.ProjectId);
+                if (project.ActualEndAt != null && !string.IsNullOrEmpty(project.ActualEndAt.ToString()))
+                {
+                    TempData["error"] = "Cannot create task for project end";
+                    
+                    return RedirectToAction("Index", "Task", new {id = project.Id});
+                }
                 obj.UpdatedDate = DateTime.Now;
                 APIResponse result = await _taskService.UpdateAsync<APIResponse>(obj);
                 TaskDTO existingTask = await GetTaskByIdAsync(obj.Id);
@@ -302,6 +346,7 @@ namespace taskify_font_end.Controllers
             }
             if (list.Count > 0)
             {
+                list = list.Where(x => x.ActualEndAt == null && !string.IsNullOrEmpty(x.ActualEndAt.ToString())).ToList();
                 list = list.OrderByDescending(x => x.CreatedDate)
                    .ThenByDescending(x => x.UpdatedDate)
                    .ToList();
