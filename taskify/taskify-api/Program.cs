@@ -47,6 +47,9 @@ builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IPriorityRepository, PriorityRepository>();
 builder.Services.AddScoped<IProjectUserRepository, ProjectUserRepository>();
 builder.Services.AddScoped<IProjectTagRepository, ProjectTagRepository>();
+builder.Services.AddScoped<IProjectMediaRepository, ProjectMediaRepository>();
+builder.Services.AddScoped<IMilestoneRepository, MilestoneRepository>();
+builder.Services.AddScoped<ITaskMediaRepository, TaskMediaRepository>();
 
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));

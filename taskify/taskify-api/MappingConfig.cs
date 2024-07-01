@@ -27,6 +27,9 @@ namespace taskify_api
             CreateMap<ProjectDTO, Project>().ReverseMap();
             CreateMap<ProjectUserDTO, ProjectUser>().ReverseMap();
             CreateMap<ProjectTagDTO, ProjectTag>().ReverseMap();
+            CreateMap<TaskMediaDTO, TaskMedia>().ReverseMap();
+            CreateMap<ProjectMediaDTO, ProjectMedia>().ReverseMap();
+            CreateMap<MilestoneDTO, Milestone>().ReverseMap();
         }
     }
 }

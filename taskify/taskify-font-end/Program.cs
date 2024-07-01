@@ -51,6 +51,14 @@ builder.Services.AddHttpClient<IProjectUserService, ProjectUserService>();
 builder.Services.AddScoped<IProjectUserService, ProjectUserService>();
 builder.Services.AddHttpClient<IProjectTagService, ProjectTagService>();
 builder.Services.AddScoped<IProjectTagService, ProjectTagService>();
+builder.Services.AddHttpClient<IMilestoneService, MilestoneService>();
+builder.Services.AddScoped<IMilestoneService, MilestoneService>();
+builder.Services.AddHttpClient<IProjectMediaService, ProjectMediaService>();
+builder.Services.AddScoped<IProjectMediaService, ProjectMediaService>();
+builder.Services.AddHttpClient<ITaskMediaService, TaskMediaService>();
+builder.Services.AddScoped<ITaskMediaService, TaskMediaService>();
+
+
 
 
 builder.Services.AddDistributedMemoryCache();
