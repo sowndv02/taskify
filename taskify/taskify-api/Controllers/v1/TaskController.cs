@@ -207,7 +207,7 @@ namespace taskify_api.Controllers.v1
                     return BadRequest(_response);
                 }
                 List<TaskModel> model = await _taskRepository.GetAllAsync(x => x.ProjectId == id);
-                _response.Result = _mapper.Map<TaskDTO>(model);
+                _response.Result = _mapper.Map<List<TaskDTO>>(model);
                 return Ok(_response);
             }
             catch (Exception ex)

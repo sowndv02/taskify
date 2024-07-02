@@ -158,7 +158,7 @@ namespace taskify_api.Controllers.v1
                     return BadRequest(_response);
                 }
                 List<TaskMedia> model = await _taskMediaRepository.GetAllAsync(x => x.TaskId == id);
-                _response.Result = _mapper.Map<TaskMediaDTO>(model);
+                _response.Result = _mapper.Map<List<TaskMediaDTO>>(model);
                 return Ok(_response);
             }
             catch (Exception ex)

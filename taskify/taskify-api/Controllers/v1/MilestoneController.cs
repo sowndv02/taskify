@@ -158,7 +158,7 @@ namespace taskify_api.Controllers.v1
                     return BadRequest(_response);
                 }
                 List<Milestone> model = await _milestoneRepository.GetAllAsync(x => x.ProjectId == id);
-                _response.Result = _mapper.Map<MilestoneDTO>(model);
+                _response.Result = _mapper.Map<List<MilestoneDTO>>(model);
                 return Ok(_response);
             }
             catch (Exception ex)

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using taskify_font_end.Validation;
 
 namespace taskify_font_end.Models.DTO
 {
@@ -8,7 +9,7 @@ namespace taskify_font_end.Models.DTO
         public int Id { get; set; }
         [Required]
         public string Title { get; set; }
-        [Required]
+        [DateRange("EndAt", ErrorMessage = "StartAt must be earlier than EndAt")]
         public DateTime StartAt { get; set; }
         [Required]
         public DateTime EndAt { get; set; }

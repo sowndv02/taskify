@@ -383,7 +383,7 @@ namespace taskify_font_end.Controllers
                 if (result != null && result.IsSuccess && result.ErrorMessages.Count == 0)
                     return Json(new { error = false, message = "Project deleted successfully" });
                 else
-                    return Json(new { error = true, message = result?.ErrorMessages?.FirstOrDefault() ?? "An error occurred while deleting the todo" });
+                    return Json(new { error = true, message = result?.ErrorMessages?.FirstOrDefault() ?? "An error occurred while deleting the project" });
             }
             catch (Exception ex)
             {
@@ -461,13 +461,26 @@ namespace taskify_font_end.Controllers
                 if (resProjectUsers != null && resProjectUsers.IsSuccess && resProjectUsers.ErrorMessages.Count == 0)
                 {
                     obj.ProjectUsers = JsonConvert.DeserializeObject<List<ProjectUserDTO>>(Convert.ToString(resProjectUsers.Result));
+                    foreach (var user in obj.ProjectUsers)
+                    {
+                        user.User = await GetUserByIdAsync(user.UserId);
+                    }
                     obj.ProjectUserIds = obj.ProjectUsers.Select(x => x.UserId).ToList();
                 }
             }
 
             return obj;
         }
-
+        private async Task<UserDTO> GetUserByIdAsync(string userId)
+        {
+            var response = await _userService.GetAsync<APIResponse>(userId);
+            UserDTO user = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                user = JsonConvert.DeserializeObject<UserDTO>(Convert.ToString(response.Result));
+            }
+            return user;
+        }
         private async Task<List<TagDTO>> GetTagsByUserIdAsync(string userId)
         {
             var response = await _tagService.GetByUserIdAsync<APIResponse>(userId);
@@ -658,6 +671,23 @@ namespace taskify_font_end.Controllers
             if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
             {
                 list = JsonConvert.DeserializeObject<List<TaskDTO>>(Convert.ToString(response.Result));
+                var users = new List<TaskUserDTO>();
+                var status = new StatusDTO();
+                foreach (var item in list)
+                {
+                    var resUser = await _taskUserService.GetByTaskIdAsync<APIResponse>(item.Id);
+                    if (resUser != null && resUser.IsSuccess && resUser.ErrorMessages.Count == 0)
+                    {
+                        users = JsonConvert.DeserializeObject<List<TaskUserDTO>>(Convert.ToString(resUser.Result));
+                        item.TaskUsers = users;
+                    }
+                    var resStatus = await _statusService.GetAsync<APIResponse>(item.StatusId);
+                    if (resStatus != null && resStatus.IsSuccess && resStatus.ErrorMessages.Count == 0)
+                    {
+                        status = JsonConvert.DeserializeObject<StatusDTO>(Convert.ToString(resStatus.Result));
+                        item.Status = status;
+                    }
+                }
             }
             return list;
         }

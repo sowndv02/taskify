@@ -55,7 +55,7 @@ namespace taskify_api.Controllers.v1
                     _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
                     return BadRequest(_response);
                 }
-                List<TaskUser> model = await _taskUserRepository.GetAllAsync(x => x.TaskId == id, "User");
+                List<TaskUser> model = await _taskUserRepository.GetAllAsync(x => x.TaskId == id);
                 _response.Result = _mapper.Map<List<TaskUserDTO>>(model);
                 return Ok(_response);
             }

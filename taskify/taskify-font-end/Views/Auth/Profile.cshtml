@@ -1,0 +1,250 @@
+﻿@model taskify_font_end.Models.DTO.UserDTO
+
+@{
+}
+
+
+<div class="content-wrapper">
+
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1">
+                        <li class="breadcrumb-item">
+                            <a asp-action="Dashboard" asp-controller="Home">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Profile
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <h5 class="card-header">Profile details</h5>
+                    <!-- Account -->
+                    <div class="card-body">
+                        <form asp-action="Update" asp-controller="Auth"
+                              class="form-submit-event" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="redirect_url"
+                                   value="https://taskify-saas.taskhub.company/master-panel/account/5">
+
+                            <input type="hidden" name="_token" value="SYMxob5ot9gih9yFuCWFvINp4a0rRNd9HGpDLeez" autocomplete="off">                            <input type="hidden" name="_method" value="PUT">                            <div class="d-flex align-items-start align-items-sm-center gap-4">
+                                <img src="https://taskify-saas.taskhub.company/storage/photos/oZIhSJaP4lp4imBepBkvXv48amqt4ibWsDZxlhvq.png"
+                                     alt="user-avatar" class="d-block rounded" height="100" width="100"
+                                     id="uploadedAvatar" />
+                                <div class="button-wrapper">
+                                    <div class="input-group d-flex">
+                                        <input type="file" class="form-control" id="inputGroupFile02" name="upload">
+                                        <button class="btn btn-outline-primary" type="submit"
+                                                id="submit_btn">
+                                            Update profile photo
+                                        </button>
+                                    </div>
+
+
+                                    <p class="text-muted mt-2">Allowed JPG or PNG.                                    </p>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                    <hr class="my-0" />
+                    <div class="card-body">
+                        <form id="formAccountSettings" method="POST" class="form-submit-event"
+                              action="https://taskify-saas.taskhub.company/profile/update/5">
+
+
+                            <input type="hidden" name="redirect_url"
+                                   value="https://taskify-saas.taskhub.company/master-panel/account/5">
+
+                            <input type="hidden" name="_token" value="SYMxob5ot9gih9yFuCWFvINp4a0rRNd9HGpDLeez" autocomplete="off">                            <input type="hidden" name="_method" value="PUT">                            <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label for="firstName" class="form-label">First name                                        <span class="asterisk">*</span></label>
+                                    <input class="form-control" type="text" id="first_name" name="first_name"
+                                           placeholder="Enter first name" value="Sid"
+                                           autofocus />
+
+
+                                </div>
+
+
+
+                                <div class="mb-3 col-md-6">
+                                    <label for="lastName" class="form-label">Last name                                        <span class="asterisk">*</span></label>
+                                    <input class="form-control" type="text" name="last_name"
+                                           placeholder="Enter last name" id="last_name"
+                                           value="gor" />
+
+
+
+                                </div>
+
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label"
+                                           for="phone">
+                                        Phone number <span class="asterisk">*</span>
+                                    </label>
+                                    <input type="text" id="phone" name="phone" placeholder="Enter phone number"
+                                           class="form-control" placeholder="" value="8530900452" />
+
+
+
+                                </div>
+
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="email">E-mail</label>
+                                    <input class="form-control" type="text" name="email" placeholder="Enter email"
+                                           value="admin@gmail.com">
+
+
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label for="password" class="form-label">
+                                        Password <small class="text-muted"> (Leave it blank if no change)</small>
+                                    </label>
+                                    <input class="form-control" type="password" id="password" name="password"
+                                           placeholder="Enter Password">
+
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label for="password_confirmation"
+                                           class="form-label">Confirm password</label>
+                                    <input class="form-control" type="password" id="password_confirmation"
+                                           name="password_confirmation" placeholder="Re Enter Password">
+
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="role">
+                                        Role <span class="asterisk">*</span>
+                                    </label>
+                                    <div class="input-group">
+
+                                        <select class="form-select text-capitalize" id="role" name="role">
+
+                                            <option value="1" selected>
+                                                admin
+                                            </option>
+                                            <option value="9">
+                                                member
+                                            </option>
+                                            <option value="21">
+                                                client
+                                            </option>
+                                            <option value="26">
+                                                test
+                                            </option>
+                                        </select>
+
+
+
+
+                                    </div>
+
+
+                                </div>
+
+
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="address">
+                                        Address <span class="asterisk">*</span>
+                                    </label>
+                                    <input class="form-control" type="text" id="address"
+                                           placeholder="Enter address" name="address"
+                                           value="bhuj">
+
+
+                                </div>
+
+
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="city">
+                                        City <span class="asterisk">*</span>
+                                    </label>
+                                    <input class="form-control" type="text" id="city" placeholder="Enter city"
+                                           name="city" value="Bhuj">
+
+
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="state">
+                                        State <span class="asterisk">*</span>
+                                    </label>
+                                    <input class="form-control" type="text" id="state" placeholder="Enter state"
+                                           name="state" value="gujrat">
+
+
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="country">
+                                        Country <span class="asterisk">*</span>
+                                    </label>
+                                    <input class="form-control" type="text" id="country"
+                                           placeholder="Enter country" name="country"
+                                           value="India">
+
+
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="zip">Zip code                                        <span class="asterisk">*</span></label>
+                                    <input class="form-control" type="text" id="zip"
+                                           placeholder="Enter ZIP code" name="zip"
+                                           value="370001">
+
+
+                                </div>
+
+                                <div class="mt-2">
+                                    <button type="submit" id="submit_btn"
+                                            class="btn btn-primary me-2">
+                                        Update
+                                    </button>
+                                    <button type="reset"
+                                            class="btn btn-outline-secondary">
+                                        Cancel
+                                    </button>
+                                </div>
+                        </form>
+                    </div>
+                    <!-- /Account -->
+                </div>
+                <div class="card">
+                    <h5 class="card-header">Delete account</h5>
+                    <div class="card-body">
+                        <div class="mb-3 col-12 mb-0">
+                            <div class="alert alert-warning">
+                                <h6 class="alert-heading fw-bold mb-1">
+                                    Are you sure you want to delete your account?
+                                </h6>
+                                <p class="mb-0">
+                                    Once you delete your account, there is no going back. Please be certain.
+                                </p>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger" data-bs-toggle="modal"
+                                data-bs-target="#deleteAccountModal">
+                            Delete account
+                        </button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

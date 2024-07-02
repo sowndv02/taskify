@@ -1,10 +1,13 @@
-﻿@model taskify_font_end.Models.DTO.ProjectDTO
+﻿@using System.Security.Claims;
+@model taskify_font_end.Models.DTO.ProjectDTO
 @{
+    var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.PathBase}";
+
     var startDate = Model.StartAt.Date;
     var endDate = Model.EndAt.Date;
     var duration = (endDate - startDate).Days + 1;
     int totalTask = 0;
-
+    var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
     foreach(var item in ViewBag.statuses)
     {
         totalTask += item.Tasks.Count;
@@ -68,16 +71,16 @@
                                 <div class="mb-3 text-center">
                                     <label class="form-label" for="start_date">Users</label>
                                     <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center flex-wrap justify-content-center">
-                                        @if (ViewBag.users != null && ViewBag.users.Count > 0)
+                                        @if (Model.ProjectUsers != null && Model.ProjectUsers.Count > 0)
                                         {
-                                            @foreach (var item in ViewBag.users)
+                                            @foreach (var item in Model.ProjectUsers)
                                             {
                                                 <li class="avatar avatar-sm pull-up"
-                                                    title="@item.FirstName @item.LastName">
-                                                    <a asp-action="Profile" asp-controller="User" asp-route-id="@item.Id" target="_blank">
-                                                        <img src="~/image/jy7QgtF889jUrfKFxLVwVUiIAox3raIavpq3zdRy.jpg"
+                                                    title="@item.User?.FirstName @item.User?.LastName">
+                                                    <a asp-action="Profile" asp-controller="User" asp-route-id="@item.User?.Id" target="_blank">
+                                                        <img src="~/image/e9FPOEwYsVXC1LWNFObuLqeOHy8jn6gLK9PQfQNq.png"
                                                              class="rounded-circle"
-                                                             alt="@item.FirstName @item.LastName">
+                                                             alt="@item.User?.FirstName @item.User?.LastName">
                                                     </a>
                                                 </li>
                                             }
@@ -273,94 +276,8 @@
                         <!-- tasks -->
                         <div class="">
                             <div class="table-responsive text-nowrap">
-                                <div class="row mx-2 mt-4">
-                                    <div class="col-md-3 mb-3">
-                                        <div class="input-group input-group-merge">
-                                            <input type="text" id="task_start_date_between" name="task_start_date_between" class="form-control"
-                                                   placeholder="Start date between" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <div class="input-group input-group-merge">
-                                            <input type="text" id="task_end_date_between" name="task_end_date_between" class="form-control"
-                                                   placeholder="End date between" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3 mb-3">
-                                        <select class="form-select" id="tasks_user_filter" aria-label="Default select example">
-                                            <option value="">Select user</option>
-
-                                            <option value="2">
-                                                super admin
-                                            </option>
-                                            <option value="7">
-                                                Team Member 1
-                                            </option>
-                                            <option value="14">
-                                                King Lost
-                                            </option>
-                                            <option value="15">
-                                                jimy karter
-                                            </option>
-                                            <option value="34">
-                                                Akash Dhaman
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-3 mb-3">
-                                        <select class="form-select" id="task_status_filter" aria-label="Default select example">
-                                            <option value="">Select status</option>
-                                            <option value="0">Default</option>
-                                            <option value="72">STARTED</option>
-                                            <option value="73">ON GOING</option>
-                                            <option value="74">IN REVIEW</option>
-                                        </select>
-                                    </div>
-
-
-                                </div>
-
-                                <input type="hidden" name="task_start_date_from" id="task_start_date_from">
-                                <input type="hidden" name="task_start_date_to" id="task_start_date_to">
-
-                                <input type="hidden" name="task_end_date_from" id="task_end_date_from">
-                                <input type="hidden" name="task_end_date_to" id="task_end_date_to">
-
-                                <input type="hidden" id="data_type" value="tasks">
-                                <input type="hidden" id="data_table" value="task_table">
-
                                 <div class="card-body">
-                                   @*  <table id="task_table" data-toggle="table" data-loading-template="loadingTemplate"
-                                           data-url="https://taskify-saas.taskhub.company/master-panel/tasks/list/project_22"
-                                           data-route-prefix="/master-panel" data-icons-prefix="bx"
-                                           data-icons="icons" data-show-refresh="true" data-total-field="total" data-trim-on-search="false"
-                                           data-data-field="rows" data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true"
-                                           data-side-pagination="server" data-show-columns="true" data-pagination="true" data-sort-name="id"
-                                           data-sort-order="desc" data-mobile-responsive="true" data-query-params="queryParamsTasks">
-
-                                        <thead>
-                                            <tr>
-                                                <th data-checkbox="true"></th>
-                                                <th data-sortable="true" data-field="id">ID</th>
-                                                <th data-sortable="true" data-field="title">Task</th>
-                                                <th data-sortable="true" data-field="project_id">Project                        </th>
-                                                <th data-field="users" data-formatter="TaskUserFormatter">
-                                                    Users
-                                                </th>
-                                                <th data-field="clients" data-formatter="TaskClientFormatter">
-                                                    Clients
-                                                </th>
-                                                <th data-sortable="true" data-field="start_date">
-                                                    Starts at
-                                                </th>
-                                                <th data-sortable="true" data-field="end_date">Ends at                        </th>
-                                                <th data-sortable="true" data-field="status_id">Status                        </th>
-                                                <th data-formatter="actionFormatter">Actions</th>
-                                            </tr>
-                                        </thead>
-                                    </table> *@
-                                    <table data-mobile-responsive="true" data-route-prefix="/Tag" id="table" class="table table-bordered">
+                                    <table data-mobile-responsive="true"  id="tableTask" class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th data-field="id">ID</th>
@@ -384,22 +301,36 @@
                                                     <tr>
                                                         <td>@item.Id</td>
                                                         <td>@item.Title</td>
-                                                        <td><span class="badge bg-@item.Color?.Title">@item.Title.ToUpper()</span></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
                                                         <td>
-                                                            <a href="javascript:void(0);" class="edit-tag card-link" data-bs-toggle="modal" data-bs-target="#edit_tag_modal" data-id="@item.Id" title="label_update"><i class="bx bx-edit mx-1"></i></a>
-                                                            <button title="label_delete" type="button" class="btn delete" data-id="@item.Id" data-type="tags">
-                                                                <i class="bx bx-trash text-danger mx-1"></i>
-                                                            </button>
+                                                            @foreach(var user in item.TaskUsers)
+                                                            {
+                                                                <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                                                    <li><a asp-action="Profile" asp-controller="User" asp-route-id="@user.Id" target="_blank"></a></li>
+                                                                    <li class="avatar avatar-sm pull-up" title="@user.User?.FirstName @user.User?.LastName">
+                                                                        <a asp-action="Profile" asp-controller="User" asp-route-id="@user.User?.Id" target="_blank">
+                                                                            <img src="~/image/9qUS34YWblfHxwbOTLx0XHtU264PUvXeMSxPd8AK.png" class="rounded-circle">
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            }
+                                                        </td>
+                                                        <td>@Model.StartAt.ToShortDateString()</td>
+                                                        <td>@Model.EndAt.ToShortDateString()</td>
+                                                        <td>@item.Status?.Title</td>
+                                                        <td>
+                                                            @if (Model.ActualEndAt == null && string.IsNullOrEmpty(Model.ActualEndAt.ToString()))
+                                                            {
+                                                                <a asp-action="Update" asp-controller="Task" asp-route-id="@item.Id" title="Update"><i class="bx bx-edit mx-1"></i></a>
+                                                                <button title="Delete" type="button" class="btn delete-item" data-id="@item.Id" data-type="task" data-table="task_table">
+                                                                    <i class="bx bx-trash text-danger mx-1"></i>
+                                                                </button>
+                                                                <a href="javascript:void(0);" class="duplicate" data-id="@item.Id" data-type="tasks" data-table="task_table" title="Duplicate">
+                                                                    <i class="bx bx-copy text-warning mx-2"></i>
+                                                                </a>
+                                                            }
                                                         </td>
                                                     </tr>
                                                 }
-                                            }
-                                            else
-                                            {
-                                                <p>Don't have any tag'</p>
                                             }
                                         </tbody>
                                     </table>
@@ -417,7 +348,7 @@
                             var remove_favorite = 'Click to remove from favorite ';
                             var id = 'project_22';
                         </script>
-                        <script src="https://taskify-saas.taskhub.company/assets/js/pages/tasks.js"></script>
+                        @* <script src="https://taskify-saas.taskhub.company/assets/js/pages/tasks.js"></script> *@
                     </div>
 
                     <div class=" tab-pane fade" id="navs-top-milestones" role="tabpanel">
@@ -437,101 +368,66 @@
                                             </button>
                                         </a>
                                     </div>
-                                    <div class="row mt-4 ">
-                                        <div class="mb-3 col-md-4">
-                                            <div class="input-group input-group-merge">
-                                                <input type="text" id="start_date_between"
-                                                       name="start_date_between" class="form-control"
-                                                       placeholder="Start date between"
-                                                       autocomplete="off">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 col-md-4">
-                                            <div class="input-group input-group-merge">
-                                                <input type="text" id="end_date_between" name="end_date_between"
-                                                       class="form-control"
-                                                       placeholder="End date between"
-                                                       autocomplete="off">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 col-md-4">
-                                            <select class="form-select" id="status_filter"
-                                                    aria-label="Default select example">
-                                                <option value="">
-                                                    Select status
-                                                </option>
-                                                <option value="incomplete">
-                                                    Incomplete
-                                                </option>
-                                                <option value="complete">
-                                                    Complete
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <input type="hidden" name="start_date_from" id="start_date_from">
-                                    <input type="hidden" name="start_date_to" id="start_date_to">
-                                    <input type="hidden" name="end_date_from" id="end_date_from">
-                                    <input type="hidden" name="end_date_to" id="end_date_to">
+                                    
                                     <div class="table-responsive">
-                                        <input type="hidden" id="data_type" value="milestone">
-                                        <input type="hidden" id="data_table" value="project_milestones_table">
-                                        <table id="project_milestones_table" data-toggle="table"
-                                               data-loading-template="loadingTemplate"
-                                               data-url="https://taskify-saas.taskhub.company/master-panel/projects/get-milestones/22"
-                                               data-icons-prefix="bx" data-icons="icons" data-show-refresh="true"
-                                               data-total-field="total" data-trim-on-search="false"
-                                               data-data-field="rows" data-page-list="[5, 10, 20, 50, 100, 200]"
-                                               data-search="true" data-side-pagination="server" data-show-columns="true"
-                                               data-pagination="true" data-sort-name="id" data-sort-order="desc"
-                                               data-mobile-responsive="true"
-                                               data-query-params="queryParamsProjectMilestones">
+                                        <table data-mobile-responsive="true" id="tableMilestone" class="table table-bordered">
                                             <thead>
                                                 <tr>
-                                                    <th data-checkbox="true"></th>
-                                                    <th data-sortable="true" data-field="id">
-                                                        ID
+                                                    <th data-field="id">ID</th>
+                                                    <th data-field="title">TITLE</th>
+                                                    <th data-field="start_date">
+                                                        START DATE
                                                     </th>
-                                                    <th data-sortable="true" data-field="title">
-                                                        Title
-                                                    </th>
-                                                    <th data-sortable="true" data-field="start_date">
-                                                        Start date
-                                                    </th>
-                                                    <th data-sortable="true" data-field="end_date">
-                                                        End Date
-                                                    </th>
-                                                    <th data-sortable="true" data-field="cost">
-                                                        Cost
-                                                    </th>
-                                                    <th data-sortable="true" data-field="progress">
-                                                        Progress
-                                                    </th>
-                                                    <th data-sortable="true" data-field="status">
-                                                        Status
-                                                    </th>
-                                                    <th data-sortable="true" data-field="description"
-                                                        data-visible="false">
-                                                        Description
-                                                    </th>
-                                                    <th data-sortable="true" data-field="created_by"
-                                                        data-visible="false">
-                                                        Created by
-                                                    </th>
-                                                    <th data-sortable="true" data-field="created_at"
-                                                        data-visible="false">
-                                                        Created at
-                                                    </th>
-                                                    <th data-sortable="true" data-field="updated_at"
-                                                        data-visible="false">
-                                                        Updated at
-                                                    </th>
-                                                    <th data-formatter="actionsFormatterProjectMilestones">
-                                                        Actions
-                                                    </th>
+                                                    <th data-field="end_date">END DATE</th>
+                                                    <th data-field="progress">PROGRESS</th>
+                                                    <th data-field="status">STATUS</th>
+                                                    <th data-formatter="actionFormatter">Actions</th>
                                                 </tr>
                                             </thead>
+                                            <tbody id="tableBody">
+                                                @if (ViewBag.milestones != null && ViewBag.milestones.Count > 0)
+                                                {
+                                                    @foreach (var item in ViewBag.milestones)
+                                                    {
+                                                        <tr>
+                                                            <td>@item.Id</td>
+                                                            <td>@item.Title</td>
+                                                            <td>@Model.StartAt.ToShortDateString()</td>
+                                                            <td>@Model.EndAt.ToShortDateString()</td>
+                                                            <td>
+                                                                <div class="demo-vertical-spacing">
+                                                                    <div class="progress">
+                                                                        <div class="progress-bar" role="progressbar" style="width: @item.Progress%" aria-valuenow="@item.Progress" aria-valuemin="0" aria-valuemax="100">
+                                                                        </div>
+                                                                    </div>
+                                                                </div> 
+                                                                <h6 class="mt-2">@item.Progress%</h6>
+                                                            </td>
+                                                            <td>@if (!item.Status)
+                                                                {
+                                                                    <span class="badge bg-danger">Incomplete</span>
+                                                                }else{
+                                                                    <span class="badge bg-success">Complete</span>
+                                                                }
+                                                               
+                                                            </td>
+                                                            <td>
+                                                                @if (Model.ActualEndAt == null && string.IsNullOrEmpty(Model.ActualEndAt.ToString()))
+                                                                {
+                                                                    <a href="javascript:void(0);" class="edit-milestone-btn" data-bs-toggle="modal" data-bs-target="#edit_milestone_modal" data-id="@item.Id" title="Update">
+                                                                        <i class="bx bx-edit mx-1"></i>
+                                                                    </a>
+                                                                    <button title="Delete" type="button" class="btn delete-item"  data-id="@item.Id" data-type="milestone" data-table="project_milestones_table">
+                                                                        <i class="bx bx-trash text-danger mx-1"></i>
+                                                                    </button>
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
                                         </table>
+
                                     </div>
                                 </div>
                             </div>
@@ -552,8 +448,7 @@
                                         </div>
                                     </a>
                                     <div class="table-responsive">
-                                        <input type="hidden" id="data_type" value="project-media">
-                                        <input type="hidden" id="data_table" value="table">
+@* 
                                         <table id="table" data-toggle="table" data-loading-template="loadingTemplate"
                                                data-url="https://taskify-saas.taskhub.company/master-panel/projects/get-media/22"
                                                data-icons-prefix="bx" data-icons="icons" data-show-refresh="true"
@@ -590,8 +485,48 @@
                                                     </th>
                                                 </tr>
                                             </thead>
-                                        </table>
+                                        </table> *@
 
+                                        <table data-mobile-responsive="true" id="tableMedia" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th data-field="id">ID</th>
+                                                    <th data-field="title">FILE NAME</th>
+                                                    <th data-field="file_size">
+                                                        FILE SIZE
+                                                    </th>
+                                                    <th data-field="created_at">CREATED AT</th>
+                                                    <th data-field="updated_at">UPDATED AT</th>
+                                                    <th data-formatter="actionFormatter">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableBody">
+                                                @if (ViewBag.medias != null && ViewBag.medias.Count > 0)
+                                                {
+                                                    @foreach (var item in ViewBag.medias)
+                                                    {
+                                                        <tr>
+                                                            <td>@item.Id</td>
+                                                            <td>@item.FileName</td>
+                                                            <td>@item.FileSize KB</td>
+                                                            <td>@item.CreatedDate.ToShortDateString()</td>
+                                                            <td>@item.UpdatedDate.ToShortDateString()</td>
+                                                            <td>
+                                                                @if (Model.ActualEndAt == null && string.IsNullOrEmpty(Model.ActualEndAt.ToString()))
+                                                                {
+                                                                    <a href="https://taskify-saas.taskhub.company/storage/project-media/db.png" title="Download" download="">
+                                                                        <i class="bx bx-download bx-sm"></i>
+                                                                    </a>
+                                                                    <button title="Delete" type="button" class="btn delete" data-id="@item.Id" data-type="projectMedia">
+                                                                        <i class="bx bx-trash text-danger"></i>
+                                                                    </button>
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
 
 
                                     </div>
@@ -743,7 +678,318 @@
     </div>
 </div>
 <script>
+    var baseUrl = '@baseUrl';
+
     $(document).ready(function () {
-        $('#table').DataTable();
+        // Initialize DataTables
+        $('#tableTask').DataTable();
+        $('#tableMilestone').DataTable();
+        $('#tableMedia').DataTable();
+        $('#tableLog').DataTable();
+
+        // Create milestone form submission
+        $('#create_milestone_modal form').submit(function (event) {
+            event.preventDefault();
+            const formData = $(this).serialize();
+
+            $.ajax({
+                type: 'POST',
+                url: `${baseUrl}/Milestone/Create`,
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#create_milestone_modal').modal('hide');
+                        // Optionally, update the UI with the new milestone
+                        toastr.success(response.message);
+                        window.location.reload();
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    toastr.error('Failed to create milestone: ' + error);
+                }
+            });
+        });
+
+        // Update milestone form submission
+        $('#edit_milestone_modal form').submit(function (event) {
+            event.preventDefault();
+            const formData = $(this).serialize();
+            console.log(formData)
+            $.ajax({
+                type: 'POST',
+                url: `${baseUrl}/Milestone/Update`,
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        $('#edit_milestone_modal').modal('hide');
+                        // Optionally, update the UI with the updated milestone
+                        toastr.success(response.message);
+                        window.location.reload();
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    toastr.error('Failed to update milestone: ' + error);
+                }
+            });
+        });
+
+        // Function to populate milestone modal
+        function populateMilestoneModal(milestone) {
+            $('#milestone_id').val(milestone.id);
+            $('#milestone_title').val(milestone.title);
+            $('#update_milestone_start_date').val(moment(milestone.startAt).format('MM/DD/YYYY'));
+            $('#update_milestone_end_date').val(moment(milestone.endAt).format('MM/DD/YYYY'));
+            $('#milestone_status').val(milestone.status.toString());
+            $('#milestone_progress').val(milestone.progress);
+            $('.milestone-progress').text(milestone.progress + '%');
+            $('#milestone_description').val(milestone.description);
+            $('#userId').val(milestone.userId);
+            $('#created_date').val(milestone.createdDate);
+        }
+
+        // Event listener for edit milestone button click
+        $('.edit-milestone-btn').click(function () {
+            var id = $(this).data('id');
+            $.ajax({
+                url: `${baseUrl}/Milestone/GetMilestone/${id}`,
+                type: 'GET',
+                success: function (response) {
+                    console.log(response)
+                    if (response && response.milestone) {
+                        populateMilestoneModal(response.milestone);
+                        $('#edit_milestone_modal').modal('show');
+                    } else {
+                        console.error('Failed to fetch milestone data');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Failed to fetch milestone:', error);
+                }
+            });
+        });
     });
+
+    $(document).ready(function () {
+        // Function to update progress display and color
+        $('#milestone_progress').on('input', function () {
+            var progressValue = $(this).val();
+            $('.milestone-progress').text(progressValue + '%');
+
+            // Adjust background color based on progress
+            var color = getColorForPercentage(progressValue);
+            $(this).css('background', '-webkit-linear-gradient(left, ' + color + ' ' + progressValue + '%, #ffffff ' + progressValue + '%)');
+        });
+
+        // Helper function to determine color based on progress percentage
+        function getColorForPercentage(percentage) {
+            var hue = ((1 - percentage / 100) * 120).toString(10);
+            return ["hsl(", hue, ",100%,50%)"].join("");
+        }
+    });
+
+
+    $(document).ready(function () {
+        $(document).on('click', '.delete-item', function (e) {
+            e.preventDefault();
+            var id = $(this).data('id');
+            var type = $(this).data('type');
+            var reload = $(this).data('reload');
+            var tableID = $(this).data('table') || 'table';
+
+            // Show delete confirmation modal
+            $('#deleteModal').modal('show');
+
+            // Handle click on confirm delete button in modal
+            $('#confirmDeleteBtn').off('click').on('click', function () {
+                // Disable button and show loading state
+                $(this).html('Deleting...').attr('disabled', true);
+
+                // Construct URL and AJAX request dynamically
+                var urlPrefix = window.location.pathname.split('/')[1];
+                var url = `/${type}/Delete/${id}`;
+
+                $.ajax({
+                    url: url,
+                    type: 'DELETE',
+                    success: function (response) {
+                        $('#deleteModal').modal('hide');
+                        if (response.error === false) {
+                            toastr.success(response.message);
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 2000); // Optional delay before reload
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        $('#deleteModal').modal('hide');
+                        toastr.error('Failed to delete item: ' + error);
+                    },
+                    complete: function () {
+                        $('#confirmDeleteBtn').html('Delete').attr('disabled', false);
+                    }
+                });
+            });
+        });
+    });
+
 </script>
+
+
+<div class="modal fade" id="create_milestone_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <form class="modal-content form-submit-event" asp-action="Create" asp-controller="Milestone"
+              method="POST">
+            <input type="hidden" name="projectId" value="@Model.Id">
+            <input type="hidden" name="userId" value="@userId">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">
+                    Create milestone
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="nameBasic" class="form-label">
+                                Title <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" name="title" class="form-control"
+                                   placeholder="Please enter title">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label for="nameBasic"
+                                   class="form-label">Starts at                                            <span class="asterisk">*</span></label>
+                            <input type="text" id="start_date" name="startAt" class="form-control"
+                                   placeholder="" autocomplete="off">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label for="nameBasic" class="form-label">Ends at                                            <span class="asterisk">*</span></label>
+                            <input type="text" id="end_date" name="endAt" class="form-control"
+                                   placeholder="" autocomplete="off">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="nameBasic" class="form-label">Status                                            <span class="asterisk">*</span></label>
+                            <select class="form-select" name="status">
+                                <option value="false">Incomplete                                            </option>
+                                <option value="true">Complete</option>
+                            </select>
+                        </div>
+                    </div>
+                    <label for="description"
+                           class="form-label">Description</label>
+                    <textarea class="form-control" name="description"
+                              placeholder="Please enter description"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="submit" id="submit_btn"
+                        class="btn btn-primary">
+                    Create
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="edit_milestone_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <form class="modal-content form-submit-event" asp-action="Update" asp-controller="Milestone"
+              method="POST">
+            <input type="hidden" name="id" id="milestone_id">
+            <input type="hidden" name="projectId" value="@Model.Id">
+            <input type="hidden" name="userId" id="userId">
+            <input type="hidden" name="createdDate" id="created_date">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">
+                    Update milestone
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="nameBasic" class="form-label">
+                                Title <span class="asterisk">*</span>
+                            </label>
+                            <input type="text" name="title" id="milestone_title" class="form-control"
+                                   placeholder="Please enter title">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label for="nameBasic"
+                                   class="form-label">Starts at                                            <span class="asterisk">*</span></label>
+                            <input type="text" id="update_milestone_start_date" name="startAt"
+                                   class="form-control" placeholder="" autocomplete="off">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label for="nameBasic" class="form-label">Ends at                                            <span class="asterisk">*</span></label>
+                            <input type="text" id="update_milestone_end_date" name="endAt"
+                                   class="form-control" placeholder="" autocomplete="off">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="nameBasic" class="form-label">Status                                            <span class="asterisk">*</span></label>
+                            <select class="form-select" id="milestone_status" name="status">
+                                <option value="false">Incomplete                                            </option>
+                                <option value="true">Complete</option>
+                            </select>
+                        </div>
+                       
+                        <div class="col-12 mb-3">
+                            <label for="nameBasic"
+                                   class="form-label">Progress</label>
+                            <input type="range" name="progress" id="milestone_progress"
+                                   class="form-range">
+                            <h6 class="mt-2 milestone-progress"></h6>
+                            <p class="text-danger text-xs mt-1 error-message"></p>
+                        </div>
+                    </div>
+                    <label for="description"
+                           class="form-label">Description</label>
+                    <textarea class="form-control" name="description" id="milestone_description"
+                              placeholder="Please enter description"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="submit" id="submit_btn"
+                        class="btn btn-primary">
+                    Update
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this item?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>             

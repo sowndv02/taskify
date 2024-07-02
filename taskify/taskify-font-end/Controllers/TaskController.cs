@@ -19,13 +19,16 @@ namespace taskify_font_end.Controllers
         private readonly IProjectService _projectService;
         private readonly ITaskUserService _taskUserService;
         private readonly IProjectUserService _projectUserService;
+        private readonly ITaskMediaService _taskMediaService;
 
         public TaskController(IStatusService statusService,
             IWorkspaceService workspaceService, IUserService userService,
             IPriorityService priorityService, IColorService colorService, 
             ITaskUserService taskUserService, IProjectService projectService, 
-            ITaskService taskService, IProjectUserService projectUserService ) : base(workspaceService)
+            ITaskService taskService, IProjectUserService projectUserService, 
+            ITaskMediaService taskMediaService ) : base(workspaceService)
         {
+            _taskMediaService = taskMediaService;
             _taskService = taskService;
             _statusService = statusService;
             _colorService = colorService;
@@ -134,15 +137,8 @@ namespace taskify_font_end.Controllers
                     TempData["error"] = "You don't have any workspaces! Please create a workspace first!";
                     return RedirectToAction("Create", "Workspace");
                 }
+                obj.Id = 0;
                 obj.CreatedDate = DateTime.Now;
-                var project = await GetProjectByIdAsync(obj.ProjectId);
-                if(project.ActualEndAt != null && !string.IsNullOrEmpty(project.ActualEndAt.ToString()))
-                {
-                    TempData["error"] = "Cannot create task for project end";
-                    ViewBag.projects = await GetProjectByUserIdAndWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
-                    ViewBag.statuses = await GetStatusesByUserIdAsync(userId);
-                    return View(obj);
-                }
                 APIResponse result = await _taskService.CreateAsync<APIResponse>(obj);
 
                 if (result != null && result.IsSuccess && result.ErrorMessages.Count == 0)
@@ -152,7 +148,7 @@ namespace taskify_font_end.Controllers
                         if(await AddUserToTask(obj.TaskUserIds, model.Id))
                             TempData["success"] = "Create new task successfully";
 
-                    return RedirectToAction("Index", "Task");
+                    return RedirectToAction("Index", "Task", new {id = obj.ProjectId});
                 }
                 else
                 {
@@ -165,9 +161,7 @@ namespace taskify_font_end.Controllers
                                                   .Select(e => e.ErrorMessage).FirstOrDefault();
                 TempData["error"] = errorMessages;
             }
-            ViewBag.projects = await GetProjectByUserIdAndWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
-            ViewBag.statuses = await GetStatusesByUserIdAsync(userId);
-            return View(obj);
+            return RedirectToAction("Index", "Task", new { id = obj.ProjectId });
         }
 
         [HttpPut]
@@ -281,6 +275,61 @@ namespace taskify_font_end.Controllers
             ViewBag.users = users;
             ViewBag.statuses = statuses;
             return View(obj);
+        }
+
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            if (id <= 0)
+            {
+                return Json(new { error = true, message = "Invalid ID" });
+            }
+            try
+            {
+                List<TaskMediaDTO> medias = new List<TaskMediaDTO>();
+                APIResponse resultTaskMedia = await _taskMediaService.GetByTaskIdAsync<APIResponse>(id);
+                if (resultTaskMedia != null && resultTaskMedia.IsSuccess && resultTaskMedia.ErrorMessages.Count == 0)
+                {
+                    medias = JsonConvert.DeserializeObject<List<TaskMediaDTO>>(Convert.ToString(resultTaskMedia.Result));
+                    if (medias != null && medias.Count > 0)
+                    {
+                        foreach (var item in medias)
+                        {
+                            APIResponse otherResult = await _taskMediaService.DeleteAsync<APIResponse>(item.Id);
+                            if (otherResult == null && !otherResult.IsSuccess && otherResult.ErrorMessages.Count != 0)
+                                return Json(new { error = true, message = otherResult?.ErrorMessages?.FirstOrDefault() ?? "An error occurred while deleting the task" });
+                        }
+                    }
+                }
+
+                List<TaskUserDTO> userDTOs = new List<TaskUserDTO>();
+                APIResponse resultTaskUsers = await _taskUserService.GetByTaskIdAsync<APIResponse>(id);
+                if (resultTaskUsers != null && resultTaskUsers.IsSuccess && resultTaskUsers.ErrorMessages.Count == 0)
+                {
+                    userDTOs = JsonConvert.DeserializeObject<List<TaskUserDTO>>(Convert.ToString(resultTaskUsers.Result));
+                    if(userDTOs != null && userDTOs.Count > 0)
+                    {
+                        foreach (var item in userDTOs)
+                        {
+                            APIResponse otherResultUser = await _taskUserService.DeleteAsync<APIResponse>(item.Id);
+                            if (otherResultUser == null && !otherResultUser.IsSuccess && otherResultUser.ErrorMessages.Count != 0)
+                                return Json(new { error = true, message = otherResultUser?.ErrorMessages?.FirstOrDefault() ?? "An error occurred while deleting the task" });
+                        }
+                    }
+                }
+
+                APIResponse result = await _taskService.DeleteAsync<APIResponse>(id);
+
+                if (result != null && result.IsSuccess && result.ErrorMessages.Count == 0)
+                    return Json(new { error = false, message = "Task deleted successfully" });
+                else
+                    return Json(new { error = true, message = result?.ErrorMessages?.FirstOrDefault() ?? "An error occurred while deleting the task" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = true, message = "An error occurred: " + ex.Message });
+            }
         }
 
         private async Task<List<StatusDTO>> GetTaskByProjectIdAndUserIdAsync(string userId, int projectId)
@@ -447,6 +496,10 @@ namespace taskify_font_end.Controllers
             if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
             {
                 list = JsonConvert.DeserializeObject<List<ProjectUserDTO>>(Convert.ToString(response.Result));
+                foreach(var item in list) 
+                {
+                    item.User = await GetUserByIdAsync(item.UserId);
+                }
             }
             var users = new List<UserDTO>(); 
             if (list.Count > 0)

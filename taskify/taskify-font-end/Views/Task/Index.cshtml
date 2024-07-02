@@ -1,6 +1,11 @@
 ﻿@using Newtonsoft.Json;
 @model List<taskify_font_end.Models.DTO.StatusDTO>
 @{
+    int? projectId = null;
+    if (ViewContext.RouteData.Values["id"] != null)
+    {
+        projectId = Convert.ToInt32(ViewContext.RouteData.Values["id"]);
+    }
 }
 
 @functions {
@@ -28,7 +33,7 @@
                 </nav>
             </div>
             <div>
-                <a asp-action="Create" asp-controller="Task">
+                <a asp-action="Create" asp-controller="Task" asp-route-id="@projectId">
                     <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="left"
                             data-bs-original-title="Create task">
                         <i class='bx bx-plus'></i>

@@ -153,21 +153,19 @@
 
 <script>
     $(document).ready(function () {
-        $('select[name="ProjectId"]').change(function () {
-            const selectedProjectId = $(this).val();
-            updateUsersDropdown(selectedProjectId);
-        });
+        const projectDropdown = $('select[name="ProjectId"]');
+        const usersDropdown = $('select[name="TaskUserIds"]');
 
+        // Function to update the users dropdown based on selected project
         function updateUsersDropdown(projectId) {
-            const usersDropdown = $('select[name="TaskUserIds"]');
-            usersDropdown.empty(); 
+            usersDropdown.empty(); // Clear current options
 
             if (projectId) {
                 $.ajax({
                     url: `/Task/GetUsersByProject/${projectId}`,
                     type: 'GET',
                     success: function (response) {
-                        console.log(response)
+                        console.log(response);
                         if (response && response.users) {
                             response.users.forEach(user => {
                                 usersDropdown.append(new Option(user.name, user.id));
@@ -181,6 +179,16 @@
                     }
                 });
             }
+        }
+
+        projectDropdown.change(function () {
+            const selectedProjectId = $(this).val();
+            updateUsersDropdown(selectedProjectId);
+        });
+
+        if (projectDropdown.children('option').length === 2) { 
+            const singleProjectId = projectDropdown.children('option').eq(1).val();
+            projectDropdown.val(singleProjectId).trigger('change');
         }
     });
 
