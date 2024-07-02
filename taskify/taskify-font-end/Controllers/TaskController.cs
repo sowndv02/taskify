@@ -255,9 +255,9 @@ namespace taskify_font_end.Controllers
                 TaskDTO existingTask = await GetTaskByIdAsync(obj.Id);
                 if (result != null && result.IsSuccess && result.ErrorMessages.Count == 0)
                 {
-                    var task = JsonConvert.DeserializeObject<ProjectDTO>(Convert.ToString(result.Result));
+                    var task = JsonConvert.DeserializeObject<TaskDTO>(Convert.ToString(result.Result));
                     if (obj.TaskUserIds != null && obj.TaskUserIds.Count > 0)
-                        await UpdateProjectUsers(obj.TaskUserIds, existingTask.TaskUsers.Select(x => x.UserId).ToList(), obj.Id);
+                        await UpdateTaskUsers(obj.TaskUserIds, existingTask.TaskUsers.Select(x => x.UserId).ToList(), obj.Id);
                     
                     TempData["success"] = "Update task successfully";
                     return RedirectToAction("Update", "Task", new { id = obj.Id });
@@ -468,7 +468,7 @@ namespace taskify_font_end.Controllers
             return obj;
         }
 
-        private async Task<bool> UpdateProjectUsers(List<string> userIdsNew, List<string> userIdsOld, int taskId)
+        private async Task<bool> UpdateTaskUsers(List<string> userIdsNew, List<string> userIdsOld, int taskId)
         {
             try
             {

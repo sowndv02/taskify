@@ -3,6 +3,12 @@
     var startDate = Model.StartAt.Date;
     var endDate = Model.EndAt.Date;
     var duration = (endDate - startDate).Days + 1;
+    int totalTask = 0;
+
+    foreach(var item in ViewBag.statuses)
+    {
+        totalTask += item.Tasks.Count;
+    }
 }
 <div class="content-wrapper">
     <div class="container-fluid">
@@ -96,80 +102,30 @@
                                             <div id="taskStatisticsChart"></div>
                                         </div>
                                         <ul class="p-0 m-0">
-                                            <li class="d-flex mb-4 pb-1">
-                                                <div class="avatar flex-shrink-0 me-3">
-                                                    <span class="avatar-initial rounded bg-label-danger">
-                                                        <i class="bx bx-task"></i>
-                                                    </span>
-                                                </div>
-                                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                                    <div class="me-2">
-                                                        <h6 class="mb-0">Default</h6>
-                                                    </div>
-                                                    <div class="user-progress">
-                                                        <div class="status-count">
-                                                            <small class="fw-semibold">0</small>
+                                            @if(ViewBag.statuses != null && ViewBag.statuses.Count > 0)
+                                            {
+                                                @foreach(var item in ViewBag.statuses)
+                                                {
+                                                    <li class="d-flex mb-4 pb-1">
+                                                        <div class="avatar flex-shrink-0 me-3">
+                                                            <span class="avatar-initial rounded bg-label-@item.Color?.Title">
+                                                                <i class="bx bx-task"></i>
+                                                            </span>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="d-flex mb-4 pb-1">
-                                                <div class="avatar flex-shrink-0 me-3">
-                                                    <span class="avatar-initial rounded bg-label-primary">
-                                                        <i class="bx bx-task"></i>
-                                                    </span>
-                                                </div>
-                                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                                    <div class="me-2">
-                                                        <a href="https://taskify-saas.taskhub.company/master-panel/tasks?project=22&amp;status=72">
-                                                            <h6 class="mb-0">STARTED</h6>
-                                                        </a>
-                                                    </div>
-                                                    <div class="user-progress">
-                                                        <div class="status-count">
-                                                            <small class="fw-semibold">0</small>
+                                                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                                            <div class="me-2">
+                                                                <h6 class="mb-0">@item.Title</h6>
+                                                            </div>
+                                                            <div class="user-progress">
+                                                                <div class="status-count">
+                                                                    <small class="fw-semibold">@item.Tasks.Count</small>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="d-flex mb-4 pb-1">
-                                                <div class="avatar flex-shrink-0 me-3">
-                                                    <span class="avatar-initial rounded bg-label-info">
-                                                        <i class="bx bx-task"></i>
-                                                    </span>
-                                                </div>
-                                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                                    <div class="me-2">
-                                                        <a href="https://taskify-saas.taskhub.company/master-panel/tasks?project=22&amp;status=73">
-                                                            <h6 class="mb-0">ON GOING</h6>
-                                                        </a>
-                                                    </div>
-                                                    <div class="user-progress">
-                                                        <div class="status-count">
-                                                            <small class="fw-semibold">1</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="d-flex mb-4 pb-1">
-                                                <div class="avatar flex-shrink-0 me-3">
-                                                    <span class="avatar-initial rounded bg-label-warning">
-                                                        <i class="bx bx-task"></i>
-                                                    </span>
-                                                </div>
-                                                <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                                                    <div class="me-2">
-                                                        <a href="https://taskify-saas.taskhub.company/master-panel/tasks?project=22&amp;status=74">
-                                                            <h6 class="mb-0">IN REVIEW</h6>
-                                                        </a>
-                                                    </div>
-                                                    <div class="user-progress">
-                                                        <div class="status-count">
-                                                            <small class="fw-semibold">1</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                                    </li>
+                                                }
+                                                
+                                            }
                                         </ul>
                                         <li class="d-flex mb-4 pb-1">
                                             <div class="avatar flex-shrink-0 me-3">
@@ -183,7 +139,7 @@
                                                 </div>
                                                 <div class="user-progress">
                                                     <div class="status-count">
-                                                        <h5 class="mb-0">2</h5>
+                                                        <h5 class="mb-0">@totalTask</h5>
                                                     </div>
                                                 </div>
                                             </div>
@@ -237,7 +193,7 @@
                                         <div class="card-body">
                                             <div class="card-title d-flex align-items-start justify-content-between">
                                                 <div class="avatar flex-shrink-0">
-                                                    <i class="menu-icon tf-icons bx bx-purchase-tag-alt bx-md text-warning"></i>
+                                                    <i class="menu-icon tf-icons bx bxs-calendar-x bx-md text-warning"></i>
                                                 </div>
                                             </div>
                                             <span class="fw-semibold d-block mb-1">Actual End</span>
@@ -333,6 +289,7 @@
                                     <div class="col-md-3 mb-3">
                                         <select class="form-select" id="tasks_user_filter" aria-label="Default select example">
                                             <option value="">Select user</option>
+
                                             <option value="2">
                                                 super admin
                                             </option>
@@ -374,7 +331,7 @@
                                 <input type="hidden" id="data_table" value="task_table">
 
                                 <div class="card-body">
-                                    <table id="task_table" data-toggle="table" data-loading-template="loadingTemplate"
+                                   @*  <table id="task_table" data-toggle="table" data-loading-template="loadingTemplate"
                                            data-url="https://taskify-saas.taskhub.company/master-panel/tasks/list/project_22"
                                            data-route-prefix="/master-panel" data-icons-prefix="bx"
                                            data-icons="icons" data-show-refresh="true" data-total-field="total" data-trim-on-search="false"
@@ -402,8 +359,50 @@
                                                 <th data-formatter="actionFormatter">Actions</th>
                                             </tr>
                                         </thead>
+                                    </table> *@
+                                    <table data-mobile-responsive="true" data-route-prefix="/Tag" id="table" class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th data-field="id">ID</th>
+                                                <th data-field="title">Task</th>
+                                                <th data-field="users">
+                                                    Users
+                                                </th>
+                                                <th data-field="start_date">
+                                                    Starts at
+                                                </th>
+                                                <th data-field="end_date">Ends at</th>
+                                                <th data-field="status_id">Status</th>
+                                                <th data-formatter="actionFormatter">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableBody">
+                                            @if (ViewBag.tasks != null && ViewBag.tasks.Count > 0)
+                                            {
+                                                @foreach (var item in ViewBag.tasks)
+                                                {
+                                                    <tr>
+                                                        <td>@item.Id</td>
+                                                        <td>@item.Title</td>
+                                                        <td><span class="badge bg-@item.Color?.Title">@item.Title.ToUpper()</span></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <a href="javascript:void(0);" class="edit-tag card-link" data-bs-toggle="modal" data-bs-target="#edit_tag_modal" data-id="@item.Id" title="label_update"><i class="bx bx-edit mx-1"></i></a>
+                                                            <button title="label_delete" type="button" class="btn delete" data-id="@item.Id" data-type="tags">
+                                                                <i class="bx bx-trash text-danger mx-1"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <p>Don't have any tag'</p>
+                                            }
+                                        </tbody>
                                     </table>
-
                                 </div>
                             </div>
                         </div>
@@ -592,6 +591,9 @@
                                                 </tr>
                                             </thead>
                                         </table>
+
+
+
                                     </div>
                                 </div>
                             </div>
@@ -740,3 +742,8 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $('#table').DataTable();
+    });
+</script>

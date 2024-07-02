@@ -22,6 +22,8 @@ namespace taskify_font_end.Controllers
         private readonly IProjectTagService _projectTagService;
         private readonly ITaskService _taskService;
         private readonly ITaskUserService _taskUserService;
+        private readonly IMilestoneService _milestoneService;
+        private readonly IProjectMediaService _projectMediaService;
         private readonly IMapper _mapper;
         private readonly int ITEM_PER_PAGE = 0;
 
@@ -31,6 +33,8 @@ namespace taskify_font_end.Controllers
             IProjectUserService projectUserService, IProjectTagService projectTagService, 
             ITaskService taskService, ITaskUserService taskUserService, 
             IWorkspaceUserService workspaceUserService,
+            IMilestoneService milestoneService,
+            IProjectMediaService projectMediaService,
             IConfiguration configuration) : base(workspaceService)
         {
             _workspaceUserService = workspaceUserService;
@@ -45,6 +49,8 @@ namespace taskify_font_end.Controllers
             _projectTagService = projectTagService;
             ITEM_PER_PAGE = configuration.GetValue<int>("ItemPerPage");
             _taskUserService = taskUserService;
+            _milestoneService = milestoneService;   
+            _projectMediaService = projectMediaService;
         }
         public async Task<IActionResult> IndexAsync(int? page, string? sort, int? status, int[]? tagIds)
         {
@@ -257,7 +263,21 @@ namespace taskify_font_end.Controllers
 
         public async Task<IActionResult> Detail(int id)
         {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             ProjectDTO project = await GetProjectByIdAsync(id);
+            if (string.IsNullOrEmpty(userId) || !project.OwnerId.Equals(userId))
+            {
+                return RedirectToAction("AccessDenied", "Auth");
+            }
+            if (ViewBag.selectedWorkspaceId == null || ViewBag.selectedWorkspaceId == 0)
+            {
+                TempData["error"] = "Internal server error!";
+                return RedirectToAction("Dashboard", "Home");
+            }
+            ViewBag.tasks = await GetTaskByProjectId(id);
+            ViewBag.statuses = await GetTaskByProjectIdAndUserIdAsync(userId, id);
+            ViewBag.milestones = await GetMilestoneByProjectId(id);
+            ViewBag.projectMedias = await GetProjectMediaByProjectId(id);
             return View(project);
         }
 
@@ -684,5 +704,81 @@ namespace taskify_font_end.Controllers
 
             return true;
         }
+
+        private async Task<List<StatusDTO>> GetTaskByProjectIdAndUserIdAsync(string userId, int projectId)
+        {
+            var response = await _statusService.GetByUserIdAsync<APIResponse>(userId);
+            List<StatusDTO> list = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<StatusDTO>>(Convert.ToString(response.Result));
+            }
+
+            if (list.Count > 0)
+            {
+                list = list
+                .Take(4)
+                .OrderByDescending(x => x.Id)
+                .Concat(
+                    list.Skip(4)
+                        .OrderBy(x => x.Id)
+                )
+                .ToList();
+                foreach (var item in list)
+                {
+                    item.Tasks = await GetTaskByProjectIdAndStatusId(projectId, item.Id);
+                }
+            }
+
+            return list;
+        }
+        private async Task<List<TaskDTO>> GetTaskByProjectIdAndStatusId(int projectId, int id)
+        {
+            var response = await _taskService.GetByStatusIdAndProjectIdAsync<APIResponse>(projectId, id);
+            List<TaskDTO> list = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<TaskDTO>>(Convert.ToString(response.Result));
+            }
+            if (list.Count > 0)
+            {
+                list = list.OrderByDescending(x => x.CreatedDate)
+                   .ThenByDescending(x => x.UpdatedDate)
+                   .ToList();
+                var users = new List<TaskUserDTO>();
+                foreach (var item in list)
+                {
+                    var resUser = await _taskUserService.GetByTaskIdAsync<APIResponse>(item.Id);
+                    if (resUser != null && resUser.IsSuccess && resUser.ErrorMessages.Count == 0)
+                    {
+                        users = JsonConvert.DeserializeObject<List<TaskUserDTO>>(Convert.ToString(resUser.Result));
+                        item.TaskUsers = users;
+                    }
+                }
+            }
+            return list;
+        }
+        private async Task<List<MilestoneDTO>> GetMilestoneByProjectId(int id)
+        {
+            var response = await _milestoneService.GetByProjectIdAsync<APIResponse>(id);
+            List<MilestoneDTO> list = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<MilestoneDTO>>(Convert.ToString(response.Result));
+            }
+            return list;
+        }
+
+        private async Task<List<ProjectMediaDTO>> GetProjectMediaByProjectId(int id)
+        {
+            var response = await _projectMediaService.GetByProjectIdAsync<APIResponse>(id);
+            List<ProjectMediaDTO> list = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<ProjectMediaDTO>>(Convert.ToString(response.Result));
+            }
+            return list;
+        }
+
     }
 }
