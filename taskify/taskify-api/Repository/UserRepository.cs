@@ -263,6 +263,35 @@ namespace taskify_api.Repository
             MarkAllTokenInChainAsInValid(existingRefreshToken.UserId, existingRefreshToken.JwtTokenId);
         }
 
+        public async Task<User> GetAsync(string userId)
+        {
+            try
+            {
+                return await _userManager.FindByIdAsync(userId);
+            }
+            catch(Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public async Task<User> CreateAsync(User user, string password)
+        {
+            var result = await _userManager.CreateAsync(user, password);
+            return result.Succeeded ? user : null;
+        }
 
+        public async Task<List<User>> GetAllAsync()
+        {
+            return await _userManager.Users.ToListAsync();
+        }
+        public async Task<bool> RemoveAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return false;
+
+            var result = await _userManager.DeleteAsync(user);
+            return result.Succeeded;
+        }
     }
 }

@@ -1,4 +1,9 @@
-﻿﻿@using taskify_utility
+﻿@using System.Security.Claims;
+﻿@using taskify_utility
+
+@{
+    var nameIdentifier = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+}
 
 <div id="section-not-to-print">
     <nav class="layout-navbar container-fluid navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
@@ -14,7 +19,7 @@
 
             <div class="nav-item d-flex align-items-center">
 
-                <form action="https://taskify-saas.taskhub.company/search" method="get" class="d-flex align-items-center m-0"
+                <form action="" method="get" class="d-flex align-items-center m-0"
                       id="search-form">
                     <button type="submit" class="btn btn-default p-0"><i class="bx bx-search fs-4 lh-0"></i></button>
                     <input type="text" name="query" value=""
@@ -70,7 +75,7 @@
                             <div class="dropdown-divider"></div>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="#">
+                            <a class="dropdown-item" asp-action="Profile" asp-controller="Auth" asp-route-id="@nameIdentifier">
                                 <i class="bx bx-user me-2"></i>
                                 <span class="align-middle">My Profile</span>
                             </a>

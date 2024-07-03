@@ -64,5 +64,16 @@ namespace taskify_font_end.Service
                 Url = API_URL + $"/api/{SD.CurrentAPIVersion}/User/" + dto.Id
             });
         }
+
+        public async Task<T> UploadImgAsync<T>(UserDTO dto)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.PUT,
+                Data = dto,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/User/UploadImg/" + dto.Id,
+                ContentType = SD.ContentType.MultipartFormData
+            });
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-
+using taskify_font_end.Models.DTO;
 
 namespace taskify_font_end
 {
@@ -8,7 +8,7 @@ namespace taskify_font_end
     {
         public MappingConfig()
         {
-            
+            CreateMap<UserDTO, UserUpdateDTO>().ReverseMap();
         }
     }
 }

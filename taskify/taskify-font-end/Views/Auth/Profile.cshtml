@@ -1,6 +1,8 @@
-﻿@model taskify_font_end.Models.DTO.UserDTO
+﻿@using System.Security.Claims;
+@model taskify_font_end.Models.DTO.UserUpdateDTO
 
 @{
+    var role = User.FindFirst(ClaimTypes.Role)?.Value;
 }
 
 
@@ -29,25 +31,21 @@
                     <h5 class="card-header">Profile details</h5>
                     <!-- Account -->
                     <div class="card-body">
-                        <form asp-action="Update" asp-controller="Auth"
+                        <form asp-action="UploadImg" asp-controller="Auth"
                               class="form-submit-event" method="POST" enctype="multipart/form-data">
-                            <input type="hidden" name="redirect_url"
-                                   value="https://taskify-saas.taskhub.company/master-panel/account/5">
-
-                            <input type="hidden" name="_token" value="SYMxob5ot9gih9yFuCWFvINp4a0rRNd9HGpDLeez" autocomplete="off">                            <input type="hidden" name="_method" value="PUT">                            <div class="d-flex align-items-start align-items-sm-center gap-4">
-                                <img src="https://taskify-saas.taskhub.company/storage/photos/oZIhSJaP4lp4imBepBkvXv48amqt4ibWsDZxlhvq.png"
-                                     alt="user-avatar" class="d-block rounded" height="100" width="100"
-                                     id="uploadedAvatar" />
+                            <div class="d-flex align-items-start align-items-sm-center gap-4">
+                                <img src="@Model.ImageUrl" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar" />
                                 <div class="button-wrapper">
                                     <div class="input-group d-flex">
-                                        <input type="file" class="form-control" id="inputGroupFile02" name="upload">
+                                        <input asp-for="ImageUrl" hidden class="form-control" />
+                                        <input asp-for="ImageLocalPathUrl" hidden class="form-control" />
+                                        <input asp-for="Id" hidden class="form-control" />
+                                        <input type="file" class="form-control" id="inputGroupFile02" asp-for="Image">
                                         <button class="btn btn-outline-primary" type="submit"
                                                 id="submit_btn">
                                             Update profile photo
                                         </button>
                                     </div>
-
-
                                     <p class="text-muted mt-2">Allowed JPG or PNG.                                    </p>
                                 </div>
 
@@ -56,33 +54,19 @@
                     </div>
                     <hr class="my-0" />
                     <div class="card-body">
-                        <form id="formAccountSettings" method="POST" class="form-submit-event"
-                              action="https://taskify-saas.taskhub.company/profile/update/5">
-
-
-                            <input type="hidden" name="redirect_url"
-                                   value="https://taskify-saas.taskhub.company/master-panel/account/5">
-
-                            <input type="hidden" name="_token" value="SYMxob5ot9gih9yFuCWFvINp4a0rRNd9HGpDLeez" autocomplete="off">                            <input type="hidden" name="_method" value="PUT">                            <div class="row">
+                        <form id="formAccountSettings" method="POST" class="form-submit-event" asp-action="Update" asp-controller="Auth">
+                            <input asp-for="Id" hidden class="form-control" />
+                            <div class="row">
                                 <div class="mb-3 col-md-6">
-                                    <label for="firstName" class="form-label">First name                                        <span class="asterisk">*</span></label>
-                                    <input class="form-control" type="text" id="first_name" name="first_name"
-                                           placeholder="Enter first name" value="Sid"
-                                           autofocus />
-
-
+                                    <label for="firstName" class="form-label">First name<span class="asterisk">*</span></label>
+                                    <input class="form-control" type="text" id="first_name" asp-for="FirstName"
+                                           placeholder="Enter first name" autofocus />
                                 </div>
 
-
-
                                 <div class="mb-3 col-md-6">
-                                    <label for="lastName" class="form-label">Last name                                        <span class="asterisk">*</span></label>
-                                    <input class="form-control" type="text" name="last_name"
-                                           placeholder="Enter last name" id="last_name"
-                                           value="gor" />
-
-
-
+                                    <label for="lastName" class="form-label">Last name<span class="asterisk">*</span></label>
+                                    <input class="form-control" type="text" asp-for="LastName"
+                                           placeholder="Enter last name" id="last_name" />
                                 </div>
 
 
@@ -91,27 +75,21 @@
                                            for="phone">
                                         Phone number <span class="asterisk">*</span>
                                     </label>
-                                    <input type="text" id="phone" name="phone" placeholder="Enter phone number"
-                                           class="form-control" placeholder="" value="8530900452" />
-
-
-
+                                    <input type="text" id="phone" asp-for="PhoneNumber" placeholder="Enter phone number"
+                                           class="form-control" placeholder="" />
                                 </div>
 
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="email">E-mail</label>
-                                    <input class="form-control" type="text" name="email" placeholder="Enter email"
-                                           value="admin@gmail.com">
-
-
+                                    <input class="form-control" type="text" readonly asp-for="Email" placeholder="Enter email" />
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label for="password" class="form-label">
                                         Password <small class="text-muted"> (Leave it blank if no change)</small>
                                     </label>
-                                    <input class="form-control" type="password" id="password" name="password"
+                                    <input class="form-control" type="password" id="password" asp-for="Password"
                                            placeholder="Enter Password">
 
                                 </div>
@@ -119,7 +97,7 @@
                                     <label for="password_confirmation"
                                            class="form-label">Confirm password</label>
                                     <input class="form-control" type="password" id="password_confirmation"
-                                           name="password_confirmation" placeholder="Re Enter Password">
+                                           asp-for="ConfirmPassword" placeholder="Re Enter Password">
 
                                 </div>
 
@@ -127,32 +105,8 @@
                                     <label class="form-label" for="role">
                                         Role <span class="asterisk">*</span>
                                     </label>
-                                    <div class="input-group">
-
-                                        <select class="form-select text-capitalize" id="role" name="role">
-
-                                            <option value="1" selected>
-                                                admin
-                                            </option>
-                                            <option value="9">
-                                                member
-                                            </option>
-                                            <option value="21">
-                                                client
-                                            </option>
-                                            <option value="26">
-                                                test
-                                            </option>
-                                        </select>
-
-
-
-
-                                    </div>
-
-
+                                    <input class="form-control" type="text" readonly value="@role" />
                                 </div>
-
 
 
                                 <div class="mb-3 col-md-6">
@@ -160,52 +114,7 @@
                                         Address <span class="asterisk">*</span>
                                     </label>
                                     <input class="form-control" type="text" id="address"
-                                           placeholder="Enter address" name="address"
-                                           value="bhuj">
-
-
-                                </div>
-
-
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label" for="city">
-                                        City <span class="asterisk">*</span>
-                                    </label>
-                                    <input class="form-control" type="text" id="city" placeholder="Enter city"
-                                           name="city" value="Bhuj">
-
-
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label" for="state">
-                                        State <span class="asterisk">*</span>
-                                    </label>
-                                    <input class="form-control" type="text" id="state" placeholder="Enter state"
-                                           name="state" value="gujrat">
-
-
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label" for="country">
-                                        Country <span class="asterisk">*</span>
-                                    </label>
-                                    <input class="form-control" type="text" id="country"
-                                           placeholder="Enter country" name="country"
-                                           value="India">
-
-
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label class="form-label" for="zip">Zip code                                        <span class="asterisk">*</span></label>
-                                    <input class="form-control" type="text" id="zip"
-                                           placeholder="Enter ZIP code" name="zip"
-                                           value="370001">
-
-
+                                           placeholder="Enter address" asp-for="Address" >
                                 </div>
 
                                 <div class="mt-2">
@@ -218,31 +127,10 @@
                                         Cancel
                                     </button>
                                 </div>
+                            </div>
                         </form>
                     </div>
                     <!-- /Account -->
-                </div>
-                <div class="card">
-                    <h5 class="card-header">Delete account</h5>
-                    <div class="card-body">
-                        <div class="mb-3 col-12 mb-0">
-                            <div class="alert alert-warning">
-                                <h6 class="alert-heading fw-bold mb-1">
-                                    Are you sure you want to delete your account?
-                                </h6>
-                                <p class="mb-0">
-                                    Once you delete your account, there is no going back. Please be certain.
-                                </p>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-danger" data-bs-toggle="modal"
-                                data-bs-target="#deleteAccountModal">
-                            Delete account
-                        </button>
-
-                    </div>
-
                 </div>
             </div>
         </div>

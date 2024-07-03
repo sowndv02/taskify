@@ -49,7 +49,7 @@ namespace taskify_api.Controllers
                     _response.ErrorMessages = new List<string> { $"{userId} is invalid!" };
                     return BadRequest(_response);
                 }
-                User model = await _userRepository.GetAsync(x => x.Id.Equals(userId));
+                User model = await _userRepository.GetAsync(userId);
                 _response.Result = _mapper.Map<UserDTO>(model);
                 return Ok(_response);
             }

@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Security.Claims;
 using taskify_font_end.Models;
 using taskify_font_end.Models.DTO;
 using taskify_font_end.Models.VM;
+using taskify_font_end.Service;
 using taskify_font_end.Service.IService;
 using taskify_utility;
 
@@ -17,11 +20,17 @@ namespace taskify_font_end.Controllers
         private readonly IAuthService _authService;
         private readonly ITokenProvider _tokenProvider;
         private readonly IWorkspaceService _workspaceService;
-        public AuthController(IAuthService authService, ITokenProvider tokenProvider, IWorkspaceService workspaceService) : base(workspaceService)
+        private readonly IUserService _userService;
+        private readonly IMapper _mapper;
+        public AuthController(IAuthService authService, ITokenProvider tokenProvider, 
+            IWorkspaceService workspaceService, IUserService userService,
+            IMapper mapper) : base(workspaceService)
         {
             _authService = authService;
             _tokenProvider = tokenProvider;
             _workspaceService = workspaceService;
+            _userService = userService;
+            _mapper = mapper;   
         }
 
         [HttpGet]
@@ -42,6 +51,33 @@ namespace taskify_font_end.Controllers
             return View();
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> ProfileAsync(string id)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId) || !id.Equals(userId))
+            {
+                return RedirectToAction("AccessDenied", "Auth");
+            }
+            UserDTO user = await GetUserByIdAsync(id);
+            var obj = _mapper.Map<UserUpdateDTO>(user);
+            return View(obj);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadImg(UserUpdateDTO updateDTO)
+        {
+            var obj = await GetUserByIdAsync(updateDTO.Id);
+            CopyAttributes(obj, updateDTO);
+            var user = _mapper.Map<UserDTO>(updateDTO);
+            var response = await _userService.UploadImgAsync<APIResponse>(user);
+            if (response != null && response.IsSuccess)
+            {
+                
+            }
+            return RedirectToAction("Profile", "Auth", new {id = updateDTO.Id});
+        }
 
         [HttpGet]
         public IActionResult ForgotPassword()
@@ -166,5 +202,30 @@ namespace taskify_font_end.Controllers
             }
             return workspaces;
         }
+
+
+        private async Task<UserDTO> GetUserByIdAsync(string userId)
+        {
+            var response = await _userService.GetAsync<APIResponse>(userId);
+            UserDTO user = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                user = JsonConvert.DeserializeObject<UserDTO>(Convert.ToString(response.Result));
+            }
+            return user;
+        }
+
+        private void CopyAttributes(UserDTO source, UserUpdateDTO destination)
+        {
+            destination.Id = source.Id;
+            destination.Email = source.Email;
+            destination.FirstName = source.FirstName;
+            destination.PhoneNumber = source.PhoneNumber;
+            destination.LastName = source.LastName;
+            destination.Address = source.Address;
+            destination.ImageUrl = source.ImageUrl;
+            destination.ImageLocalPathUrl = source.ImageLocalPathUrl;
+        }
+
     }
 }
