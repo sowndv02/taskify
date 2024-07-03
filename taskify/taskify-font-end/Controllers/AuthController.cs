@@ -68,15 +68,48 @@ namespace taskify_font_end.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadImg(UserUpdateDTO updateDTO)
         {
-            var obj = await GetUserByIdAsync(updateDTO.Id);
-            CopyAttributes(obj, updateDTO);
-            var user = _mapper.Map<UserDTO>(updateDTO);
-            var response = await _userService.UploadImgAsync<APIResponse>(user);
-            if (response != null && response.IsSuccess)
+            try
             {
-                
+                var obj = await GetUserByIdAsync(updateDTO.Id);
+                CopyAttributes(obj, updateDTO);
+                var user = _mapper.Map<UserDTO>(updateDTO);
+                var response = await _userService.UploadImgAsync<APIResponse>(user);
+                if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+                {
+                    TempData["success"] = "Update Image successful!";
+                }
+                else
+                {
+                    TempData["error"] = response.ErrorMessages[0];
+                }
+            }catch(Exception ex)
+            {
+                TempData["error"] = ex.Message; 
             }
             return RedirectToAction("Profile", "Auth", new {id = updateDTO.Id});
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfileAsync(UserUpdateDTO updateDTO)
+        {
+            try
+            {
+                var user = _mapper.Map<UserDTO>(updateDTO);
+                var response = await _userService.UpdateAsync<APIResponse>(user);
+                if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+                {
+                    TempData["success"] = "Update profile successful!";
+                }
+                else
+                {
+                    TempData["error"] = response.ErrorMessages[0];
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = ex.Message;
+            }
+            return RedirectToAction("Profile", "Auth", new { id = updateDTO.Id });
         }
 
         [HttpGet]

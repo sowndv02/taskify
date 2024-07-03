@@ -55,6 +55,8 @@
                     <hr class="my-0" />
                     <div class="card-body">
                         <form id="formAccountSettings" method="POST" class="form-submit-event" asp-action="Update" asp-controller="Auth">
+                            <input asp-for="ImageUrl" hidden class="form-control" />
+                            <input asp-for="ImageLocalPathUrl" hidden class="form-control" />
                             <input asp-for="Id" hidden class="form-control" />
                             <div class="row">
                                 <div class="mb-3 col-md-6">
