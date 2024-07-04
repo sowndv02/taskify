@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.Net;
+using System.Security.AccessControl;
 using taskify_api.Models;
 using taskify_api.Models.DTO;
 using taskify_api.Repository.IRepository;
+using taskify_utility;
 
 namespace taskify_api.Controllers.v1
 {
@@ -13,6 +16,7 @@ namespace taskify_api.Controllers.v1
     [ApiVersion("1.0")]
     public class ProjectMediaController : ControllerBase
     {
+
         private readonly IProjectMediaRepository _projectMediaRepository;
         protected APIResponse _response;
         private readonly IMapper _mapper;
@@ -69,17 +73,51 @@ namespace taskify_api.Controllers.v1
         }
 
         [HttpPost]
-        public async Task<ActionResult<APIResponse>> CreateAsync([FromBody] ProjectMediaDTO createDTO)
+        public async Task<ActionResult<APIResponse>> CreateAsync([FromForm] ProjectMediaDTO createDTO)
         {
             try
             {
 
-                if (createDTO == null) return BadRequest(createDTO);
+                if (createDTO == null || createDTO.File?.Length == 0)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string>() { "File invalid!" };
+                    return BadRequest(_response);
+                }
                 ProjectMedia model = _mapper.Map<ProjectMedia>(createDTO);
-                await _projectMediaRepository.CreateAsync(model);
-                _response.Result = _mapper.Map<ProjectMediaDTO>(model);
-                _response.StatusCode = HttpStatusCode.Created;
-                return CreatedAtRoute("GetTaskById", new { model.Id }, _response);
+                var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                if (createDTO.File != null && createDTO.File.Length > 0)
+                {
+
+
+                    string fileName = createDTO.FileName;
+                    string filePath = @"wwwroot\ProjectMedia\" + createDTO.ProjectId + @"\" + fileName;
+                    var directoryLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                    using (var stream = new FileStream(directoryLocation, FileMode.Create))
+                    {
+                        createDTO.File.CopyTo(stream);
+                    }
+
+                    model.MediaLocalPathUrl = filePath;
+                    model.MediaUrl = baseUrl + $"/ProjectMedia/" + createDTO.ProjectId + "/" + fileName;
+                    
+                    await _projectMediaRepository.CreateAsync(model);
+                    _response.Result = _mapper.Map<ProjectMediaDTO>(model);
+                    _response.StatusCode = HttpStatusCode.Created;
+                    return Ok(_response);
+
+                }
+                else
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string>() { "File invalid!" };
+                    return BadRequest(_response);
+                }
+
+                
             }
             catch (Exception ex)
             {
@@ -91,7 +129,6 @@ namespace taskify_api.Controllers.v1
         }
 
 
-
         [HttpPut("{id:int}")]
         public async Task<ActionResult<APIResponse>> UpdateAsync(int id, [FromBody] ProjectMediaDTO updateDTO)
         {
@@ -101,7 +138,7 @@ namespace taskify_api.Controllers.v1
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages = new List<string>() { "Color Id invalid!" };
+                    _response.ErrorMessages = new List<string>() { "Id invalid!" };
                     return BadRequest(_response);
                 }
                 ProjectMedia model = _mapper.Map<ProjectMedia>(updateDTO);

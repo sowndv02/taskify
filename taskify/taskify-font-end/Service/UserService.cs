@@ -55,13 +55,24 @@ namespace taskify_font_end.Service
             });
         }
 
+        public async Task<T> UpdatePasswordAsync<T>(UpdatePasswordRequestDTO updatePasswordRequestDTO)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.PUT,
+                Data = updatePasswordRequestDTO,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/User/password/" + updatePasswordRequestDTO.Id
+            });
+        }
+
         public async Task<T> UpdateAsync<T>(UserDTO dto)
         {
             return await _baseServices.SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.PUT,
                 Data = dto,
-                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/User/" + dto.Id
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/User/" + dto.Id,
+                ContentType = SD.ContentType.MultipartFormData
             });
         }
 

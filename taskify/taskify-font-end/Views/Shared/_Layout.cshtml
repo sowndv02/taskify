@@ -40,7 +40,8 @@
     <link href="~/css/select2.min.css" rel="stylesheet" />
     <link href="~/css/bootstrap-table.min.css" rel="stylesheet" />
     <link href="~/css/toastr.min.css" rel="stylesheet" />
-    <link href="~/css/dropzone.min.css" rel="stylesheet" />
+    @* <link href="~/css/dropzone.min.css" rel="stylesheet" /> *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.css" />
 
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
@@ -102,14 +103,17 @@
     <script src="~/js/moment.min.js"></script>
     <script src="~/js/daterangepicker.js"></script>
     <script src="~/js/lightbox.min.js"></script>
-    <script src="~/js/dropzone.min.js"></script>
+    @* <script src="~/js/dropzone.min.js"></script> *@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
+
+
     <script>
         var js_date_format = 'DD-MM-YYYY';
         var lable_delete_select = 'Delete selected';
         var lable_min_0 = 'Value must be greater then 0';
         var lable_max_100 = 'Not greater Then 100';
     </script>
-    <script src="~/js/custom.js?v3"></script> 
+    <script src="~/js/custom.js?v11"></script> 
     @await RenderSectionAsync("Scripts", required: false)
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">

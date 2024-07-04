@@ -103,7 +103,7 @@
                                                         foreach(var user in task.TaskUsers){
                                                             <li class="avatar avatar-sm pull-up" title="@user.User?.FirstName @user.User?.LastName">
                                                                 <a asp-action="Profile" asp-controller="User" asp-route-id="@user.Id" target="_blank">
-                                                                    <img src="~/image/ozihsjap4lp4imbepbkvxv48amqt4ibwsdzxlhvq.png"
+                                                                    <img src="@user.User?.ImageUrl"
                                                                             class="rounded-circle" alt="@user.User?.FirstName @user.User?.LastName">
                                                                 </a>
                                                             </li>

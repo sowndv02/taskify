@@ -7,10 +7,11 @@ namespace taskify_api.Repository.IRepository
     {
         bool IsUniqueUser(string username);
         Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO);
-        Task<UserDTO> Register(RegisterationRequestDTO registerationRequestDTO);
+        Task<User> Register(RegisterationRequestDTO registerationRequestDTO);
         Task<TokenDTO> RefreshAccessToken(TokenDTO tokenDTO);
         Task RevokeRefreshToken(TokenDTO tokenDTO);
         Task<User> GetAsync(string userId);
+        Task<User> UpdatePasswordAsync(UpdatePasswordRequestDTO updatePasswordRequestDTO);
         Task<User> UpdateAsync(User user);
         Task<User> CreateAsync(User user, string password);
         Task<bool> RemoveAsync(string userId);

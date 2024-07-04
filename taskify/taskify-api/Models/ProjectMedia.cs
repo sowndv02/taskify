@@ -21,5 +21,6 @@ namespace taskify_api.Models
         [ForeignKey(nameof (UserId))]
         public User? User {  get; set; }
         public string? MediaLocalPathUrl { get; set; }
+
     }
 }

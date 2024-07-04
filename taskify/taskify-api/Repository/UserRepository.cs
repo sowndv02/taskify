@@ -12,7 +12,7 @@ using taskify_api.Repository.IRepository;
 
 namespace taskify_api.Repository
 {
-    public class UserRepository : Repository<User>, IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -20,7 +20,7 @@ namespace taskify_api.Repository
         private readonly RoleManager<IdentityRole> _roleManager;
         private string secretKey = string.Empty;
 
-        public UserRepository(ApplicationDbContext context, IConfiguration configuration, UserManager<User> userManager, IMapper mapper, RoleManager<IdentityRole> roleManager) : base(context)
+        public UserRepository(ApplicationDbContext context, IConfiguration configuration, UserManager<User> userManager, IMapper mapper, RoleManager<IdentityRole> roleManager)
         {
             _roleManager = roleManager;
             _mapper = mapper;
@@ -79,7 +79,7 @@ namespace taskify_api.Repository
         }
 
 
-        public async Task<UserDTO> Register(RegisterationRequestDTO registerationRequestDTO)
+        public async Task<User> Register(RegisterationRequestDTO registerationRequestDTO)
         {
             User user = new()
             {
@@ -102,8 +102,7 @@ namespace taskify_api.Repository
                     }
 
                     await _userManager.AddToRoleAsync(user, registerationRequestDTO.Role);
-                    var userToReturn = _context.Users.FirstOrDefault(u => u.UserName == registerationRequestDTO.UserName);
-                    return _mapper.Map<UserDTO>(userToReturn);
+                    return _context.Users.FirstOrDefault(u => u.UserName == registerationRequestDTO.UserName);
                 }
             }
             catch (Exception ex)
@@ -123,10 +122,11 @@ namespace taskify_api.Repository
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.UserName.ToString()),
+                    new Claim(ClaimTypes.Name, $"{user.FirstName.ToString()} {user.LastName.ToString()}"),
                     new Claim(ClaimTypes.Role, roles.FirstOrDefault()),
                     new Claim(JwtRegisteredClaimNames.Jti, jwtTokenId),
                     new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                    new Claim(JwtRegisteredClaimNames.GivenName, user.ImageUrl),
                     new Claim(JwtRegisteredClaimNames.Aud, "sonwdv02.com")
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(1),
@@ -273,6 +273,33 @@ namespace taskify_api.Repository
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<User> UpdatePasswordAsync(UpdatePasswordRequestDTO updatePasswordRequestDTO)
+        {
+            var user = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == updatePasswordRequestDTO.UserName.ToLower());
+
+            if (user == null)
+            {
+                throw new Exception("User not found.");
+            }
+
+            bool isValid = await _userManager.CheckPasswordAsync(user, updatePasswordRequestDTO.Password);
+
+            if (!isValid)
+            {
+                throw new Exception("Invalid current password.");
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, updatePasswordRequestDTO.Password, updatePasswordRequestDTO.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                throw new Exception("Password change failed.");
+            }
+
+            return user;
+
         }
         public async Task<User> CreateAsync(User user, string password)
         {

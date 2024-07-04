@@ -308,7 +308,7 @@
                                                                     <li><a asp-action="Profile" asp-controller="User" asp-route-id="@user.Id" target="_blank"></a></li>
                                                                     <li class="avatar avatar-sm pull-up" title="@user.User?.FirstName @user.User?.LastName">
                                                                         <a asp-action="Profile" asp-controller="User" asp-route-id="@user.User?.Id" target="_blank">
-                                                                            <img src="~/image/9qUS34YWblfHxwbOTLx0XHtU264PUvXeMSxPd8AK.png" class="rounded-circle">
+                                                                            <img src="@user.User?.ImageUrl" class="rounded-circle">
                                                                         </a>
                                                                     </li>
                                                                 </ul>
@@ -992,4 +992,46 @@
             </div>
         </div>
     </div>
-</div>             
+</div>
+
+
+<div class="modal fade" id="modalId" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form class="modal-content form-horizontal" id="media-upload"
+              asp-action="Upload" asp-controller="ProjectMedia" method="POST" enctype="multipart.form-data">
+              <input type="hidden" name="projectId" value="@Model.Id">
+                <input type="hidden" name="userId" value="@userId">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Add Media</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4 class="mb-5">Project media</h4>
+                <form class="form-horizontal" id="media-upload" asp-action="Upload" asp-controller="ProjectMedia"
+                      method="POST" enctype="multipart/form-data">
+                    <div class="card-body">
+                        <div class="dropzone dz-clickable" id="media-upload-dropzone">
+                        </div>
+                        <div class="form-group mt-4 text-center">
+                            <button class="btn btn-primary"
+                                    id="upload_media_btn">
+                                Upload
+                            </button>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <div class="form-group" id="error_box">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </form>
+    </div>
+</div>

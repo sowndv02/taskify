@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
@@ -70,6 +71,11 @@ namespace taskify_font_end.Controllers
         {
             try
             {
+                if(updateDTO.Image == null)
+                {
+                    TempData["error"] = "Please upload image avatar";
+                    return RedirectToAction("Profile", "Auth", new { id = updateDTO.Id });
+                }
                 var obj = await GetUserByIdAsync(updateDTO.Id);
                 CopyAttributes(obj, updateDTO);
                 var user = _mapper.Map<UserDTO>(updateDTO);
@@ -94,11 +100,39 @@ namespace taskify_font_end.Controllers
         {
             try
             {
-                var user = _mapper.Map<UserDTO>(updateDTO);
-                var response = await _userService.UpdateAsync<APIResponse>(user);
+                string msg = string.Empty;
+                if (string.IsNullOrEmpty(updateDTO.NewPassword) && string.IsNullOrEmpty(updateDTO.ConfirmNewPassword) && string.IsNullOrEmpty(updateDTO.OldPassword))
+                {
+                    var obj = await GetUserByIdAsync(updateDTO.Id);
+                }
+                else if (updateDTO.NewPassword != updateDTO.ConfirmNewPassword)
+                {
+                    TempData["error"] = "Passwords do not match.";
+                    return RedirectToAction("Profile", "Auth", new { id = updateDTO.Id });
+                }
+                else
+                {
+                    
+                    var user = await GetUserByIdAsync(updateDTO.Id);
+                    UpdatePasswordRequestDTO updatePasswordRequestDTO = new UpdatePasswordRequestDTO() { Id = updateDTO.Id, NewPassword = updateDTO.NewPassword, Password = updateDTO.OldPassword, UserName = updateDTO.Email };
+                    var changePasswordResult = await _userService.UpdatePasswordAsync<APIResponse>(updatePasswordRequestDTO);
+                    if (changePasswordResult != null && changePasswordResult.IsSuccess && changePasswordResult.ErrorMessages.Count == 0)
+                    {
+                        msg += "Update password successfull\n";
+                    }
+                    else
+                    {
+                        TempData["error"] = "Current password not correct.";
+                        return RedirectToAction("Profile", "Auth", new { id = updateDTO.Id });
+                    }
+                }
+
+                var userDTO = _mapper.Map<UserDTO>(updateDTO);
+                var response = await _userService.UpdateAsync<APIResponse>(userDTO);
                 if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
                 {
-                    TempData["success"] = "Update profile successful!";
+                    msg  += "Update profile successful!";
+                    TempData["success"] = msg;
                 }
                 else
                 {
@@ -109,8 +143,10 @@ namespace taskify_font_end.Controllers
             {
                 TempData["error"] = ex.Message;
             }
+
             return RedirectToAction("Profile", "Auth", new { id = updateDTO.Id });
         }
+
 
         [HttpGet]
         public IActionResult ForgotPassword()
@@ -137,6 +173,7 @@ namespace taskify_font_end.Controllers
                     identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(u => u.Type == "unique_name").Value));
                     identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == "role").Value));
                     identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, jwt.Claims.FirstOrDefault(u => u.Type == "sub").Value));
+                    identity.AddClaim(new Claim(ClaimTypes.GivenName, jwt.Claims.FirstOrDefault(u => u.Type == "given_name").Value));
                     var principal = new ClaimsPrincipal(identity);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                     _tokenProvider.SetToken(model);

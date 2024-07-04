@@ -54,7 +54,7 @@
                     </div>
                     <hr class="my-0" />
                     <div class="card-body">
-                        <form id="formAccountSettings" method="POST" class="form-submit-event" asp-action="Update" asp-controller="Auth">
+                        <form id="formAccountSettings" method="POST" class="form-submit-event" asp-action="UpdateProfile" asp-controller="Auth">
                             <input asp-for="ImageUrl" hidden class="form-control" />
                             <input asp-for="ImageLocalPathUrl" hidden class="form-control" />
                             <input asp-for="Id" hidden class="form-control" />
@@ -87,19 +87,27 @@
                                     <input class="form-control" type="text" readonly asp-for="Email" placeholder="Enter email" />
                                 </div>
 
+
+                                <div class="mb-3 col-md-12">
+                                    <label for="password" class="form-label">
+                                        OldPassword <small class="text-muted"> (Leave it blank if no change)</small>
+                                    </label>
+                                    <input class="form-control" type="password" id="old_password" asp-for="OldPassword"
+                                           placeholder="Enter Password">
+                                </div>
+
                                 <div class="mb-3 col-md-6">
                                     <label for="password" class="form-label">
-                                        Password <small class="text-muted"> (Leave it blank if no change)</small>
+                                        NewPassword <small class="text-muted"> (Leave it blank if no change)</small>
                                     </label>
-                                    <input class="form-control" type="password" id="password" asp-for="Password"
+                                    <input class="form-control" type="password" id="password" asp-for="NewPassword"
                                            placeholder="Enter Password">
-
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label for="password_confirmation"
-                                           class="form-label">Confirm password</label>
+                                           class="form-label">Confirm new password</label>
                                     <input class="form-control" type="password" id="password_confirmation"
-                                           asp-for="ConfirmPassword" placeholder="Re Enter Password">
+                                           asp-for="ConfirmNewPassword" placeholder="Re Enter Password">
 
                                 </div>
 

@@ -868,7 +868,9 @@ if (document.getElementById("media-upload-dropzone")) {
         url: $("#media-upload").attr("action"),
         paramName: "media_files",
         autoProcessQueue: false,
-        timeout: 360000,
+        timeout: 10000,
+        parallelUploads: 10,
+        maxFiles: 10,
         autoDiscover: false,
         headers: {
         },
@@ -899,21 +901,31 @@ if (document.getElementById("media-upload-dropzone")) {
     mediaDropzone.on("error", function (file, response) {
         console.log(response);
     });
+
+    mediaDropzone.on("success", function (file, response) {
+        console.log(response); // Log the server response
+
+        if (!response.is_error) {
+            toastr.success("File uploaded successfully.");
+            $("#uploaded-files-list").append("<li>" + response.fileName + "</li>");
+        } else {
+            toastr.error("File upload failed.");
+        }
+
+        $("#upload_media_btn").removeAttr('disabled').text('Upload'); // Re-enable upload button
+    });
+
     mediaDropzone.on("sending", function (file, xhr, formData) {
-        var id = $("#media_type_id").val();
-        formData.append("flash_message", 1);
-        formData.append("id", id);
-        xhr.onreadystatechange = function (response) {
-            setTimeout(function () {
-                location.reload();
-            }, 2000);
-        };
+        formData.append("projectId", $("input[name='projectId']").val());
+        formData.append("userId", $("input[name='userId']").val());
+        formData.append("media_files", file); // Correct parameter name "media_files"
+
     });
     $("#upload_media_btn").on("click", function (e) {
         e.preventDefault();
         if (mediaDropzone.getQueuedFiles().length > 0) {
             if (is_error == false) {
-                $("#upload_media_btn").attr('disabled', true).text(label_please_wait);
+                $("#upload_media_btn").attr('disabled', true).text('Please wait...');
                 mediaDropzone.processQueue();
             }
         } else {
@@ -921,6 +933,7 @@ if (document.getElementById("media-upload-dropzone")) {
         }
     });
 }
+
 // Row-wise Select/Deselect All
 $('.row-permission-checkbox').change(function () {
     var module = $(this).data('module');

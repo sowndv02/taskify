@@ -218,7 +218,7 @@
                                                             title="@user.User?.FirstName @user.User?.LastName">
                                                             <a asp-action="Profile" asp-controller="User" asp-route-id="@user.UserId"
                                                                target="_blank">
-                                                                <img src="~/image/ozihsjap4lp4imbepbkvxv48amqt4ibwsdzxlhvq.png" onerror="~/image/oZIhSJaP4lp4imBepBkvXv48amqt4ibWsDZxlhvq.png"
+                                                                <img src="@user.User?.ImageUrl" onerror="~/image/oZIhSJaP4lp4imBepBkvXv48amqt4ibWsDZxlhvq.png"
                                                                      class="rounded-circle"
                                                                      alt="@user.User?.FirstName @user.User?.LastName">
                                                             </a>

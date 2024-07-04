@@ -3,6 +3,7 @@
 
 @{
     var nameIdentifier = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    var imgUrl = User.FindFirst(ClaimTypes.GivenName)?.Value;
 }
 
 <div id="section-not-to-print">
@@ -41,7 +42,7 @@
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                     <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                         <div class="avatar avatar-online">
-                            <img src="~/image/ozihsjap4lp4imbepbkvxv48amqt4ibwsdzxlhvq.png"
+                            <img src="@imgUrl"
                                  alt class="w-px-40  rounded-circle" />
                         </div>
                     </a>
@@ -51,7 +52,7 @@
                                 <div class="d-flex">
                                     <div class="flex-shrink-0 me-3">
                                         <div class="avatar avatar-online">
-                                            <img src="~/image/ozihsjap4lp4imbepbkvxv48amqt4ibwsdzxlhvq.png"
+                                            <img src="@imgUrl"
                                                  alt class="w-px-40  rounded-circle" />
                                         </div>
                                     </div>

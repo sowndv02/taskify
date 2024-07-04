@@ -560,6 +560,10 @@ namespace taskify_font_end.Controllers
                     if (resUser != null && resUser.IsSuccess && resUser.ErrorMessages.Count == 0)
                     {
                         users = JsonConvert.DeserializeObject<List<ProjectUserDTO>>(Convert.ToString(resUser.Result));
+                        foreach(var u in users)
+                        {
+                            u.User = await GetUserByIdAsync(u.UserId);
+                        }
                         item.ProjectUsers = users;
                     }
                 }
@@ -679,6 +683,10 @@ namespace taskify_font_end.Controllers
                     if (resUser != null && resUser.IsSuccess && resUser.ErrorMessages.Count == 0)
                     {
                         users = JsonConvert.DeserializeObject<List<TaskUserDTO>>(Convert.ToString(resUser.Result));
+                        foreach(var u in users)
+                        {
+                            u.User = await GetUserByIdAsync(u.UserId);
+                        }
                         item.TaskUsers = users;
                     }
                     var resStatus = await _statusService.GetAsync<APIResponse>(item.StatusId);

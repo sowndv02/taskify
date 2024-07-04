@@ -4,6 +4,7 @@ using System.Net;
 using taskify_api.Models;
 using taskify_api.Models.DTO;
 using taskify_api.Repository.IRepository;
+using taskify_utility;
 
 namespace taskify_api.Controllers
 {
@@ -92,6 +93,7 @@ namespace taskify_api.Controllers
                 _response.ErrorMessages.Add("Username already exists");
                 return BadRequest(_response);
             }
+
             var user = await _userRepository.Register(model);
             if (user == null)
             {
@@ -100,6 +102,10 @@ namespace taskify_api.Controllers
                 _response.ErrorMessages.Add("Error while registering");
                 return BadRequest(_response);
             }
+            var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+            user.ImageUrl = baseUrl + $"/{SD.UrlImageUser}/" + SD.UrlImageAvatarDefault;
+            user.ImageLocalPathUrl = @"wwwroot\UserImage\" + SD.UrlImageAvatarDefault;
+            await _userRepository.UpdateAsync(user);
             _response.StatusCode = HttpStatusCode.OK;
             _response.IsSuccess = true;
             return Ok(_response);

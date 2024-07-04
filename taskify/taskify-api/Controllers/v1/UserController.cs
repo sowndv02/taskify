@@ -69,6 +69,31 @@ namespace taskify_api.Controllers.v1
             }
         }
 
+        [HttpPut("password/{id}", Name = "UpdatePassword")]
+        public async Task<ActionResult<APIResponse>> GetPasswordByIdAsync(string id, [FromBody] UpdatePasswordRequestDTO updatePasswordRequestDTO)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(id))
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
+                    return BadRequest(_response);
+                }
+                User model = await _userRepository.UpdatePasswordAsync(updatePasswordRequestDTO);
+                _response.Result = _mapper.Map<UserDTO>(model);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<APIResponse>> CreateAsync([FromBody] UserDTO createDTO)
         {
@@ -105,7 +130,7 @@ namespace taskify_api.Controllers.v1
                     _response.ErrorMessages = new List<string>() { "Id invalid!" };
                     return BadRequest(_response);
                 }
-                User model = _mapper.Map<User>(updateDTO);
+                var model = await _userRepository.GetAsync(updateDTO.Id);
                 var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
                 if (updateDTO.Image != null)
                 {
@@ -127,17 +152,13 @@ namespace taskify_api.Controllers.v1
                     {
                         updateDTO.Image.CopyTo(fileStream);
                     }
-
-
-                    
-                    model.ImageUrl = baseUrl + SD.UrlImageUser + fileName;
+                    model.ImageUrl = baseUrl + $"/{SD.UrlImageUser}/" + fileName;
                     model.ImageLocalPathUrl = filePath;
                 }
-                else
-                {
-                    model.ImageUrl = baseUrl + SD.UrlImageUser + SD.UrlImageDefault;
-                    model.ImageLocalPathUrl = @"wwwroot\UserImage\" + SD.UrlImageDefault;
-                }
+                model.PhoneNumber = updateDTO.PhoneNumber;
+                model.Address = updateDTO.Address;
+                model.FirstName = updateDTO.FirstName;  
+                model.LastName = updateDTO.LastName;    
 
                 await _userRepository.UpdateAsync(model);
                 _response.StatusCode = HttpStatusCode.NoContent;
@@ -167,6 +188,8 @@ namespace taskify_api.Controllers.v1
                     return BadRequest(_response);
                 }
                 User model = await _userRepository.GetAsync(id);
+
+                var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
                 if (updateDTO.Image != null)
                 {
                     if (!string.IsNullOrEmpty(model.ImageLocalPathUrl))
@@ -189,13 +212,14 @@ namespace taskify_api.Controllers.v1
                     }
 
 
-                    var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
-                    model.ImageUrl = baseUrl + "/UserImage/" + fileName;
+                    
+                    model.ImageUrl = baseUrl + $"/{SD.UrlImageUser}/" + fileName;
                     model.ImageLocalPathUrl = filePath;
                 }
                 else
                 {
-                    model.ImageUrl = "https://placehold.co/600x400";
+                    model.ImageUrl = baseUrl + $"/{SD.UrlImageUser}/" + SD.UrlImageDefault;
+                    model.ImageLocalPathUrl = @"wwwroot\UserImage\" + SD.UrlImageDefault;
                 }
 
                 await _userRepository.UpdateAsync(model);

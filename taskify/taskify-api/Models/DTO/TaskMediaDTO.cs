@@ -16,5 +16,6 @@ namespace taskify_api.Models.DTO
         public string UserId { get; set; }
         public UserDTO? User { get; set; }
         public string? MediaLocalPathUrl { get; set; }
+        public IFormFile? File { get; set; }
     }
 }
