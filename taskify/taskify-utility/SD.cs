@@ -19,6 +19,9 @@
 
         public const string Admin = "admin";
         public const string Client = "client";
+        public const string UrlImageUser = "UserImage";
+        public const string UrlImageDefault = "https://placehold.co/600x400";
+        public const string UrlImageAvatarDefault = "https://placehold.co/600x400";
 
         public static string AccessToken = "JWTToken";
         public static string RefreshToken = "RefreshToken";

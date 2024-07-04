@@ -5,6 +5,7 @@ using System.Net;
 using taskify_api.Models;
 using taskify_api.Models.DTO;
 using taskify_api.Repository.IRepository;
+using taskify_utility;
 
 namespace taskify_api.Controllers.v1
 {
@@ -105,7 +106,7 @@ namespace taskify_api.Controllers.v1
                     return BadRequest(_response);
                 }
                 User model = _mapper.Map<User>(updateDTO);
-
+                var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
                 if (updateDTO.Image != null)
                 {
                     if (!string.IsNullOrEmpty(model.ImageLocalPathUrl))
@@ -128,13 +129,14 @@ namespace taskify_api.Controllers.v1
                     }
 
 
-                    var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
-                    model.ImageUrl = baseUrl + "/UserImage/" + fileName;
+                    
+                    model.ImageUrl = baseUrl + SD.UrlImageUser + fileName;
                     model.ImageLocalPathUrl = filePath;
                 }
                 else
                 {
-                    model.ImageUrl = "https://placehold.co/600x400";
+                    model.ImageUrl = baseUrl + SD.UrlImageUser + SD.UrlImageDefault;
+                    model.ImageLocalPathUrl = @"wwwroot\UserImage\" + SD.UrlImageDefault;
                 }
 
                 await _userRepository.UpdateAsync(model);
