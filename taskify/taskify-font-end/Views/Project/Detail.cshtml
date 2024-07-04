@@ -1,4 +1,5 @@
 ﻿@using System.Security.Claims;
+@using System.IO;
 @model taskify_font_end.Models.DTO.ProjectDTO
 @{
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.PathBase}";
@@ -13,6 +14,20 @@
         totalTask += item.Tasks.Count;
     }
 }
+
+
+@functions {
+    public string GetFileNameFromUrl(string url)
+    {
+        if (string.IsNullOrEmpty(url))
+            return string.Empty;
+
+        string[] segments = url.Split('/');
+        return segments[segments.Length - 1];
+    }
+}
+
+
 <div class="content-wrapper">
     <div class="container-fluid">
         <div class="d-flex justify-content-between mb-2 mt-4">
@@ -78,7 +93,7 @@
                                                 <li class="avatar avatar-sm pull-up"
                                                     title="@item.User?.FirstName @item.User?.LastName">
                                                     <a asp-action="Profile" asp-controller="User" asp-route-id="@item.User?.Id" target="_blank">
-                                                        <img src="~/image/e9FPOEwYsVXC1LWNFObuLqeOHy8jn6gLK9PQfQNq.png"
+                                                        <img src="@item.User?.ImageUrl"
                                                              class="rounded-circle"
                                                              alt="@item.User?.FirstName @item.User?.LastName">
                                                     </a>
@@ -501,22 +516,22 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="tableBody">
-                                                @if (ViewBag.medias != null && ViewBag.medias.Count > 0)
+                                                @if (ViewBag.projectMedias != null && ViewBag.projectMedias.Count > 0)
                                                 {
-                                                    @foreach (var item in ViewBag.medias)
+                                                    @foreach (var item in ViewBag.projectMedias)
                                                     {
                                                         <tr>
                                                             <td>@item.Id</td>
                                                             <td>@item.FileName</td>
                                                             <td>@item.FileSize KB</td>
                                                             <td>@item.CreatedDate.ToShortDateString()</td>
-                                                            <td>@item.UpdatedDate.ToShortDateString()</td>
+                                                            <td>@item.UpdatedDate?.ToShortDateString()</td>
                                                             <td>
+                                                                <a href="#" title="Download" target="_blank" onclick="downloadFile('@item.MediaUrl', '@GetFileNameFromUrl(item.MediaUrl)');" download="@GetFileNameFromUrl(@item.MediaUrl)">
+                                                                    <i class="bx bx-download bx-sm"></i>
+                                                                </a>
                                                                 @if (Model.ActualEndAt == null && string.IsNullOrEmpty(Model.ActualEndAt.ToString()))
                                                                 {
-                                                                    <a href="https://taskify-saas.taskhub.company/storage/project-media/db.png" title="Download" download="">
-                                                                        <i class="bx bx-download bx-sm"></i>
-                                                                    </a>
                                                                     <button title="Delete" type="button" class="btn delete" data-id="@item.Id" data-type="projectMedia">
                                                                         <i class="bx bx-trash text-danger"></i>
                                                                     </button>
@@ -611,7 +626,7 @@
                             <input type="hidden" id="data_type" value="activity-log">
                             <input type="hidden" id="data_table" value="activity_log_table">
                             <input type="hidden" id="type_id" value="22">
-                            <table id="activity_log_table" data-toggle="table"
+                           @*  <table id="activity_log_table" data-toggle="table"
                                    data-loading-template="loadingTemplate" data-url="https://taskify-saas.taskhub.company/master-panel/activity-log/list"
                                    data-icons-prefix="bx" data-icons="icons" data-show-refresh="true"
                                    data-total-field="total" data-trim-on-search="false" data-data-field="rows"
@@ -669,7 +684,10 @@
                                         </th>
                                     </tr>
                                 </thead>
-                            </table>
+                            </table> *@
+
+
+
                         </div>
                     </div>
                 </div>
@@ -679,6 +697,20 @@
 </div>
 <script>
     var baseUrl = '@baseUrl';
+
+    function downloadFile(url, fileName) {
+        var link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', fileName);
+
+        link.onclick = function (e) {
+            e.preventDefault(); // Prevent the default action
+            link.click(); // Trigger the download
+        };
+
+        document.body.appendChild(link);
+        link.style.display = 'none'; // Optional: hide the link
+    }
 
     $(document).ready(function () {
         // Initialize DataTables

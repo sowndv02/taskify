@@ -102,7 +102,7 @@ namespace taskify_api.Controllers.v1
 
                     model.MediaLocalPathUrl = filePath;
                     model.MediaUrl = baseUrl + $"/ProjectMedia/" + createDTO.ProjectId + "/" + fileName;
-                    
+                    model.CreatedDate = DateTime.Now;
                     await _projectMediaRepository.CreateAsync(model);
                     _response.Result = _mapper.Map<ProjectMediaDTO>(model);
                     _response.StatusCode = HttpStatusCode.Created;
