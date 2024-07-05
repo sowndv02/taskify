@@ -194,7 +194,7 @@
                                 <div class="my-4 d-flex justify-content-between">
                                     <span>
                                         <i class='bx bx-task text-primary'></i>
-                                        <b>0</b>
+                                        <b>@item.Tasks?.Count</b>
                                         Tasks
                                     </span>
                                     <a asp-action="Index" asp-controller="Task" asp-route-id="@item.Id">
@@ -395,4 +395,5 @@ else
             $('#confirmationModal').modal('hide'); // Hide the modal
         });
     });
+
 </script>

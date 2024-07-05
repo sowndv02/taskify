@@ -532,7 +532,7 @@
                                                                 </a>
                                                                 @if (Model.ActualEndAt == null && string.IsNullOrEmpty(Model.ActualEndAt.ToString()))
                                                                 {
-                                                                    <button title="Delete" type="button" class="btn delete" data-id="@item.Id" data-type="projectMedia">
+                                                                    <button title="Delete" type="button" class="btn delete-item" data-id="@item.Id" data-type="projectMedia">
                                                                         <i class="bx bx-trash text-danger"></i>
                                                                     </button>
                                                                 }
@@ -1031,7 +1031,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <form class="modal-content form-horizontal" id="media-upload"
               asp-action="Upload" asp-controller="ProjectMedia" method="POST" enctype="multipart.form-data">
-              <input type="hidden" name="projectId" value="@Model.Id">
+              <input type="hidden" name="id" value="@Model.Id">
                 <input type="hidden" name="userId" value="@userId">
 
             <div class="modal-header">

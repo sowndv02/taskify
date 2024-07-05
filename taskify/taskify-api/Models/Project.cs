@@ -9,7 +9,7 @@ namespace taskify_api.Models
         {
             ProjectTags = new HashSet<ProjectTag>();
             ProjectUsers = new HashSet<ProjectUser>();
-            TaskModels = new HashSet<TaskModel>();
+            Tasks = new HashSet<TaskModel>();
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -32,7 +32,7 @@ namespace taskify_api.Models
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime? UpdatedDate { get; set; }
         public ICollection<ProjectUser> ProjectUsers { get; set; }
-        public ICollection<TaskModel> TaskModels { get; set; }
+        public ICollection<TaskModel> Tasks { get; set; }
         public ICollection<ProjectTag> ProjectTags { get; set; }
 
     }

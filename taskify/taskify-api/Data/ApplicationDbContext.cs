@@ -110,7 +110,7 @@ namespace taskify_api.Data
 
             modelBuilder.Entity<TaskModel>()
                 .HasOne(t => t.Project)
-                .WithMany(p => p.TaskModels)
+                .WithMany(p => p.Tasks)
                 .HasForeignKey(t => t.ProjectId)
                 .OnDelete(DeleteBehavior.NoAction);
 

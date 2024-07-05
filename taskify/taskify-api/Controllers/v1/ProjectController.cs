@@ -69,6 +69,32 @@ namespace taskify_api.Controllers.v1
             }
         }
 
+        [HttpGet("workspace/{id:int}", Name = "GetProjectByWorkspaceId")]
+        public async Task<ActionResult<APIResponse>> GetByWorkspaceIdAsync(int id)
+        {
+            try
+            {
+                if (id < 0)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
+                    return BadRequest(_response);
+                }
+                List<Project> model = await _projectRepository.GetAllAsync(x => x.WorkspaceId == id);
+                _response.Result = _mapper.Map<List<ProjectDTO>>(model);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+
         [HttpGet("{key}", Name = "GetProjectByTitle")]
         public async Task<ActionResult<APIResponse>> GetProjectByTitleAsync(string key)
         {

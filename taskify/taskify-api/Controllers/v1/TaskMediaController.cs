@@ -5,6 +5,7 @@ using System.Net;
 using taskify_api.Models.DTO;
 using taskify_api.Models;
 using taskify_api.Repository.IRepository;
+using taskify_api.Repository;
 
 namespace taskify_api.Controllers.v1
 {
@@ -69,17 +70,49 @@ namespace taskify_api.Controllers.v1
         }
 
         [HttpPost]
-        public async Task<ActionResult<APIResponse>> CreateAsync([FromBody] TaskMediaDTO createDTO)
+        public async Task<ActionResult<APIResponse>> CreateAsync([FromForm] TaskMediaDTO createDTO)
         {
             try
             {
 
-                if (createDTO == null) return BadRequest(createDTO);
+                if (createDTO == null || createDTO.File?.Length == 0)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string>() { "File invalid!" };
+                    return BadRequest(_response);
+                }
                 TaskMedia model = _mapper.Map<TaskMedia>(createDTO);
-                await _taskMediaRepository.CreateAsync(model);
-                _response.Result = _mapper.Map<TaskMediaDTO>(model);
-                _response.StatusCode = HttpStatusCode.Created;
-                return CreatedAtRoute("GetTaskById", new { model.Id }, _response);
+                var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                if (createDTO.File != null && createDTO.File.Length > 0)
+                {
+                    string fileName = createDTO.FileName;
+                    string filePath = @"wwwroot\TaskMedia\" + createDTO.TaskId + @"\" + fileName;
+                    var directoryLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                    using (var stream = new FileStream(directoryLocation, FileMode.Create))
+                    {
+                        createDTO.File.CopyTo(stream);
+                    }
+
+                    model.MediaLocalPathUrl = filePath;
+                    model.MediaUrl = baseUrl + $"/TaskMedia/" + createDTO.TaskId + "/" + fileName;
+                    model.CreatedDate = DateTime.Now;
+                    await _taskMediaRepository.CreateAsync(model);
+                    _response.Result = _mapper.Map<TaskMediaDTO>(model);
+                    _response.StatusCode = HttpStatusCode.Created;
+                    return Ok(_response);
+
+                }
+                else
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string>() { "File invalid!" };
+                    return BadRequest(_response);
+                }
+
+
             }
             catch (Exception ex)
             {

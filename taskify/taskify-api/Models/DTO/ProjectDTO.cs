@@ -23,7 +23,7 @@ namespace taskify_api.Models.DTO
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime? UpdatedDate { get; set; }
         public List<ProjectUserDTO>? ProjectUsers { get; set; } = new List<ProjectUserDTO>();
-        public List<TaskDTO>? TaskModels { get; set; } = new List<TaskDTO>();
+        public List<TaskDTO>? Tasks { get; set; } = new List<TaskDTO>();
         public List<ProjectTagDTO>? ProjectTags { get; set; } = new List<ProjectTagDTO>();
     }
 }

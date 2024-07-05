@@ -47,9 +47,6 @@
                                         <option value="@item.Id">@item.FirstName @item.LastName</option>
                                     }
                                 }
-                                <option value="2">
-                                        super admin
-                                    </option>
                                     
                                 </select>
                             </div>
@@ -58,25 +55,6 @@
                         <input type="hidden" id="data_type" value="workspaces">
                        
                             <div class="card-body">
-                                @* <table id="table" data-toggle="table" data-loading-template="loadingTemplate"
-                                       data-url="https://taskify-saas.taskhub.company/master-panel/workspaces/list" data-icons-prefix="bx" data-icons="icons"
-                                       data-show-refresh="true" data-total-field="total" data-trim-on-search="false" data-data-field="rows"
-                                       data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true" data-side-pagination="server"
-                                       data-show-columns="true" data-pagination="true" data-sort-name="id" data-sort-order="desc"
-                                       data-mobile-responsive="true" data-query-params="queryParams">
-                                    <thead>
-                                        <tr>
-                                            <th data-checkbox="true"></th>
-                                            <th data-sortable="true" data-field="id">ID</th>
-                                            <th data-sortable="true" data-field="title">Title</th>
-                                            <th data-field="users" data-formatter="userFormatter">Users                            </th>
-                                            <th data-field="clients" data-formatter="clientFormatter">
-                                                Clients
-                                            </th>
-                                            <th data-formatter="actionsFormatter">Actions</th>
-                                        </tr>
-                                    </thead>
-                                </table> *@
 
                             <table data-mobile-responsive="true" data-route-prefix="/Workspace" id="table" class="table table-bordered">
                                 <thead>
@@ -106,7 +84,7 @@
                                                             </li>
                                                             <li class="avatar avatar-sm pull-up" title="">
                                                                 <a asp-action="Profile" asp-controller="User" asp-route-id="@user.Id" target="_blank">
-                                                                    <img src="~/image/oZIhSJaP4lp4imBepBkvXv48amqt4ibWsDZxlhvq.png" class="rounded-circle">
+                                                                    <img src="@user.User?.ImageUrl" class="rounded-circle">
                                                                 </a>
                                                             </li>
                                                         }

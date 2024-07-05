@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using taskify_font_end.Models;
 using taskify_font_end.Models.DTO;
+using taskify_font_end.Service;
 using taskify_font_end.Service.IService;
 
 namespace taskify_font_end.Controllers
 {
-    public class ProjectMediaController : Controller
+    public class TaskMediaController : Controller
     {
-        private readonly IProjectMediaService _projectMediaService;
+        private readonly ITaskMediaService _taskMediaService;
 
-        public ProjectMediaController(IProjectMediaService projectMediaService)
+        public TaskMediaController(ITaskMediaService taskMediaService)
         {
-            _projectMediaService = projectMediaService;
+            _taskMediaService = taskMediaService;
         }
 
 
@@ -30,22 +31,23 @@ namespace taskify_font_end.Controllers
                     {
 
                         string fileName = $"{userId}_{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-                        var projectMedia = new ProjectMediaDTO() { 
-                            UserId = userId, 
-                            ProjectId = int.Parse(id), 
-                            File = file, 
-                            FileName = fileName, 
+                        var media = new TaskMediaDTO()
+                        {
+                            UserId = userId,
+                            TaskId = int.Parse(id),
+                            File = file,
+                            FileName = fileName,
                             FileSize = (int)file.Length / 1024.0
-                    };
-                        var result = await _projectMediaService.CreateAsync<APIResponse>(projectMedia);
+                        };
+                        var result = await _taskMediaService.CreateAsync<APIResponse>(media);
                         if (result == null || !result.IsSuccess || result.ErrorMessages.Count != 0)
                         {
-                            return StatusCode(int.Parse(result.StatusCode.ToString()), new { message = result.ErrorMessages[0] }); 
+                            return StatusCode(int.Parse(result.StatusCode.ToString()), new { message = result.ErrorMessages[0] });
                         }
                     }
                 }
 
-                return Ok(new { is_error = false,  message = "Files successfully uploaded." });
+                return Ok(new { is_error = false, message = "Files successfully uploaded." });
             }
             catch (Exception ex)
             {
@@ -62,7 +64,7 @@ namespace taskify_font_end.Controllers
             }
             try
             {
-                APIResponse result = await _projectMediaService.DeleteAsync<APIResponse>(id);
+                APIResponse result = await _taskMediaService.DeleteAsync<APIResponse>(id);
 
                 if (result != null && result.IsSuccess && result.ErrorMessages.Count == 0)
                     return Json(new { error = false, message = "Project Media deleted successfully" });

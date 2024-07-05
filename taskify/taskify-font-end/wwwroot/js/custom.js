@@ -13,8 +13,6 @@ $(document).on('click', '.delete', function (e) {
     } else {
         reload = false;
     }
-    console.log(reload);
-    console.log(type);
     
     // return;
     var tableID = $(this).data('table') || 'table';
@@ -908,6 +906,9 @@ if (document.getElementById("media-upload-dropzone")) {
         if (!response.is_error) {
             toastr.success("File uploaded successfully.");
             $("#uploaded-files-list").append("<li>" + response.fileName + "</li>");
+            setTimeout(function () {
+                location.reload();
+            }, 3000); 
         } else {
             toastr.error("File upload failed.");
         }
@@ -916,7 +917,7 @@ if (document.getElementById("media-upload-dropzone")) {
     });
 
     mediaDropzone.on("sending", function (file, xhr, formData) {
-        formData.append("projectId", $("input[name='projectId']").val());
+        formData.append("id", $("input[name='id']").val());
         formData.append("userId", $("input[name='userId']").val());
         formData.append("media_files", file); // Correct parameter name "media_files"
 

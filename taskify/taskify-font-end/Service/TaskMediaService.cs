@@ -24,7 +24,8 @@ namespace taskify_font_end.Service
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/taskMedia"
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/taskMedia",
+                ContentType = SD.ContentType.MultipartFormData
             });
         }
 

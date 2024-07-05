@@ -566,6 +566,8 @@ namespace taskify_font_end.Controllers
                         }
                         item.ProjectUsers = users;
                     }
+
+                    item.Tasks = await GetTaskByProjectId(item.Id);
                 }
             }
             return list;

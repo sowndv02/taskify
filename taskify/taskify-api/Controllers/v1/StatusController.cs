@@ -73,7 +73,7 @@ namespace taskify_api.Controllers
                     _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
                     return BadRequest(_response);
                 }
-                Status model = await _statusRepository.GetAsync(x => x.Id == id);
+                Status model = await _statusRepository.GetAsync(x => x.Id == id, true, "Color");
                 _response.Result = _mapper.Map<StatusDTO>(model);
                 return Ok(_response);
             }

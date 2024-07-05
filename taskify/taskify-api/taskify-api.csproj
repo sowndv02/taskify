@@ -39,8 +39,9 @@
 
   
   <ItemGroup>
+    <Folder Include="wwwroot\Chat\" />
     <Folder Include="wwwroot\ProjectMedia\7\" />
-    <Folder Include="wwwroot\TaskMedia\" />
+    <Folder Include="wwwroot\TaskMedia\3\" />
     <Folder Include="wwwroot\UserImage\" />
   </ItemGroup>
 </Project>

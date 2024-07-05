@@ -332,6 +332,36 @@ namespace taskify_font_end.Controllers
             }
         }
 
+        public async Task<IActionResult> Detail(int id)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            TaskDTO task = await GetTaskByIdAsync(id);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("AccessDenied", "Auth");
+            }
+            if (ViewBag.selectedWorkspaceId == null || ViewBag.selectedWorkspaceId == 0)
+            {
+                TempData["error"] = "Internal server error!";
+                return RedirectToAction("Dashboard", "Home");
+            }
+
+            task.Project = await GetProjectByIdAsync(task.ProjectId);
+
+            ViewBag.taskMedias = await GetTaskMediaByTaskId(id);
+            return View(task);
+        }
+        private async Task<List<TaskMediaDTO>> GetTaskMediaByTaskId(int id)
+        {
+            var response = await _taskMediaService.GetByTaskIdAsync<APIResponse>(id);
+            List<TaskMediaDTO> list = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<TaskMediaDTO>>(Convert.ToString(response.Result));
+            }
+            return list;
+        }
+
         private async Task<List<StatusDTO>> GetTaskByProjectIdAndUserIdAsync(string userId, int projectId)
         {
             var response = await _statusService.GetByUserIdAsync<APIResponse>(userId);
@@ -485,10 +515,22 @@ namespace taskify_font_end.Controllers
         {
             var response = await _taskService.GetAsync<APIResponse>(id);
             TaskDTO obj = new();
+            var users = new List<TaskUserDTO>();
             if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
             {
                 obj = JsonConvert.DeserializeObject<TaskDTO>(Convert.ToString(response.Result));
                 obj.Project = await GetProjectByIdAsync(obj.ProjectId);
+                obj.Status = await GetStatusById(obj.StatusId);
+                var resUser = await _taskUserService.GetByTaskIdAsync<APIResponse>(obj.Id);
+                if (resUser != null && resUser.IsSuccess && resUser.ErrorMessages.Count == 0)
+                {
+                    users = JsonConvert.DeserializeObject<List<TaskUserDTO>>(Convert.ToString(resUser.Result));
+                    foreach (var u in users)
+                    {
+                        u.User = await GetUserByIdAsync(u.UserId);
+                    }
+                    obj.TaskUsers = users;
+                }
             }
             return obj;
         }
@@ -560,6 +602,17 @@ namespace taskify_font_end.Controllers
                 TempData["error"] = $"Internal Server Error! {ex.Message}";
                 return false;
             }
+        }
+
+        private async Task<StatusDTO> GetStatusById(int id)
+        {
+            var response = await _statusService.GetAsync<APIResponse>(id);
+            StatusDTO obj = new();
+            if (response != null && response.IsSuccess)
+            {
+                obj = JsonConvert.DeserializeObject<StatusDTO>(Convert.ToString(response.Result));
+            }
+            return obj;
         }
     }
 }

@@ -64,6 +64,16 @@ namespace taskify_font_end.Service
             });
         }
 
+        public async Task<T> GetByWorkspaceIdAsync<T>(int workspaceId)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/project/workspace/" + workspaceId
+            });
+        }
+
+
         public async Task<T> UpdateAsync<T>(ProjectDTO dto)
         {
             return await _baseServices.SendAsync<T>(new APIRequest()
