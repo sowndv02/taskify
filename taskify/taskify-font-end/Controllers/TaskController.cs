@@ -20,14 +20,17 @@ namespace taskify_font_end.Controllers
         private readonly ITaskUserService _taskUserService;
         private readonly IProjectUserService _projectUserService;
         private readonly ITaskMediaService _taskMediaService;
+        private readonly IWorkspaceUserService _workspaceUserService;
 
         public TaskController(IStatusService statusService,
             IWorkspaceService workspaceService, IUserService userService,
             IPriorityService priorityService, IColorService colorService, 
             ITaskUserService taskUserService, IProjectService projectService, 
             ITaskService taskService, IProjectUserService projectUserService, 
-            ITaskMediaService taskMediaService ) : base(workspaceService)
+            IWorkspaceUserService workspaceUserService,
+            ITaskMediaService taskMediaService ) : base(workspaceService, workspaceUserService)
         {
+            _workspaceUserService = workspaceUserService;
             _taskMediaService = taskMediaService;
             _taskService = taskService;
             _statusService = statusService;

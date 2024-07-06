@@ -54,6 +54,14 @@ namespace taskify_font_end.Service
                 Url = API_URL + $"/api/{SD.CurrentAPIVersion}/WorkspaceUser/" + id
             });
         }
+        public async Task<T> GetByUserIdAsync<T>(string userId)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/workspaceUser/user/" + userId
+            });
+        }
 
         public async Task<T> UpdateAsync<T>(WorkspaceUserDTO dto)
         {

@@ -20,11 +20,12 @@ namespace taskify_font_end.Controllers
         private readonly ITodoService _todoService;
         private readonly IColorService _colorService;
         private readonly IPriorityService _priorityService;
-
+        private readonly IWorkspaceUserService _workspaceUserService;
         public TodoController(ITodoService todoService,
-            IWorkspaceService workspaceService, IUserService userService,
-            IPriorityService priorityService, IColorService colorService) : base(workspaceService)
+            IWorkspaceService workspaceService, IUserService userService, IWorkspaceUserService workspaceUserService,
+            IPriorityService priorityService, IColorService colorService) : base(workspaceService, workspaceUserService)
         {
+            _workspaceUserService = workspaceUserService;
             _todoService = todoService; 
             _colorService = colorService;
             _workspaceService = workspaceService;

@@ -6,6 +6,7 @@ namespace taskify_font_end.Service.IService
     {
         Task<T> GetAllAsync<T>();
         Task<T> GetByWorkspaceIdAsync<T>(int id);
+        Task<T> GetByUserIdAsync<T>(string userId);
         Task<T> CreateAsync<T>(WorkspaceUserDTO dto);
         Task<T> UpdateAsync<T>(WorkspaceUserDTO dto);
         Task<T> DeleteAsync<T>(int id);

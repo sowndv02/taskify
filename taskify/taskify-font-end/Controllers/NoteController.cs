@@ -16,12 +16,13 @@ namespace taskify_font_end.Controllers
         private readonly IColorService _colorService;
         private readonly INoteService _noteService;
         private readonly IMapper _mapper;
-
+        private readonly IWorkspaceUserService _workspaceUserService;
         public NoteController(
             IColorService colorService, INoteService noteService, 
             IUserService userService, IWorkspaceService workspaceService, 
-            IMapper mapper) : base(workspaceService)
+            IMapper mapper, IWorkspaceUserService workspaceUserService) : base(workspaceService, workspaceUserService)
         {
+            _workspaceUserService = workspaceUserService;
             _colorService = colorService;
             _noteService = noteService;
             _userService = userService;

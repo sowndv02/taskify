@@ -67,6 +67,31 @@ namespace taskify_api.Controllers.v1
             }
         }
 
+        [HttpGet("user/{id}", Name = "GetProjectUserByUserId")]
+        public async Task<ActionResult<APIResponse>> GetByUserIdAsync(string id)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(id))
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
+                    return BadRequest(_response);
+                }
+                List<ProjectUser> model = await _projectUserRepository.GetAllAsync(x => x.UserId == id);
+                _response.Result = _mapper.Map<List<ProjectUserDTO>>(model);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<APIResponse>> CreateAsync([FromBody] ProjectUserDTO createDTO)
         {

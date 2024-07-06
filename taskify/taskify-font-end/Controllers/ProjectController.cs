@@ -35,7 +35,7 @@ namespace taskify_font_end.Controllers
             IWorkspaceUserService workspaceUserService,
             IMilestoneService milestoneService,
             IProjectMediaService projectMediaService,
-            IConfiguration configuration) : base(workspaceService)
+            IConfiguration configuration) : base(workspaceService, workspaceUserService)
         {
             _workspaceUserService = workspaceUserService;
             _workspaceService = workspaceService;

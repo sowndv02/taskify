@@ -17,7 +17,7 @@ namespace taskify_font_end.Controllers
         private readonly IMapper _mapper;
         public WorkspaceController(
             IUserService userService, IWorkspaceService workspaceService, 
-            IWorkspaceUserService workspaceUserService, IMapper mapper) : base(workspaceService)
+            IWorkspaceUserService workspaceUserService, IMapper mapper) : base(workspaceService, workspaceUserService)
         {
             _mapper = mapper;
             _workspaceService = workspaceService;

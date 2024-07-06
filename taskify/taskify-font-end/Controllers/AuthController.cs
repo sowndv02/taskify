@@ -23,10 +23,12 @@ namespace taskify_font_end.Controllers
         private readonly IWorkspaceService _workspaceService;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly IWorkspaceUserService _workspaceUserService;
         public AuthController(IAuthService authService, ITokenProvider tokenProvider, 
-            IWorkspaceService workspaceService, IUserService userService,
-            IMapper mapper) : base(workspaceService)
+            IWorkspaceService workspaceService, IUserService userService, IWorkspaceUserService workspaceUserService,
+            IMapper mapper) : base(workspaceService, workspaceUserService)
         {
+            _workspaceUserService = workspaceUserService;
             _authService = authService;
             _tokenProvider = tokenProvider;
             _workspaceService = workspaceService;

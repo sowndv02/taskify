@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
@@ -23,6 +24,7 @@ namespace taskify_font_end.Controllers
         private readonly ITaskService _taskService;
         private readonly IPriorityService _priorityService;
         private readonly IStatusService _statusService;
+        private readonly IWorkspaceUserService _workspaceUserService;
         private readonly ITodoService _todoService;
         private readonly IMapper _mapper;
         public HomeController(IWorkspaceService workspaceService, IMapper mapper, 
@@ -31,8 +33,10 @@ namespace taskify_font_end.Controllers
             ITaskUserService taskUserService, 
             ITodoService todoService,
             IPriorityService priorityService,
-            IStatusService statusService) : base(workspaceService)
+            IStatusService statusService, 
+            IWorkspaceUserService workspaceUserService) : base(workspaceService, workspaceUserService)
         {
+            _workspaceUserService = workspaceUserService;
             _priorityService = priorityService;
             _todoService = todoService;
             _statusService = statusService;
@@ -53,8 +57,12 @@ namespace taskify_font_end.Controllers
 
         public async Task<IActionResult> DashboardAsync(int? id)
         {
-            if(ViewBag.SelectedWorkspaceId == 0 && id != 0)
+            if(id != null && id != 0)
+            {
                 HttpContext.Response.Cookies.Append("SelectedWorkspaceId", id.ToString());
+                ViewBag.SelectedWorkspaceId = id;
+            }
+                
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
             {
@@ -65,7 +73,7 @@ namespace taskify_font_end.Controllers
             {
                 workspaces = await GetWorkspaceByUserIdAsync(userId);
                 ViewBag.workspaces = workspaces;
-                if (id == null || id == 0)
+                if ((id == null || id == 0) && (ViewBag.SelectedWorkspaceId == null || ViewBag.SelectedWorkspaceId == 0))
                 {
                     if (workspaces.Count > 0)
                     {
@@ -100,7 +108,7 @@ namespace taskify_font_end.Controllers
                     }
                     return View(null);
                 }
-                var workspace = workspaces.FirstOrDefault(x => x.Id == id);
+                var workspace = workspaces.FirstOrDefault(x => x.Id == ViewBag.SelectedWorkspaceId);
                 if(workspace != null)
                 {
                     var projects = await GetProjectByUserIdAndWorkspaceIdAsync(userId, workspace.Id);
@@ -169,12 +177,14 @@ namespace taskify_font_end.Controllers
             if (response != null && response.IsSuccess)
             {
                 workspaces = JsonConvert.DeserializeObject<List<WorkspaceDTO>>(Convert.ToString(response.Result));
-            }
-            if (workspaces.Count > 0)
-            {
-                workspaces = workspaces.OrderByDescending(x => x.CreatedDate)
-                   .ThenByDescending(x => x.UpdatedDate)
-                   .ToList();
+                var listContainsUser = await GetListWorkspaceContainsUser(userId);
+                workspaces = workspaces.Concat(listContainsUser)
+                              .GroupBy(p => p.Id)
+                              .Select(g => g.First())
+                              .ToList()
+                              .OrderByDescending(x => x.CreatedDate)
+                              .ThenByDescending(x => x.UpdatedDate)
+                              .ToList();
             }
             return workspaces;
         }
@@ -186,9 +196,6 @@ namespace taskify_font_end.Controllers
             if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
             {
                 list = JsonConvert.DeserializeObject<List<TodoDTO>>(Convert.ToString(response.Result));
-            }
-            if (list.Count > 0)
-            {
                 list = list.OrderByDescending(x => x.CreatedDate)
                    .ThenByDescending(x => x.UpdatedDate)
                    .ToList();
@@ -329,10 +336,27 @@ namespace taskify_font_end.Controllers
         {
             var projects = await GetProjectInWorkspace(workspaceId);
             var projectsHaveUser = await GetListProjectContainsUser(userId, workspaceId);
-
             return projects.Where(p => projectsHaveUser.Any(pu => pu.Id == p.Id)).ToList();
-
         }
+
+        private async Task<List<WorkspaceDTO>> GetListWorkspaceContainsUser(string userId)
+        {
+            var workspaces = await GetWorkspaces();
+            var workspaceHaveUser = await GetListWorkspacesContainsUser(userId);
+            return workspaces.Where(p => workspaceHaveUser.Any(pu => pu.Id == p.Id)).ToList();
+        }
+
+        private async Task<List<WorkspaceDTO>> GetWorkspaces()
+        {
+            var response = await _workspaceService.GetAllAsync<APIResponse>();
+            List<WorkspaceDTO> list = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<WorkspaceDTO>>(Convert.ToString(response.Result));
+            }
+            return list;
+        }
+
         private async Task<List<ProjectDTO>> GetProjectInWorkspace(int workspaceId)
         {
             var response = await _projectService.GetByWorkspaceIdAsync<APIResponse>(workspaceId);
@@ -372,6 +396,46 @@ namespace taskify_font_end.Controllers
             }
             return projects;
         }
+
+
+        private async Task<List<WorkspaceDTO>> GetListWorkspacesContainsUser(string userId)
+        {
+            var response = await _workspaceUserService.GetByUserIdAsync<APIResponse>(userId);
+            List<WorkspaceDTO> workspaces = new();
+            List<WorkspaceUserDTO> list = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<WorkspaceUserDTO>>(Convert.ToString(response.Result));
+                foreach (var item in list)
+                {
+                    workspaces.Add(await GetWorkspaceByIdAsync(item.WorkspaceId));
+                }
+            }
+            return workspaces;
+        }
+        private async Task<WorkspaceDTO> GetWorkspaceByIdAsync(int id)
+        {
+            var response = await _workspaceService.GetAsync<APIResponse>(id);
+            WorkspaceDTO obj = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                obj = JsonConvert.DeserializeObject<WorkspaceDTO>(Convert.ToString(response.Result));
+            }
+
+            if (obj.Id != 0)
+            {
+
+                var resWorkspaceUsers = await _workspaceUserService.GetByWorkspaceIdAsync<APIResponse>(obj.Id);
+                if (resWorkspaceUsers != null && resWorkspaceUsers.IsSuccess && resWorkspaceUsers.ErrorMessages.Count == 0)
+                {
+                    obj.WorkspaceUsers = JsonConvert.DeserializeObject<List<WorkspaceUserDTO>>(Convert.ToString(resWorkspaceUsers.Result));
+                    obj.WorkspaceUserIds = obj.WorkspaceUsers.Select(x => x.UserId).ToList();
+                }
+            }
+
+            return obj;
+        }
+
         private async Task<ProjectDTO> GetProjectByIdAsync(int id)
         {
             var response = await _projectService.GetAsync<APIResponse>(id);

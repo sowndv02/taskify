@@ -44,12 +44,12 @@ namespace taskify_api.Controllers.v1
             }
         }
 
-        [HttpGet("{userId}", Name = "GetWorkspaceUserByUserId")]
-        public async Task<ActionResult<APIResponse>> GetAsyncByUserId(string userId)
+        [HttpGet("user/{id}", Name = "GetWorkspaceUserByUserId")]
+        public async Task<ActionResult<APIResponse>> GetAsyncByUserId(string id)
         {
             try
             {
-                List<WorkspaceUser> list = await _workspaceUserRepository.GetAllAsync(x => x.UserId.Equals(userId));
+                List<WorkspaceUser> list = await _workspaceUserRepository.GetAllAsync(x => x.UserId.Equals(id));
                 _response.Result = _mapper.Map<List<WorkspaceUserDTO>>(list);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);

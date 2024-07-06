@@ -12,6 +12,7 @@ namespace taskify_font_end.Controllers
     {
         private readonly IProjectService _projectService;
         private readonly IWorkspaceService _workspaceService;
+        private readonly IWorkspaceUserService _workspaceUserService;
         private readonly IUserService _userService;
         private readonly IStatusService _statusService;
         private readonly ITagService _tagService;
@@ -24,8 +25,9 @@ namespace taskify_font_end.Controllers
             IWorkspaceService workspaceService, IUserService userService,
             IStatusService statusService, ITagService tagService,
             IProjectUserService projectUserService, IProjectTagService projectTagService, 
-            IConfiguration configuration, IColorService colorService) : base(workspaceService)
+            IConfiguration configuration, IColorService colorService, IWorkspaceUserService workspaceUserService) : base(workspaceService, workspaceUserService)
         {
+            _workspaceUserService = workspaceUserService;
             _workspaceService = workspaceService;
             _mapper = mapper;
             _projectService = projectService;

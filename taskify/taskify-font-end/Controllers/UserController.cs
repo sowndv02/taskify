@@ -17,14 +17,16 @@ namespace taskify_font_end.Controllers
         private readonly ITaskUserService _taskUserService;
         private readonly ITaskService _taskService;
         private readonly IStatusService _statusService;
-
+        private readonly IWorkspaceUserService _workspaceUserService;
         public UserController(IWorkspaceService workspaceService, 
             IUserService userService, IProjectService projectService, 
             IProjectUserService projectUserService, 
             ITaskUserService taskUserService, 
             ITaskService taskService, 
-            IStatusService statusService) : base(workspaceService)
+            IWorkspaceUserService workspaceUserService,
+            IStatusService statusService) : base(workspaceService, workspaceUserService)
         {
+            _workspaceUserService = workspaceUserService;
             _statusService = statusService;
             _taskService = taskService; 
             _taskUserService = taskUserService;
