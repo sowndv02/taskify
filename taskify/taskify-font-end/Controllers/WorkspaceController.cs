@@ -14,15 +14,25 @@ namespace taskify_font_end.Controllers
         private readonly IUserService _userService;
         private readonly IWorkspaceService _workspaceService;
         private readonly IWorkspaceUserService _workspaceUserService;
+        private readonly IProjectService _projectService;
+        private readonly IProjectUserService _projectUserService;
+        private readonly ITaskService _taskService;
+        private readonly ITaskUserService _taskUserService;
         private readonly IMapper _mapper;
         public WorkspaceController(
             IUserService userService, IWorkspaceService workspaceService, 
-            IWorkspaceUserService workspaceUserService, IMapper mapper) : base(workspaceService, workspaceUserService)
+            IWorkspaceUserService workspaceUserService, IMapper mapper, 
+            IProjectService projectService, IProjectUserService projectUserService, 
+            ITaskService taskService, ITaskUserService taskUserService) : base(workspaceService, workspaceUserService)
         {
             _mapper = mapper;
             _workspaceService = workspaceService;
             _workspaceUserService = workspaceUserService;
             _userService = userService;
+            _projectService = projectService;
+            _projectUserService = projectUserService;
+            _taskService = taskService;
+            _taskUserService = taskUserService;
         }
 
         public async Task<IActionResult> Index()
@@ -52,24 +62,55 @@ namespace taskify_font_end.Controllers
             {
                 return RedirectToAction("Dashboard", "Home", new { id = newWorkspaceId });
             }
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var response = await _workspaceService.GetAsync<APIResponse>(id);
             WorkspaceDTO workspace = new();
             if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
             {
                 workspace = JsonConvert.DeserializeObject<WorkspaceDTO>(Convert.ToString(response.Result));
             }
-            workspace.IsDeleted = true;
-            var res = await _workspaceService.UpdateAsync<APIResponse>(workspace);
-            if (res != null && res.IsSuccess)
+            if(workspace != null)
             {
-                TempData["success"] = "You have successfully left the workspace!";
-                return RedirectToAction("Dashboard", "Home", new { id = newWorkspaceId });
+                if (workspace.OwnerId.Equals(userId))
+                {
+                    workspace.IsDeleted = true;
+                    var res = await _workspaceService.UpdateAsync<APIResponse>(workspace);
+                    if (res != null && res.IsSuccess)
+                    {
+                        TempData["success"] = "You have successfully left the workspace!";
+                        return RedirectToAction("Dashboard", "Home", new { id = newWorkspaceId });
+                    }
+                    else
+                    {
+                        TempData["error"] = $"You have failed to leave the workspace! {res.ErrorMessages.FirstOrDefault()}";
+                        return RedirectToAction("Dashboard", "Home", new { id });
+                    }
+                }
+                else
+                {
+                    var result = await _workspaceUserService.DeleteByWorkspaceAndUserAsync<APIResponse>(workspace.Id, userId);
+                    if (result == null && result.IsSuccess && result.ErrorMessages.Count == 0)
+                    {
+                        TempData["error"] = result.ErrorMessages.FirstOrDefault();
+                    }
+                    List<ProjectDTO> projects = await GetProjectByUserIdAndWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
+                    foreach(var item in projects)
+                    {
+                        bool resultDeleteProjectUsers = await DeleteProjectUsersByProjectIdAndUserId(item.Id, userId);
+                        if (!resultDeleteProjectUsers) return Json(new { error = true, message = "Internal server have error!" });
+                        foreach(var task in item.Tasks)
+                        {
+                            bool resultDeleteTaskUsers = await DeleteTaskUsersByTaskIdAndUserId(item.Id, userId);
+                            if (!resultDeleteTaskUsers) return Json(new { error = true, message = "Internal server have error!" });
+                        }
+                    }
+                    var removeTask = await _taskUserService.DeleteByTaskAndUserAsync<APIResponse>(workspace.Id, userId);
+                    return RedirectToAction("Dashboard", "Home", new { id = newWorkspaceId });
+                }
             }
-            else
-            {
-                TempData["error"] = $"You have failed to leave the workspace! {res.ErrorMessages.FirstOrDefault()}";
-                return RedirectToAction("Dashboard", "Home", new { id });
-            }
+            TempData["error"] = $"You have failed to leave the workspace!";
+            return RedirectToAction("Dashboard", "Home", new { id = newWorkspaceId });
+
         }
 
         [HttpGet]
@@ -326,5 +367,58 @@ namespace taskify_font_end.Controllers
             }
             return obj;
         }
+
+        private async Task<List<ProjectDTO>> GetProjectByUserIdAndWorkspaceIdAsync(string userId, int workspaceId)
+        {
+            var response = await _projectService.GetByUserIdAndWorkspaceIdAsync<APIResponse>(userId, workspaceId);
+            List<ProjectDTO> list = new();
+            List<ProjectTagDTO> tags = new();
+            List<ProjectUserDTO> users = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<ProjectDTO>>(Convert.ToString(response.Result));
+            }
+            if (list.Count > 0)
+            {
+                list = list.OrderByDescending(x => x.CreatedDate)
+                   .ThenByDescending(x => x.UpdatedDate)
+                   .ToList();
+
+                foreach (var item in list)
+                {
+                    item.Tasks = await GetTaskByProjectId(item.Id);
+                }
+            }
+            return list;
+        }
+
+        private async Task<List<TaskDTO>> GetTaskByProjectId(int id)
+        {
+            var response = await _taskService.GetByProjectIdAsync<APIResponse>(id);
+            List<TaskDTO> list = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<TaskDTO>>(Convert.ToString(response.Result));
+            }
+            return list;
+        }
+
+        private async Task<bool> DeleteProjectUsersByProjectIdAndUserId(int projectId, string userId)
+        {
+            var result = await _projectUserService.DeleteByProjectAndUserAsync<APIResponse>(projectId, userId);
+            if (result == null || !result.IsSuccess || result.ErrorMessages.Count != 0)
+                return false;
+            return true;
+        }
+
+        private async Task<bool> DeleteTaskUsersByTaskIdAndUserId(int taskId, string userId)
+        {
+            var result = await _taskUserService.DeleteByTaskAndUserAsync<APIResponse>(taskId, userId);
+            if (result == null || !result.IsSuccess || result.ErrorMessages.Count != 0)
+                return false;
+            return true;
+        }
+
+        
     }
 }
