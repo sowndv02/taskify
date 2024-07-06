@@ -1,515 +1,291 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using taskify_utility;
+@model taskify_font_end.Models.DTO.UserDTO
 @{
 }
 <div class="content-wrapper">
-
-    <div class="container-fluid">
-        <div class="d-flex justify-content-between mt-4">
-            <div>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb breadcrumb-style1">
-                        <li class="breadcrumb-item">
-                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a href="https://taskify-saas.taskhub.company/master-panel/users">Users</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            Akash Dhaman
-                        </li>
-                    </ol>
-                </nav>
+    @if(Model != null)
+    {
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between mt-4">
+                <div>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-style1">
+                            <li class="breadcrumb-item">
+                                <a asp-action="Dashboard" asp-controller="Home">Home</a>
+                            </li>
+                            @if (User.IsInRole(SD.Admin))
+                            {
+                                <li class="breadcrumb-item">
+                                    <a asp-action="Index" asp-controller="User">Users</a>
+                                </li>
+                            }
+                            <li class="breadcrumb-item">
+                                @Model.FirstName @Model.LastName
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card mb-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card mb-4">
 
-                    <!-- Account -->
-                    <div class="card-body">
-                        <div class="d-flex align-items-start align-items-sm-center gap-4">
-                            <img src="https://taskify-saas.taskhub.company/storage/photos/no-image.jpg"
-                                 alt="user-avatar" class="d-block rounded" height="100" width="100"
-                                 id="uploadedAvatar" />
-                            <h4 class="card-header fw-bold">Akash Dhaman</h4>
-                            <span class="badge bg-success">Active</span>
+                        <!-- Account -->
+                        <div class="card-body">
+                            <div class="d-flex align-items-start align-items-sm-center gap-4">
+                                <img src="@Model.ImageUrl"
+                                     alt="user-avatar" class="d-block rounded" height="100" width="100"
+                                     id="uploadedAvatar" />
+                                <h4 class="card-header fw-bold">@Model.FirstName @Model.LastName</h4>
+                            </div>
                         </div>
-                    </div>
-                    <hr class="my-0" />
-                    <div class="card-body">
-                        <div class="row">
+                        <hr class="my-0" />
+                        <div class="card-body">
+                            <div class="row">
 
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label"
-                                       for="phone">Phone number</label>
-                                <div class="input-group input-group-merge">
-                                    <input type="text" id="phone" name="phone" class="form-control" placeholder=""
-                                           value="7047547959" readonly />
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label"
+                                           for="phone">Phone number</label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="text" id="phone" name="phone" class="form-control" placeholder=""
+                                               value="@Model.PhoneNumber" readonly />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label" for="email">E-mail</label>
-                                <div class="input-group input-group-merge">
-                                    <input class="form-control" type="text" id="exampleFormControlReadOnlyInput1"
-                                           placeholder="" value="adhaman31@gmail.com" readonly="">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="email">E-mail</label>
+                                    <div class="input-group input-group-merge">
+                                        <input class="form-control" type="text" id="exampleFormControlReadOnlyInput1"
+                                               placeholder="" value="@Model.Email" readonly="">
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label" for="role">Role</label>
-                                <div class="input-group input-group-merge">
-                                    <input class="form-control text-capitalize" type="text" id="role" placeholder=""
-                                           value="member" readonly="">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="role">Role</label>
+                                    <div class="input-group input-group-merge">
+                                        <input class="form-control text-capitalize" type="text" id="role" placeholder=""
+                                               value="@(User.IsInRole(SD.Admin) ? "Admin" : "Client")" readonly="">
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label" for="address">Address</label>
-                                <div class="input-group input-group-merge">
-                                    <input class="form-control" type="text" id="address" placeholder=""
-                                           value="GWalior" readonly="">
-                                </div>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label" for="city">City</label>
-                                <div class="input-group input-group-merge">
-                                    <input class="form-control" type="text" id="city" placeholder=""
-                                           value="Gwalior" readonly="">
-                                </div>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label" for="state">State</label>
-                                <div class="input-group input-group-merge">
-                                    <input class="form-control" type="text" id="state" placeholder=""
-                                           value="Madhya Pradesh" readonly="">
-                                </div>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label" for="country">Country</label>
-                                <div class="input-group input-group-merge">
-                                    <input class="form-control" type="text" id="country" placeholder=""
-                                           value="India" readonly="">
-                                </div>
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label" for="zip">Zip code</label>
-                                <div class="input-group input-group-merge">
-                                    <input class="form-control" type="text" id="zip" placeholder=""
-                                           value="474003" readonly="">
-                                </div>
-                            </div>
-
-
-
-
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label" for="dob">Date of birth</label>
-                                <div class="input-group input-group-merge">
-                                    <input class="form-control" type="text" placeholder="" value="04-07-1992" readonly>
-
-
-                                </div>
-                            </div>
-                            <div class="mb-3 col-md-6">
-                                <label class="form-label"
-                                       for="doj">Date of joining</label>
-                                <div class="input-group input-group-merge">
-                                    <input class="form-control" type="text" placeholder="" value="03-05-2023" readonly>
-
-
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="address">Address</label>
+                                    <div class="input-group input-group-merge">
+                                        <input class="form-control" type="text" id="address" placeholder=""
+                                               value="@Model.Address" readonly="">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Tabs -->
-        <div class="nav-align-top my-4">
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item">
-                    <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                            data-bs-target="#navs-top-projects" aria-controls="navs-top-projects"
-                            aria-selected="true">
-                        <i class="menu-icon tf-icons bx bx-briefcase-alt-2 text-success"></i>Projects
-                    </button>
-                </li>
-                <li class="nav-item">
-                    <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
-                            data-bs-target="#navs-top-tasks" aria-controls="navs-top-tasks" aria-selected="false">
-                        <i class="menu-icon tf-icons bx bx-task text-primary"></i>Tasks
-                    </button>
-                </li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane fade active show" id="navs-top-projects" role="tabpanel">
+            <!-- Tabs -->
+            <div class="nav-align-top my-4">
+                <ul class="nav nav-tabs" role="tablist">
+                    <li class="nav-item">
+                        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                data-bs-target="#navs-top-projects" aria-controls="navs-top-projects"
+                                aria-selected="true">
+                            <i class="menu-icon tf-icons bx bx-briefcase-alt-2 text-success"></i>Projects
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                data-bs-target="#navs-top-tasks" aria-controls="navs-top-tasks" aria-selected="false">
+                            <i class="menu-icon tf-icons bx bx-task text-primary"></i>Tasks
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade active show" id="navs-top-projects" role="tabpanel">
 
-                    <div class="table-responsive text-nowrap">
+                        <div class="table-responsive text-nowrap">
 
-                        <div class="d-flex justify-content-between">
-                            <h4 class="fw-bold">Akash's Projects                                    </h4>
-                        </div>
-                        <!-- projects card -->
-                        <div class="card ">
-                            <div class="table-responsive text-nowrap">
+                            <div class="d-flex justify-content-between">
+                                <h4 class="fw-bold">Akash's Projects                                    </h4>
+                            </div>
+                            <!-- projects card -->
+                            <div class="card ">
+                                <div class="table-responsive text-nowrap">
+                                    <div class="card-body">
+                                        <table data-mobile-responsive="true" data-route-prefix="/Project" id="tableProject" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Title</th>
+                                                    <th>User</th>
+                                                    <th>StartAt</th>
+                                                    <th>EndAt</th>
+                                                    <th>Actual EndAt</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableBody">
+                                                @if (ViewBag.projects != null && ViewBag.projects.Count > 0)
+                                                {
+                                                    @foreach (var item in ViewBag.projects)
+                                                    {
+                                                        <tr>
+                                                            <td>@item.Id</td>
+                                                            <td>
+                                                                <a asp-action="Detail" asp-controller="Project" asp-route-id="@item.Id" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" title="@item.Title"><strong>@item.Title</strong></a>
+                                                            </td>
+                                                            <td>
+                                                                <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                                                    @foreach (var user in item.ProjectUsers)
+                                                                    {
+                                                                        <li><a asp-action="Profile" asp-controller="User" asp-route-id="@user.User?.Id" target="_blank"></a></li>
+                                                                        <li class="avatar avatar-sm pull-up" title="@user.User?.FirstName @user.User?.LastName">
+                                                                            <a asp-action="Profile" asp-controller="User" asp-route-id="@user.User?.Id" target="_blank">
+                                                                                <img src="@user.User?.ImageUrl" class="rounded-circle">
+                                                                            </a>
+                                                                        </li>
+                                                                    }
+                                                                </ul>
+                                                            </td>
+                                                            <td>@item.StartAt.ToShortDateString()</td>
+                                                            <td>@item.EndAt.ToShortDateString()</td>
+                                                            <td>@item.ActualEndAt?.ToShortDateString()</td>
+                                                            <td>
+                                                                @if (Model.Id.Equals(item.OwnerId))
+                                                                {
+                                                                    <a asp-action="Update" asp-controller="Project" asp-route-id="@item.Id" title="Update"><i class="bx bx-edit mx-1"></i></a>
+                                                                    <button title="Delete" type="button" class="btn delete-item" data-id="@item.Id" data-type="Project">
+                                                                        <i class="bx bx-trash text-danger"></i>
+                                                                    </button>
+                                                                    <button class="duplicate-item btn" data-id="@item.Id" data-type="Project"><i class='menu-icon tf-icons bx bx-copy text-warning'></i></button>
 
+                                                                }
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
 
-                                <div class="row mt-4 mx-2">
-                                    <div class="mb-3 col-md-3">
-                                        <div class="input-group input-group-merge">
-                                            <input type="text" id="project_start_date_between" name="start_date_between" class="form-control"
-                                                   placeholder="Start date between" autocomplete="off">
-                                        </div>
                                     </div>
-                                    <div class="mb-3 col-md-3">
-                                        <div class="input-group input-group-merge">
-                                            <input type="text" id="project_end_date_between" name="project_end_date_between"
-                                                   class="form-control" placeholder="End date between"
-                                                   autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <select class="form-select" id="projects_user_filter" aria-label="Default select example">
-                                            <option value="">Select user</option>
-                                            <option value="5">
-                                                Sid gor
-                                            </option>
-                                            <option value="7">
-                                                Team Member 1
-                                            </option>
-                                            <option value="14">
-                                                King Lost
-                                            </option>
-                                            <option value="15">
-                                                jimy karter
-                                            </option>
-                                            <option value="16">
-                                                kenny blinder
-                                            </option>
-                                            <option value="34">
-                                                Akash Dhaman
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <select class="form-select" id="projects_client_filter" aria-label="Default select example">
-                                            <option value="">Select client</option>
-                                            <option value="2">
-                                                same parker
-                                            </option>
-                                            <option value="3">
-                                                Thomas bond
-                                            </option>
-                                            <option value="4">
-                                                shie Waine
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <select class="form-select" id="status_filter" aria-label="Default select example">
-                                            <option value="">Select status</option>
-
-                                            <option value="0">
-                                                Default
-                                            </option>
-
-
-
-                                            <option value="72">
-                                                STARTED
-                                            </option>
-
-
-
-                                            <option value="73">
-                                                ON GOING
-                                            </option>
-
-
-
-                                            <option value="74">
-                                                IN REVIEW
-                                            </option>
-
-
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <input type="hidden" name="project_start_date_from" id="project_start_date_from">
-                                <input type="hidden" name="project_start_date_to" id="project_start_date_to">
-
-                                <input type="hidden" name="project_end_date_from" id="project_end_date_from">
-                                <input type="hidden" name="project_end_date_to" id="project_end_date_to">
-
-                                <input type="hidden" id="is_favorites" value="">
-
-                                <input type="hidden" id="data_type" value="projects">
-                                <input type="hidden" id="data_table" value="projects_table">
-
-                                <div class="card-body">
-                                    <table id="projects_table" data-toggle="table" data-loading-template="loadingTemplate"
-                                           data-url="https://taskify-saas.taskhub.company/master-panel/projects/listing" data-icons-prefix="bx" data-icons="icons"
-                                           data-show-refresh="true" data-total-field="total" data-trim-on-search="false" data-data-field="rows"
-                                           data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true" data-side-pagination="server"
-                                           data-show-columns="true" data-pagination="true" data-sort-name="id" data-sort-order="desc"
-                                           data-route-prefix="/master-panel" data-mobile-responsive="true"
-                                           data-query-params="queryParamsProjects">
-                                        <thead>
-                                            <tr>
-                                                <th data-checkbox="true"></th>
-                                                <th data-sortable="true" data-field="id">ID</th>
-                                                <th data-sortable="true" data-field="title">Title</th>
-                                                <th data-field="users" data-formatter="ProjectUserFormatter">
-                                                    Users
-                                                </th>
-                                                <th data-field="clients" data-formatter="ProjectClientFormatter">
-                                                    Clients
-                                                </th>
-                                                <th data-sortable="true" data-field="start_date">
-                                                    Starts at
-                                                </th>
-                                                <th data-sortable="true" data-field="end_date">Ends at                        </th>
-                                                <th data-sortable="true" data-field="end_date">Ends at                        </th>
-                                                <th data-sortable="true" data-field="budget">
-                                                    Budget (₹)
-                                                </th>
-                                                <th data-formatter="actionsFormatter">Actions</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-
                                 </div>
                             </div>
+
+                            <script>
+                                var label_update = 'Update ';
+                                var label_delete = 'Delete';
+                                var label_not_assigned = 'Not assigned ';
+                                var add_favorite = 'Click to mark as favorite ';
+                                var remove_favorite = 'Click to remove from favorite ';
+                                var label_duplicate = 'Duplicate ';
+
+                            </script>
+                            <script src="~/js/project-list.js"></script>
                         </div>
 
-                        <script>
-                            var label_update = 'Update ';
-                            var label_delete = 'Delete';
-                            var label_not_assigned = 'Not assigned ';
-                            var add_favorite = 'Click to mark as favorite ';
-                            var remove_favorite = 'Click to remove from favorite ';
-                            var label_duplicate = 'Duplicate ';
-
-                        </script>
-                        <script src="https://taskify-saas.taskhub.company/assets/js/pages/project-list.js"></script>
                     </div>
 
-                </div>
+                    <div class="tab-pane fade "
+                         id="navs-top-tasks" role="tabpanel">
 
-                <div class="tab-pane fade "
-                     id="navs-top-tasks" role="tabpanel">
+                        <div class="table-responsive text-nowrap">
 
-                    <div class="table-responsive text-nowrap">
+                            <div class="d-flex justify-content-between">
+                                <h4 class="fw-bold">Akash's Tasks</h4>
+                            </div>
+                            <!-- tasks -->
+                            <div class="card ">
+                                <div class="table-responsive text-nowrap">
+                                    <div class="card-body">
+                                        <table data-mobile-responsive="true" data-route-prefix="/Task" id="tableTask" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Task</th>
+                                                    <th>Project</th>
+                                                    <th>Users</th>
+                                                    <th>StartAt</th>
+                                                    <th>EndAt</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tableBody">
+                                                @if (ViewBag.tasks != null && ViewBag.tasks.Count > 0)
+                                                {
+                                                    @foreach (var item in ViewBag.tasks)
+                                                    {
+                                                        <tr>
+                                                            <td>@item.Id</td>
+                                                            <td><a asp-action="Detail" asp-controller="Task" asp-route-id="@item.Id" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" title="@item.Title"><strong>@item.Title</strong></a></td>
+                                                            <td><a asp-action="Detail" asp-controller="Project" asp-route-id="@item.ProjectId" target="_blank data-bs-toggle=" tooltip'="" data-bs-placement="bottom" title="New" website="" to="" work="" on=""><strong>@item.Project?.Title</strong></a></td>
+                                                            <td>
+                                                                <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                                                    @foreach (var user in item.TaskUsers)
+                                                                    {
+                                                                        <li><a asp-action="Profile" asp-controller="User" asp-route-id="@user.User?.Id" target="_blank"></a></li>
+                                                                        <li class="avatar avatar-sm pull-up" title="@user.User?.FirstName @user.User?.LastName">
+                                                                            <a asp-action="Profile" asp-controller="User" asp-route-id="@user.User?.Id" target="_blank">
+                                                                                <img src="@user.User?.ImageUrl" class="rounded-circle">
+                                                                            </a>
+                                                                        </li>
+                                                                    }
+                                                                </ul>
+                                                            </td>
+                                                            <td>@item.StartAt.ToShortDateString()</td>
+                                                            <td>@item.EndAt.ToShortDateString()</td>
+                                                            <td><span class="badge bg-label-@item.Status?.Color?.Title me-1">@item.Status?.Title</span></td>
+                                                            <td>
+                                                                <a asp-action="Update" asp-controller="Task" asp-route-id="@item.Id" title="Update"><i class="bx bx-edit mx-1"></i></a>
+                                                                @if (Model.Id.Equals(item.OwnerId))
+                                                                {
 
-                        <div class="d-flex justify-content-between">
-                            <h4 class="fw-bold">Akash's Tasks</h4>
-                        </div>
-                        <!-- tasks -->
-                        <div class="card ">
-                            <div class="table-responsive text-nowrap">
-
-
-                                <div class="row mt-4 mx-2">
-                                    <div class="mb-3 col-md-3">
-                                        <div class="input-group input-group-merge">
-                                            <input type="text" id="task_start_date_between" name="task_start_date_between" class="form-control"
-                                                   placeholder="Start date between" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="mb-3 col-md-3">
-                                        <div class="input-group input-group-merge">
-                                            <input type="text" id="task_end_date_between" name="task_end_date_between" class="form-control"
-                                                   placeholder="End date between" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <select class="form-select" id="tasks_project_filter" aria-label="Default select example">
-                                            <option value="">Select project</option>
-                                            <option value="11">
-                                                Software App
-                                            </option>
-                                            <option value="12">
-                                                Frontend development
-                                            </option>
-                                            <option value="13">
-                                                UI/UX Designing
-                                            </option>
-                                            <option value="14">
-                                                Client Issue in Web
-                                            </option>
-                                            <option value="15">
-                                                eShop Marketing
-                                            </option>
-                                            <option value="16">
-                                                Lot 1837
-                                            </option>
-                                            <option value="17">
-                                                Test
-                                            </option>
-                                            <option value="18">
-                                                Create a YouTube channel
-                                            </option>
-                                            <option value="19">
-                                                Webdesign - Pompom
-                                            </option>
-                                            <option value="20">
-                                                fsssds
-                                            </option>
-                                            <option value="21">
-                                                Background Check
-                                            </option>
-                                            <option value="22">
-                                                Testing
-                                            </option>
-                                            <option value="23">
-                                                HSER
-                                            </option>
-                                            <option value="24">
-                                                projeto1
-                                            </option>
-                                            <option value="25">
-                                                abc
-                                            </option>
-                                        </select>
+                                                                    <button title="Delete" type="button" class="btn delete-item" data-id="@item.Id" data-type="Task">
+                                                                        <i class="bx bx-trash text-danger"></i>
+                                                                    </button>
+                                                                }
+                                                                <button class="duplicate-item btn" data-id="@item.Id" data-type="Task"><i class='menu-icon tf-icons bx bx-copy text-warning'></i></button>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
 
                                     </div>
-
-                                    <div class="col-md-3">
-                                        <select class="form-select" id="tasks_user_filter" aria-label="Default select example">
-                                            <option value="">Select user</option>
-                                            <option value="5">
-                                                Sid gor
-                                            </option>
-                                            <option value="7">
-                                                Team Member 1
-                                            </option>
-                                            <option value="14">
-                                                King Lost
-                                            </option>
-                                            <option value="15">
-                                                jimy karter
-                                            </option>
-                                            <option value="16">
-                                                kenny blinder
-                                            </option>
-                                            <option value="34">
-                                                Akash Dhaman
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <select class="form-select" id="tasks_client_filter" aria-label="Default select example">
-                                            <option value="">Select client</option>
-                                            <option value="2">
-                                                same parker
-                                            </option>
-                                            <option value="3">
-                                                Thomas bond
-                                            </option>
-                                            <option value="4">
-                                                shie Waine
-                                            </option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <select class="form-select" id="task_status_filter" aria-label="Default select example">
-                                            <option value="">Select status</option>
-
-
-
-                                            <option value="0">Default</option>
-
-
-
-
-                                            <option value="72">STARTED</option>
-
-
-
-
-                                            <option value="73">ON GOING</option>
-
-
-
-
-                                            <option value="74">IN REVIEW</option>
-
-                                        </select>
-                                    </div>
-
-
-                                </div>
-
-                                <input type="hidden" name="task_start_date_from" id="task_start_date_from">
-                                <input type="hidden" name="task_start_date_to" id="task_start_date_to">
-
-                                <input type="hidden" name="task_end_date_from" id="task_end_date_from">
-                                <input type="hidden" name="task_end_date_to" id="task_end_date_to">
-
-                                <input type="hidden" id="data_type" value="tasks">
-                                <input type="hidden" id="data_table" value="task_table">
-
-                                <div class="card-body">
-                                    <table id="task_table" data-toggle="table" data-loading-template="loadingTemplate"
-                                           data-url="https://taskify-saas.taskhub.company/master-panel/tasks/list"
-                                           data-route-prefix="/master-panel" data-icons-prefix="bx"
-                                           data-icons="icons" data-show-refresh="true" data-total-field="total" data-trim-on-search="false"
-                                           data-data-field="rows" data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true"
-                                           data-side-pagination="server" data-show-columns="true" data-pagination="true" data-sort-name="id"
-                                           data-sort-order="desc" data-mobile-responsive="true" data-query-params="queryParamsTasks">
-
-                                        <thead>
-                                            <tr>
-                                                <th data-checkbox="true"></th>
-                                                <th data-sortable="true" data-field="id">ID</th>
-                                                <th data-sortable="true" data-field="title">Task</th>
-                                                <th data-sortable="true" data-field="project_id">Project                        </th>
-                                                <th data-field="users" data-formatter="TaskUserFormatter">
-                                                    Users
-                                                </th>
-                                                <th data-field="clients" data-formatter="TaskClientFormatter">
-                                                    Clients
-                                                </th>
-                                                <th data-sortable="true" data-field="start_date">
-                                                    Starts at
-                                                </th>
-                                                <th data-sortable="true" data-field="end_date">Ends at                        </th>
-                                                <th data-sortable="true" data-field="status_id">Status                        </th>
-                                                <th data-formatter="actionFormatter">Actions</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-
                                 </div>
                             </div>
+
+
+                            <script>
+                                var label_update = 'Update ';
+                                var label_delete = 'Delete ';
+                                var label_duplicate = 'Duplicate ';
+                                var label_not_assigned = 'Not assigned ';
+                                var add_favorite = 'Click to mark as favorite ';
+                                var remove_favorite = 'Click to remove from favorite ';
+                                var id = '';
+                            </script>
+                            <script src="~/js/task.js"></script>
                         </div>
 
-
-                        <script>
-                            var label_update = 'Update ';
-                            var label_delete = 'Delete ';
-                            var label_duplicate = 'Duplicate ';
-                            var label_not_assigned = 'Not assigned ';
-                            var add_favorite = 'Click to mark as favorite ';
-                            var remove_favorite = 'Click to remove from favorite ';
-                            var id = '';
-                        </script>
-                        <script src="https://taskify-saas.taskhub.company/assets/js/pages/tasks.js"></script>
                     </div>
-
                 </div>
             </div>
+
         </div>
 
-    </div>
+    }
+    else
+    {
+        <div class="container-fluid">
+            <h1 class="text-danger">Not Found</h1>
+        </div>
+    }
+    
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#tableProject').DataTable();
+        $('#tableTask').DataTable();
+    });
+</script>

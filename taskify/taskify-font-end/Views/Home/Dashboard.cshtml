@@ -9,7 +9,17 @@
     var taskStatistics = ViewBag.taskStatistics as Dictionary<StatusDTO, int>;
     var projectStatistics = ViewBag.projectStatistics as Dictionary<StatusDTO, int>;
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.PathBase}";
+    var tasklabels = taskStatistics?.Keys.Select(k => k.Title.ToString()).ToArray();
+    var taskData = taskStatistics?.Values.ToArray();
+    var projectlabels = projectStatistics?.Keys.Select(k => k.Title.ToString()).ToArray();
+    var projectData = projectStatistics?.Values.ToArray();
 
+    var todoTotal = ViewBag.todoTotal ?? 0;
+    var todoDone = ViewBag.todoStatistics ?? 0;
+    var todoInDoing = todoTotal - todoDone;
+    var totalProject = ViewBag.projects ?? 0;
+    var totalTask = ViewBag.tasks ?? 0;
+    var todoData = new[] { todoDone, todoInDoing };
 }
 @model taskify_font_end.Models.DTO.WorkspaceDTO
 @if (Model == null)
@@ -313,7 +323,7 @@ else
                                 <div>
 
                                     <div class="">
-                                        <table data-mobile-responsive="true" data-route-prefix="/Project" id="table" class="table table-bordered">
+                                        <table data-mobile-responsive="true" data-route-prefix="/Project" id="tableProject" class="table table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th>Id</th>
@@ -404,7 +414,7 @@ else
                                 <div>
 
                                     <div class="">
-                                        <table data-mobile-responsive="true" data-route-prefix="/Task" id="table" class="table table-bordered">
+                                        <table data-mobile-responsive="true" data-route-prefix="/Task" id="tableTask" class="table table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th>Id</th>
@@ -483,20 +493,22 @@ else
             <!-- ------------------------------------------- -->
         </div>
         <script>
-            var labels = ['Default', 'STARTED', 'ON GOING', 'IN REVIEW'];
-            var project_data = [2, 4, 5, 2];
-            var task_data = [3, 7, 20, 18];
+            var task_labels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(tasklabels));
+            var project_labels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(projectlabels));
+            var project_data = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(projectData));
+            var task_data = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(taskData));
             var bg_colors = ['#6777ef', '#ff3300', '#3333cc', '#ff00ff'];
-            var total_projects = [13];
-            var total_tasks = [48];
-            var total_todos = [5];
-            var todo_data = [3, 2];
-            //labels
+            var total_projects = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(totalProject));
+            var total_tasks = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(totalTask));
+            var total_todos = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(todoTotal));
+            var todo_data = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(todoData));
+            console.log(todo_data);
+            console.log(total_todos);
             var done = 'Done ';
             var pending = 'Pending ';
             var total = 'Total ';
         </script>
-        <script src="~/js/apexcharts.js"></script><script src="~/js/dashboard.js"></script>
+        <script src="~/js/apexcharts.js"></script><script src="~/js/dashboard.js?v1"></script>
 
         <script>
             var label_please_wait = 'Please wait...';
@@ -509,7 +521,8 @@ else
             var label_upload = 'Upload';
 
             $(document).ready(function () {
-                $('#table').DataTable();
+                $('#tableProject').DataTable();
+                $('#tableTask').DataTable();
             });
 
 
@@ -521,15 +534,10 @@ else
                     var reload = $(this).data('reload');
                     var tableID = $(this).data('table') || 'table';
 
-                    // Show delete confirmation modal
                     $('#deleteModal').modal('show');
 
-                    // Handle click on confirm delete button in modal
                     $('#confirmDeleteBtn').off('click').on('click', function () {
-                        // Disable button and show loading state
                         $(this).html('Deleting...').attr('disabled', true);
-
-                        // Construct URL and AJAX request dynamically
                         var urlPrefix = window.location.pathname.split('/')[1];
                         var url = `/${type}/Delete/${id}`;
 
@@ -542,7 +550,7 @@ else
                                     toastr.success(response.message);
                                     setTimeout(function () {
                                         window.location.reload();
-                                    }, 2000); // Optional delay before reload
+                                    }, 2000); 
                                 } else {
                                     toastr.error(response.message);
                                 }
@@ -565,15 +573,11 @@ else
                     var reload = $(this).data('reload');
                     var tableID = $(this).data('table') || 'table';
 
-                    // Show duplicate confirmation modal
                     $('#duplicateModal').modal('show');
 
-                    // Handle click on confirm duplicate button in modal
                     $('#confirmDuplicateBtn').off('click').on('click', function () {
-                        // Disable button and show loading state
                         $(this).html('Duplicating...').attr('disabled', true);
 
-                        // Construct URL and AJAX request dynamically
                         var url = `/${type}/Duplicate/${id}`;
 
                         $.ajax({
@@ -585,7 +589,7 @@ else
                                     toastr.success(response.message);
                                     setTimeout(function () {
                                         window.location.reload();
-                                    }, 2000); // Optional delay before reload
+                                    }, 2000); 
                                 } else {
                                     toastr.error(response.message);
                                 }

@@ -83,9 +83,15 @@ namespace taskify_font_end.Controllers
                         }
                         ViewBag.priorities = await GetPrioritiesByUserIdAsync(userId);
                         if (todos.Count > 0)
-                            ViewBag.todoStatistics = (int)todos.Where(x => x.Status).ToList().Count/todos.Count;
+                        {
+                            ViewBag.todoStatistics = (int)todos.Where(x => x.Status).ToList().Count;
+                            ViewBag.todoTotal = todos.Count;
+                        }
                         else
+                        {
+                            ViewBag.todoTotal = todos.Count;
                             ViewBag.todoStatistics = 0;
+                        }
                         ViewBag.taskStatistics = taskDictionary;
                         ViewBag.projectStatistics = projectDictionary;
                         ViewBag.projects = projects;
@@ -111,9 +117,15 @@ namespace taskify_font_end.Controllers
                     ViewBag.todos = todos.Take(5).ToList();
                     ViewBag.priorities = await GetPrioritiesByUserIdAsync(userId);
                     if (todos.Count > 0)
-                        ViewBag.todoStatistics = (int)todos.Where(x => x.Status).ToList().Count / todos.Count;
+                    {
+                        ViewBag.todoStatistics = (int)todos.Where(x => x.Status).ToList().Count;
+                        ViewBag.todoTotal = todos.Count;
+                    }
                     else
+                    {
+                        ViewBag.todoTotal = todos.Count;
                         ViewBag.todoStatistics = 0;
+                    }
                     ViewBag.projects = projects;
                     ViewBag.taskStatistics = taskDictionary;
                     ViewBag.projectStatistics = projectDictionary;
@@ -191,6 +203,7 @@ namespace taskify_font_end.Controllers
             var response = await _projectService.GetByUserIdAndWorkspaceIdAsync<APIResponse>(userId, workspaceId);
             List<ProjectDTO> list = new();
             List<TaskDTO> tasks = new();
+            List<ProjectUserDTO> users = new();
             if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
             {
                 list = JsonConvert.DeserializeObject<List<ProjectDTO>>(Convert.ToString(response.Result));
@@ -205,6 +218,18 @@ namespace taskify_font_end.Controllers
                               .ToList();
                 foreach(var item in list) 
                 {
+
+                    var resUser = await _projectUserService.GetByProjectIdAsync<APIResponse>(item.Id);
+                    if (resUser != null && resUser.IsSuccess && resUser.ErrorMessages.Count == 0)
+                    {
+                        users = JsonConvert.DeserializeObject<List<ProjectUserDTO>>(Convert.ToString(resUser.Result));
+                        foreach (var u in users)
+                        {
+                            u.User = await GetUserByIdAsync(u.UserId);
+                        }
+                        item.ProjectUsers = users;
+                    }
+
                     var statuses = await GetTaskByProjectIdAndUserIdAsync(userId, item.Id);
                     foreach(var stat in statuses)
                     {

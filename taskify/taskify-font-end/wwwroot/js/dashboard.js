@@ -15,7 +15,7 @@
     var options = {
         series: project_data,
         colors: bg_colors,
-        labels: labels,
+        labels: project_labels,
         chart: {
             type: 'donut',
             height: 300,
@@ -38,7 +38,7 @@
     // Tasks Statistics Chart
 
     var options = {
-        labels: labels,
+        labels: task_labels,
         series: task_data,
         colors: bg_colors,
         chart: {
