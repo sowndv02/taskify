@@ -73,6 +73,16 @@ namespace taskify_font_end.Service
             });
         }
 
+        public async Task<T> GetByColorIdAsync<T>(int colorId)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/note/color/" + colorId
+            });
+        }
+        
+
         public async Task<T> UpdateAsync<T>(NoteDTO dto)
         {
             return await _baseServices.SendAsync<T>(new APIRequest()

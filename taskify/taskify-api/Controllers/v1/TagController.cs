@@ -172,5 +172,30 @@ namespace taskify_api.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, _response);
             }
         }
+
+        [HttpGet("color/{id:int}", Name = "GetTagByColorId")]
+        public async Task<ActionResult<APIResponse>> GetByColorIdAsync(int id)
+        {
+            try
+            {
+                if (id < 0)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
+                    return BadRequest(_response);
+                }
+                List<Tag> model = await _tagRepository.GetAllAsync(x => x.ColorId == id);
+                _response.Result = _mapper.Map<List<TagDTO>>(model);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
     }
 }

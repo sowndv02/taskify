@@ -1,5 +1,94 @@
-﻿
+﻿@model List<taskify_font_end.Models.DTO.ColorDTO>
 @{
 }
 
 
+<div class="content-wrapper">
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1">
+                        <li class="breadcrumb-item">
+                            <a asp-action="Dashboard" asp-controller="Home">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Colors
+                        </li>
+
+                    </ol>
+                </nav>
+            </div>
+            <div>
+                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#create_color_modal">
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="right"
+                            data-bs-original-title=" Create color">
+                        <i class="bx bx-plus"></i>
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive text-nowrap">
+                    <table data-mobile-responsive="true" data-route-prefix="/Color" id="table" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Title</th>
+                                <th>ColorCode</th>
+                                <th>Description</th>
+                                <th>Preview</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            @if (Model != null && Model.Count > 0)
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.Title</td>
+                                        <td>@item.ColorCode</td>
+                                        <td><span class="badge bg-@item.Title" style="background-color: @item.ColorCode">@item.Title.ToUpper()</span></td>
+                                        <td>
+                                            @if (!item.IsDefault)
+                                            {
+                                                <a href="javascript:void(0);" class="edit-color card-link" data-bs-toggle="modal" data-bs-target="#edit_color_modal" data-id="@item.Id" title="label_update"><i class="bx bx-edit mx-1"></i></a>
+                                                <button title="label_delete" type="button" class="btn delete" data-id="@item.Id" data-type="colors">
+                                                    <i class="bx bx-trash text-danger mx-1"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <span>Default Color</span>
+                                            }
+
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <p>Don't have any color'</p>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+        var label_update = 'Update ';
+        var label_delete = 'Delete ';
+    </script>
+    @*     <script src="~/js/tag.js"></script>*@
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        });
+    </script>

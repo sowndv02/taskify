@@ -92,6 +92,33 @@ namespace taskify_api.Controllers.v1
             }
         }
 
+
+        [HttpGet("color/{id:int}", Name = "GetNoteByColorId")]
+        public async Task<ActionResult<APIResponse>> GetByColorIdAsync(int id)
+        {
+            try
+            {
+                if (id < 0)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
+                    return BadRequest(_response);
+                }
+                List<Note> model = await _noteRepository.GetAllAsync(x => x.ColorId == id);
+                _response.Result = _mapper.Map<List<NoteDTO>>(model);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+
         [HttpGet("{key}", Name = "GetNoteByTitle")]
         public async Task<ActionResult<APIResponse>> GetNoteByTitleAsync(string key)
         {
