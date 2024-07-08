@@ -1,0 +1,80 @@
+﻿@model List<taskify_font_end.Models.DTO.ActivityDTO>
+
+@{
+}
+
+<div class="content-wrapper">
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1">
+                        <li class="breadcrumb-item">
+                            <a asp-action="Dashboard" asp-controller="Home">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Activities
+                        </li>
+
+                    </ol>
+                </nav>
+            </div>
+            <div>
+                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#create_activity_modal">
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="right"
+                            data-bs-original-title=" Create activity">
+                        <i class="bx bx-plus"></i>
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive text-nowrap">
+                    <table data-mobile-responsive="true" data-route-prefix="/activity" id="table" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            @if (Model != null && Model.Count > 0)
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>@item.Title</td>
+                                        <td>@item.Description</td>
+                                        <td>
+                                            <a href="javascript:void(0);" class="edit-activity card-link" data-bs-toggle="modal" data-bs-target="#edit_activity_modal" data-id="@item.Id" title="label_update"><i class="bx bx-edit mx-1"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <p>Don't have any activity'</p>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var label_update = 'Update ';
+    var label_delete = 'Delete ';
+</script>
+@*     <script src="~/js/tag.js"></script>*@
+<script>
+    $(document).ready(function () {
+        $('#table').DataTable();
+    });
+</script>

@@ -3,8 +3,278 @@
     var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
     var workspaceId = ViewBag.selectedWorkspaceId;
 }
+<div class="modal fade" id="edit_activity_type_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <form class="modal-content form-submit-event" asp-action="Update" asp-controller="ActivityType" method="POST">
+            <input type="hidden" name="activityTypeDTO.Id" id="activity_type_id">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Update activity type</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" id="activity_type_title" class="form-control" name="activityTypeDTO.Title"
+                               placeholder="Please enter title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="activity_type_description" class="form-label">
+                            Description
+                        </label>
+                        <textarea type="text" id="activity_type_description" class="form-control" name="activityTypeDTO.Description"
+                                  placeholder="Please enter description"></textarea>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="submit" class="btn btn-primary"
+                        id="submit_btn">
+                    Update
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
 
+<div class="modal fade" id="create_activity_type_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <form class="modal-content form-submit-event" asp-action="Create" asp-controller="ActivityType" method="POST">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Create color</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" id="nameBasic" class="form-control" name="activityTypeDTO.Title"
+                               placeholder="Please enter title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="description" class="form-label">
+                            Description <span class="asterisk"></span>
+                        </label>
+                        <input type="text" id="description" class="form-control" name="activityTypeDTO.Description"
+                               placeholder="Please input description" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="submit" class="btn btn-primary"
+                        id="submit_btn">
+                    Create
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="edit_activity_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <form class="modal-content form-submit-event" asp-action="Update" asp-controller="Activity" method="POST">
+            <input type="hidden" name="activityDTO.Id" id="activity_id">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Update activity</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" id="activity_title" class="form-control" name="activityDTO.Title"
+                               placeholder="Please enter title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="activity_description" class="form-label">
+                            Description
+                        </label>
+                        <textarea type="text" id="activity_description" class="form-control" name="activityDTO.Description"
+                               placeholder="Please enter description"></textarea>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="submit" class="btn btn-primary"
+                        id="submit_btn">
+                    Update
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="create_activity_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <form class="modal-content form-submit-event" asp-action="Create" asp-controller="Activity" method="POST">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Create color</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" id="nameBasic" class="form-control" name="activityDTO.Title"
+                               placeholder="Please enter title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="description" class="form-label">
+                            Description <span class="asterisk"></span>
+                        </label>
+                        <input type="text" id="description" class="form-control" name="activityDTO.Description"
+                               placeholder="Please input description" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="submit" class="btn btn-primary"
+                        id="submit_btn">
+                    Create
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="edit_color_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <form class="modal-content form-submit-event" asp-action="Update" asp-controller="Color" method="POST">
+            <input type="hidden" name="colorDTO.UserId" value="@userId">
+            <input type="hidden" name="colorDTO.Id" id="color_id">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Update color</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" id="color_title" class="form-control" name="colorDTO.Title"
+                               placeholder="Please enter title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="colorCode" class="form-label">
+                            ColorCode <span class="asterisk">*</span>
+                        </label>
+                        <input type="color" id="color_code" class="form-control" name="colorDTO.ColorCode"
+                               placeholder="Please select color code" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="color_description" class="form-label">
+                            Description
+                        </label>
+                        <input type="text" id="color_description" class="form-control" name="colorDTO.Description"
+                                  placeholder="Please enter description" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="submit" class="btn btn-primary"
+                        id="submit_btn">
+                    Update
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="create_color_modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <form class="modal-content form-submit-event" asp-action="Create" asp-controller="Color" method="POST">
+            <input type="hidden" value="@userId" name="colorDTO.UserId" />
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Create color</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="nameBasic" class="form-label">
+                            Title <span class="asterisk">*</span>
+                        </label>
+                        <input type="text" id="nameBasic" class="form-control" name="colorDTO.Title"
+                               placeholder="Please enter title" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="colorCode" class="form-label">
+                            ColorCode <span class="asterisk">*</span>
+                        </label>
+                        <input type="color" id="colorCode" class="form-control" name="colorDTO.ColorCode"
+                               placeholder="Please select color code" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="description" class="form-label">
+                            Description <span class="asterisk"></span>
+                        </label>
+                        <input type="text" id="description" class="form-control" name="colorDTO.Description"
+                               placeholder="Please input description" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="submit" class="btn btn-primary"
+                        id="submit_btn">
+                    Create
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
 
 
@@ -56,11 +326,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    Close</label>
+                    Close
                 </button>
                 <button type="submit" class="btn btn-primary"
                         id="submit_btn">
-                    Create</label>
+                    Create
                 </button>
             </div>
         </form>
@@ -118,11 +388,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    Close</label>
+                    Close
                 </button>
                 <button type="submit" class="btn btn-primary"
                         id="submit_btn">
-                    Update</label>
+                    Update
                 </button>
             </div>
         </form>
@@ -177,11 +447,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    Close</label>
+                    Close
                 </button>
                 <button type="submit" class="btn btn-primary"
                         id="submit_btn">
-                    Create</label>
+                    Create
                 </button>
             </div>
         </form>
@@ -239,11 +509,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    Close</label>
+                    Close
                 </button>
                 <button type="submit" class="btn btn-primary"
                         id="submit_btn">
-                    Update</label>
+                    Update
                 </button>
             </div>
         </form>
@@ -299,11 +569,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    Close</label>
+                    Close
                 </button>
                 <button type="submit" class="btn btn-primary"
                         id="submit_btn">
-                    Create</label>
+                    Create
                 </button>
             </div>
         </form>

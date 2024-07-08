@@ -219,6 +219,65 @@ $(document).on('click', '.edit-tag', function () {
         },
     });
 });
+
+$(document).on('click', '.edit-color', function () {
+    var id = $(this).data('id');
+    var routePrefix = $("#table").data('routePrefix');
+    $('#edit_color_modal').modal('show');
+    $.ajax({
+        url: routePrefix + '/get/' + id,
+        type: 'get',
+        headers: {
+        },
+        dataType: 'json',
+        success: function (response) {
+            console.log(response)
+            $('#color_id').val(response.id)
+            $('#color_title').val(response.title)
+            $('#color_code').val(response.colorCode)
+            $('#color_description').val(response.description)
+        },
+    });
+});
+
+$(document).on('click', '.edit-activity', function () {
+    var id = $(this).data('id');
+    var routePrefix = $("#table").data('routePrefix');
+    $('#edit_activity_modal').modal('show');
+    $.ajax({
+        url: routePrefix + '/get/' + id,
+        type: 'get',
+        headers: {
+        },
+        dataType: 'json',
+        success: function (response) {
+            console.log(response)
+            $('#activity_id').val(response.id)
+            $('#activity_title').val(response.title)
+            $('#activity_description').val(response.description)
+        },
+    });
+});
+
+$(document).on('click', '.edit-activity-type', function () {
+    var id = $(this).data('id');
+    var routePrefix = $("#table").data('routePrefix');
+    $('#edit_activity_type_modal').modal('show');
+    $.ajax({
+        url: routePrefix + '/get/' + id,
+        type: 'get',
+        headers: {
+        },
+        dataType: 'json',
+        success: function (response) {
+            console.log(response)
+            $('#activity_type_id').val(response.id)
+            $('#activity_type_title').val(response.title)
+            $('#activity_type_description').val(response.description)
+        },
+    });
+});
+
 $(document).on('click', '.edit-leave-request', function () {
     var id = $(this).data('id');
     var routePrefix = $('#lr_table').data('routePrefix');
@@ -235,53 +294,8 @@ $(document).on('click', '.edit-leave-request', function () {
         }
     });
 });
-$(document).on('click', '.edit-contract-type', function () {
-    var routePrefix = $('#table').data('routePrefix');
-    var id = $(this).data('id');
-    $('#edit_contract_type_modal').modal('show');
-    $.ajax({
-        url: '' + routePrefix + '/contracts/get-contract-type/' + id,
-        type: 'get',
-        headers: {
-        },
-        dataType: 'json',
-        success: function (response) {
-            $('#update_contract_type_id').val(response.ct.id);
-            $('#contract_type').val(response.ct.type);
-        }
-    });
-});
-$(document).on('click', '.edit-contract', function () {
-    var id = $(this).data('id');
-    var routePrefix = $('#contracts_table').data('routePrefix');
-    console.log(routePrefix);
-    $('#edit_contract_modal').modal('show');
-    $.ajax({
-        url: routePrefix + "/contracts/get/" + id,
-        type: 'get',
-        headers: {
-        },
-        dataType: 'json',
-        success: function (response) {
-            if (response.error == false) {
-                var formattedStartDate = moment(response.contract.start_date).format(js_date_format);
-                var formattedEndDate = moment(response.contract.end_date).format(js_date_format);
-                $('#contract_id').val(response.contract.id);
-                $('#title').val(response.contract.title);
-                $('#value').val(response.contract.value);
-                $('#client_id').val(response.contract.client_id);
-                $('#project_id').val(response.contract.project_id);
-                $('#contract_type_id').val(response.contract.contract_type_id);
-                $('#update_contract_description').val(response.contract.description);
-                $('#update_start_date').val(formattedStartDate);
-                $('#update_end_date').val(formattedEndDate);
-                initializeDateRangePicker('#update_start_date, #update_end_date');
-            } else {
-                location.reload();
-            }
-        }
-    });
-});
+
+
 function initializeDateRangePicker(inputSelector) {
     $(inputSelector).daterangepicker({
         alwaysShowCalendars: true,
