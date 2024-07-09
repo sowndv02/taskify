@@ -58,7 +58,6 @@ namespace taskify_api.Repository
             var user = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == loginRequestDTO.UserName.ToLower());
 
             bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
-
             if (user == null || !isValid)
             {
                 return new TokenDTO()
@@ -267,7 +266,9 @@ namespace taskify_api.Repository
         {
             try
             {
-                return await _userManager.FindByIdAsync(userId);
+                var user = await _userManager.FindByIdAsync(userId);
+                user.Role = await GetRoleByUserId(user);
+                return user;
             }
             catch(Exception ex) 
             {
@@ -303,14 +304,68 @@ namespace taskify_api.Repository
         }
         public async Task<User> CreateAsync(User user, string password)
         {
-            var result = await _userManager.CreateAsync(user, password);
-            return result.Succeeded ? user : null;
+            User obj = new User
+            {
+                UserName = user.UserName,
+                ImageLocalPathUrl = user.ImageLocalPathUrl,
+                ImageUrl = user.ImageUrl,
+                Address = user.Address,
+                PhoneNumber = user.PhoneNumber,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PasswordHash = password,
+                Email = user.Email,
+                NormalizedEmail = user.Email
+            };
+            var result = await _userManager.CreateAsync(obj, password);
+            
+            if (result.Succeeded)
+            {
+                var roleId = user.RoleId;
+                user.Role = await _roleManager.FindByIdAsync(roleId);
+
+                await _userManager.AddToRoleAsync(obj, user.Role?.Name);
+                return _context.Users.FirstOrDefault(u => u.UserName == user.Email);
+            }
+            else
+            {
+                var mesg = result.Errors;
+            }
+            return null;
         }
 
         public async Task<List<User>> GetAllAsync()
         {
-            return await _userManager.Users.ToListAsync();
+            var users = await _userManager.Users.ToListAsync();
+            foreach(var user in users)
+            {
+                user.Role = await GetRoleByUserId(user);
+            }
+             return users;
         }
+        public async Task<IdentityRole> GetRoleByUserId(User user)
+        {
+            try
+            {
+                if (user != null)
+                {
+                    var roleIds = await _userManager.GetRolesAsync(user);
+                    var roleName = roleIds.FirstOrDefault();
+                    if (!string.IsNullOrEmpty(roleName))
+                    {
+                        var role = await _roleManager.FindByNameAsync(roleName);
+                        return role;
+                    }
+                    return null;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<bool> RemoveAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);

@@ -95,19 +95,19 @@ namespace taskify_api.Controllers.v1
         }
 
 
-        [HttpGet("{key}", Name = "GetProjectByTitle")]
-        public async Task<ActionResult<APIResponse>> GetProjectByTitleAsync(string key)
+        [HttpGet("user/{userId}", Name = "GetProjectByUserId")]
+        public async Task<ActionResult<APIResponse>> GetProjectByUserIdAsync(string userId)
         {
             try
             {
-                if (string.IsNullOrEmpty(key))
+                if (string.IsNullOrEmpty(userId))
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     _response.IsSuccess = false;
-                    _response.ErrorMessages = new List<string> { $"{key} is null or empty!" };
+                    _response.ErrorMessages = new List<string> { $"{userId} is null or empty!" };
                     return BadRequest(_response);
                 }
-                List<Project> model = await _projectRepository.GetAllAsync(x => x.Title.Contains(key));
+                List<Project> model = await _projectRepository.GetAllAsync(x => x.OwnerId.Equals(userId));
                 _response.Result = _mapper.Map<List<ProjectDTO>>(model);
                 return Ok(_response);
             }

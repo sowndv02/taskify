@@ -1,0 +1,100 @@
+﻿@model taskify_font_end.Models.DTO.UserCreateDTO
+
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-style1">
+                        <li class="breadcrumb-item">
+                            <a asp-controller="Home" asp-action="Dashboard">Home</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a asp-action="Index" asp-controller="User">Users</a>
+                        </li>
+                        <li class="breadcrumb-item active">Create</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Create" asp-controller="User" method="POST" class="form-submit-event" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="firstName" class="form-label">First name <span
+                                    class="asterisk">*</span></label>
+                            <input class="form-control" type="text" id="first_name" asp-for="FirstName"
+                                placeholder="Enter First name" value="">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="lastName" class="form-label">Last name <span
+                                    class="asterisk">*</span></label>
+                            <input class="form-control" type="text" asp-for="LastName" id="last_name"
+                                placeholder="Enter Last name" value="">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">E-mail <span
+                                    class="asterisk">*</span></label>
+                            <input class="form-control" type="text" id="email" asp-for="Email"
+                                placeholder="Enter E-mail" value="">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Phone number <span class="asterisk">*</span></label>
+                            <div class="input-group">
+                                <input type="text" asp-for="PhoneNumber" class="form-control" placeholder="1234567890" />
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Password <span
+                                    class="asterisk">*</span></label>
+                            <input class="form-control" type="password" id="password" asp-for="Password"
+                                placeholder="Enter Password">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="password_confirmation"
+                                class="form-label">Confirm password <span
+                                    class="asterisk">*</span></label>
+                            <input class="form-control" type="password" id="password_confirmation"
+                                asp-for="ConfirmPassword" placeholder="Re enter Password">
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label" for="role">Role <span
+                                    class="asterisk">*</span></label>
+                            <select class="form-select text-capitalize" id="role" asp-for="RoleId">
+                                <option value="">Please select</option>
+                                @if(ViewBag.roles != null)
+                                {
+                                    @foreach(var item in ViewBag.roles)
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                }         
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="address" class="form-label">Address <span
+                                    class="asterisk">*</span></label>
+                            <input class="form-control" type="text" id="address" asp-for="Address"
+                                placeholder="Enter Address" >
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="photo"
+                                class="form-label">Profile picture</label>
+                            <input class="form-control" type="file" id="photo" asp-for="Image">
+                            <p class="text-muted mt-2">Allowed JPG or PNG.</p>
+                        </div>
+                        <div class="mt-2">
+                            <button type="submit" class="btn btn-primary me-2"
+                                id="submit_btn">Create</button>
+                            <button type="reset"
+                                class="btn btn-outline-secondary">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

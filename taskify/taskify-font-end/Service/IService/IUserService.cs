@@ -7,7 +7,7 @@ namespace taskify_font_end.Service.IService
         Task<T> GetAllAsync<T>();
         Task<T> GetAsync<T>(string id);
         Task<T> UpdatePasswordAsync<T>(UpdatePasswordRequestDTO updatePasswordRequestDTO);
-        Task<T> CreateAsync<T>(UserDTO dto);
+        Task<T> CreateAsync<T>(UserCreateDTO dto);
         Task<T> UpdateAsync<T>(UserDTO dto);
         Task<T> UploadImgAsync<T>(UserDTO dto);
         Task<T> DeleteAsync<T>(string id);

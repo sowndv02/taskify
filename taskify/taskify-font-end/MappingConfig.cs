@@ -9,6 +9,7 @@ namespace taskify_font_end
         public MappingConfig()
         {
             CreateMap<UserDTO, UserUpdateDTO>().ReverseMap();
+            CreateMap<UserDTO, UserCreateDTO>().ReverseMap();
         }
     }
 }

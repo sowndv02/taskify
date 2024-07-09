@@ -14,6 +14,8 @@
         public virtual List<ProjectDTO>? Projects { get; set; } = new List<ProjectDTO>();
         public virtual List<ProjectUserDTO>? ProjectUsers { get; set; } = new List<ProjectUserDTO>();
         public virtual List<TaskUserDTO>? TaskUsers { get; set; } = new List<TaskUserDTO>();
+        public virtual List<TaskDTO>? Tasks { get; set; } = new List<TaskDTO>();
         public IFormFile? Image { get; set; }
+        public RoleDTO? Role { get; set; }
     }
 }

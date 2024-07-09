@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using taskify_font_end.Models;
@@ -18,14 +19,19 @@ namespace taskify_font_end.Controllers
         private readonly ITaskService _taskService;
         private readonly IStatusService _statusService;
         private readonly IWorkspaceUserService _workspaceUserService;
+        private readonly IRoleService _roleService;
+        private readonly IMapper _mapper;
         public UserController(IWorkspaceService workspaceService, 
             IUserService userService, IProjectService projectService, 
             IProjectUserService projectUserService, 
             ITaskUserService taskUserService, 
             ITaskService taskService, 
             IWorkspaceUserService workspaceUserService,
-            IStatusService statusService) : base(workspaceService, workspaceUserService)
+            IStatusService statusService, IRoleService roleService,
+            IMapper mapper) : base(workspaceService, workspaceUserService)
         {
+            _mapper = mapper;
+            _roleService = roleService;
             _workspaceUserService = workspaceUserService;
             _statusService = statusService;
             _taskService = taskService; 
@@ -37,9 +43,53 @@ namespace taskify_font_end.Controllers
 
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            UserCreateDTO userDTO = new UserCreateDTO();
+            ViewBag.roles = await GetRolesAsync();
+            return View(userDTO);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(UserCreateDTO userCreateDTO)
+        {
+
+            try
+            {
+                if (string.IsNullOrEmpty(userCreateDTO.Password) || string.IsNullOrEmpty(userCreateDTO.ConfirmPassword))
+                {
+                    TempData["error"] = "Password and ConfirmPassword is required";
+                    return View(userCreateDTO);
+                }
+                else if (userCreateDTO.Password != userCreateDTO.ConfirmPassword)
+                {
+                    TempData["error"] = "Passwords do not match.";
+                    return View(userCreateDTO);
+                }
+                else
+                {
+                    var response = await _userService.CreateAsync<APIResponse>(userCreateDTO);
+                    if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+                    {
+                        TempData["success"] = "Create new user successful";
+                        return RedirectToAction("Index", "User");
+                    }
+                    else
+                    {
+                        TempData["error"] = "Create new user failed!";
+                        return View(userCreateDTO);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = ex.Message;
+            }
+            return View(userCreateDTO);
+        }
+        public async Task<IActionResult> Index()
+        {
+            var list = await GetUsersAsync();
+            return View(list);
         }
         public async Task<IActionResult> Profile(string id)
         {
@@ -51,7 +101,6 @@ namespace taskify_font_end.Controllers
             ViewBag.tasks = tasks;
             return View(user);
         }
-
         private async Task<UserDTO> GetUserByIdAsync(string userId)
         {
             var response = await _userService.GetAsync<APIResponse>(userId);
@@ -62,7 +111,6 @@ namespace taskify_font_end.Controllers
             }
             return user;
         }
-
         private async Task<List<ProjectDTO>> GetProjectByUserIdAndWorkspaceIdAsync(string userId, int workspaceId)
         {
             var response = await _projectService.GetByUserIdAndWorkspaceIdAsync<APIResponse>(userId, workspaceId);
@@ -105,7 +153,6 @@ namespace taskify_font_end.Controllers
 
             return list;
         }
-
         private async Task<List<ProjectDTO>> GetListProjectContainsUserInWorkspace(string userId, int workspaceId)
         {
             var projects = await GetProjectInWorkspace(workspaceId);
@@ -113,7 +160,6 @@ namespace taskify_font_end.Controllers
 
             return projects.Where(p => projectsHaveUser.Any(pu => pu.Id == p.Id)).ToList();
         }
-
         private async Task<List<StatusDTO>> GetTaskByProjectIdAndUserIdAsync(string userId, int projectId)
         {
             var response = await _statusService.GetByUserIdAsync<APIResponse>(userId);
@@ -141,7 +187,6 @@ namespace taskify_font_end.Controllers
 
             return list;
         }
-
         private async Task<List<ProjectDTO>> GetProjectInWorkspace(int workspaceId)
         {
             var response = await _projectService.GetByWorkspaceIdAsync<APIResponse>(workspaceId);
@@ -165,7 +210,6 @@ namespace taskify_font_end.Controllers
             }
             return list;
         }
-
         private async Task<List<ProjectDTO>> GetListProjectContainsUser(string userId, int workspaceId)
         {
             var response = await _projectUserService.GetByUserIdAsync<APIResponse>(userId);
@@ -213,7 +257,6 @@ namespace taskify_font_end.Controllers
             }
             return list;
         }
-
         private async Task<StatusDTO> GetStatusById(int id)
         {
             var response = await _statusService.GetAsync<APIResponse>(id);
@@ -224,7 +267,6 @@ namespace taskify_font_end.Controllers
             }
             return obj;
         }
-
         private async Task<ProjectDTO> GetProjectByIdAsync(int id)
         {
             var response = await _projectService.GetAsync<APIResponse>(id);
@@ -249,6 +291,61 @@ namespace taskify_font_end.Controllers
             }
 
             return obj;
+        }
+        private async Task<List<UserDTO>> GetUsersAsync()
+        {
+            List<UserDTO> users = new List<UserDTO>();  
+            var response = await _userService.GetAllAsync<APIResponse>();   
+            if(response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                users = JsonConvert.DeserializeObject<List<UserDTO>>(Convert.ToString(response.Result));
+                foreach(var user in users)
+                {
+                    user.Tasks = await GetTaskByUserId(user.Id);
+                    user.Projects = await GetProjectByUserId(user.Id);
+                }
+            }
+            return users;
+        }
+        private async Task<List<TaskDTO>> GetTaskByUserId(string userId)
+        {
+            List<TaskDTO> tasks = new List<TaskDTO>();
+            var response = await _taskService.GetByUserIdAsync<APIResponse>(userId);
+            if(response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                tasks = JsonConvert.DeserializeObject<List<TaskDTO>>(Convert.ToString(response.Result));
+            }
+            return tasks;
+        }
+        private async Task<List<ProjectDTO>> GetProjectByUserId(string userId)
+        {
+            List<ProjectDTO> projects = new List<ProjectDTO>();
+            var response = await _projectService.GetByUserIdAsync<APIResponse>(userId);
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                projects = JsonConvert.DeserializeObject<List<ProjectDTO>>(Convert.ToString(response.Result));
+            }
+            return projects;
+        }
+        private async Task<RoleDTO> GetRoleByUserId(string userId)
+        {
+            RoleDTO role = new RoleDTO();
+            var response = await _roleService.GetByUserIdAsync<APIResponse>(userId);
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                role = JsonConvert.DeserializeObject<RoleDTO>(Convert.ToString(response.Result));
+            }
+            return role;
+        }
+        private async Task<List<RoleDTO>> GetRolesAsync()
+        {
+            List<RoleDTO> list = new List<RoleDTO>();
+            var response = await _roleService.GetAllAsync<APIResponse>();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<RoleDTO>>(Convert.ToString(response.Result));
+            }
+            return list;
         }
     }
 }

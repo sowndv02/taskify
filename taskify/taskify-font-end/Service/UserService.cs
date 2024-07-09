@@ -18,13 +18,14 @@ namespace taskify_font_end.Service
             _clientFactory = clientFactory;
         }
 
-        public async Task<T> CreateAsync<T>(UserDTO dto)
+        public async Task<T> CreateAsync<T>(UserCreateDTO dto)
         {
             return await _baseServices.SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.POST,
                 Data = dto,
-                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/User"
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/User",
+                ContentType = SD.ContentType.MultipartFormData
             });
         }
 

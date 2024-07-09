@@ -57,7 +57,8 @@ builder.Services.AddHttpClient<IProjectMediaService, ProjectMediaService>();
 builder.Services.AddScoped<IProjectMediaService, ProjectMediaService>();
 builder.Services.AddHttpClient<ITaskMediaService, TaskMediaService>();
 builder.Services.AddScoped<ITaskMediaService, TaskMediaService>();
-
+builder.Services.AddHttpClient<IRoleService, RoleService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 
 

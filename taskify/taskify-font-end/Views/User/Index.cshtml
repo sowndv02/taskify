@@ -11,7 +11,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb breadcrumb-style1">
                         <li class="breadcrumb-item">
-                            <a href="https://taskify-saas.taskhub.company/master-panel/home">Home</a>
+                            <a asp-action="Dashboard" asp-controller="Home">Home</a>
                         </li>
                         <li class="breadcrumb-item active">
                             Users
@@ -20,7 +20,7 @@
                 </nav>
             </div>
             <div>
-                <a href="https://taskify-saas.taskhub.company/master-panel/users/create">
+                <a asp-action="Create" asp-controller="User">
                     <button type="button" class="btn btn-sm btn-primary"
                             data-bs-toggle="tooltip" data-bs-placement="left"
                             data-bs-original-title="Create user">
@@ -36,41 +36,75 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive text-nowrap">
-
-                    <table id="table" data-toggle="table" data-loading-template="loadingTemplate"
-                           data-url="https://taskify-saas.taskhub.company/master-panel/users/list" data-icons-prefix="bx" data-icons="icons"
-                           data-show-refresh="true" data-total-field="total" data-trim-on-search="false"
-                           data-data-field="rows" data-page-list="[5, 10, 20, 50, 100, 200]" data-search="true"
-                           data-side-pagination="server" data-show-columns="true" data-pagination="true"
-                           data-sort-name="id" data-sort-order="desc" data-mobile-responsive="true"
-                           data-query-params="queryParams">
+                    <table data-mobile-responsive="true" data-route-prefix="/User" id="table" class="table table-bordered">
                         <thead>
                             <tr>
-                                <th data-checkbox="true"></th>
-                                <th data-sortable="true" data-field="id">ID</th>
-                                <th data-formatter="userFormatter" data-sortable="true" data-field="first_name">
-                                    Users
-                                </th>
-                                <th data-field="role">Role</th>
-                                <th data-field="phone" data-sortable="true">
-                                    Phone number
-                                </th>
-                                <th data-formatter="assignedFormatter">Assigned</th>
-                                <th data-formatter="actionFormatter">Actions</th>
+                                <th>Id</th>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>PhoneNumber</th>
+                                <th>Assigned</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
+                        <tbody id="tableBody">
+                            @if (Model != null && Model.Count > 0)
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.Id</td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <div class="avatar avatar-md pull-up" title="jimy karter">
+                                                    <a asp-action="Profile" asp-controller="User" asp-route-id="@item.Id">
+                                                        <img src="@item.ImageUrl" alt="Avatar" class="rounded-circle">
+                                                    </a>
+                                                </div><div class="mx-2 mt-2"><h6 class="mb-1">@item.FirstName @item.LastName</h6><p class="text-muted">@item.Email</p></div>
+                                            </div>
+                                        </td>
+                                        <td>@item.Role?.Name</td>
+                                        <td>@item.PhoneNumber</td>
+                                        <td>
+                                            <div class="d-flex justify-content-start align-items-center">
+                                                <div class="text-center mx-4">
+                                                    <span class="badge rounded-pill bg-primary">@item.Tasks.Count</span>
+                                                    <div>Projects</div>
+                                                </div>
+                                                <div class="text-center">
+                                                    <span class="badge rounded-pill bg-primary">@item.Projects.Count</span>
+                                                    <div>Tasks</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @* <a asp-action="Update" asp-route-id="@item.Id" asp-controller="User" class="edit-user card-link" data-bs-toggle="modal" data-id="@item.Id" title="label_update"><i class="bx bx-edit mx-1"></i></a> *@
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <p>Don't have any user</p>
+                            }
+                        </tbody>
                     </table>
 
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <script>
         var label_update = 'Update';
         var label_delete = 'Delete';
         var label_projects = 'Projects';
         var label_tasks = 'Tasks';
-        var routePrefix = '/master-panel';
     </script>
-    <script src="https://taskify-saas.taskhub.company/assets/js/pages/users.js"></script>
+    @* <script src="~/js/users.js"></script> *@
+    <script>
+        $(document).ready(function () {
+            $('#table').DataTable();
+        });
+    </script>

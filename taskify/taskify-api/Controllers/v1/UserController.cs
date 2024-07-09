@@ -95,17 +95,44 @@ namespace taskify_api.Controllers.v1
         }
 
         [HttpPost]
-        public async Task<ActionResult<APIResponse>> CreateAsync([FromBody] UserDTO createDTO)
+        public async Task<ActionResult<APIResponse>> CreateAsync([FromForm] UserCreateDTO createDTO)
         {
             try
             {
 
                 if (createDTO == null) return BadRequest(createDTO);
+
                 User model = _mapper.Map<User>(createDTO);
-                await _userRepository.CreateAsync(model, "");
+                var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                if (createDTO.Image != null)
+                {
+                    if (!string.IsNullOrEmpty(model.ImageLocalPathUrl))
+                    {
+                        var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), model.ImageLocalPathUrl);
+                        FileInfo file = new FileInfo(oldFilePathDirectory);
+                        if (file.Exists)
+                        {
+                            file.Delete();
+                        }
+                    }
+                    Guid guid = Guid.NewGuid(); 
+                    string fileName = guid.ToString() + Path.GetExtension(createDTO.Image.FileName);
+                    string filePath = @"wwwroot\UserImage\" + fileName;
+
+                    var directoryLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                    using (var fileStream = new FileStream(directoryLocation, FileMode.Create))
+                    {
+                        createDTO.Image.CopyTo(fileStream);
+                    }
+                    model.ImageUrl = baseUrl + $"/{SD.UrlImageUser}/" + fileName;
+                    model.ImageLocalPathUrl = filePath;
+                }
+                model.UserName = model.Email;
+                await _userRepository.CreateAsync(model, createDTO.Password);
                 _response.Result = _mapper.Map<UserDTO>(model);
                 _response.StatusCode = HttpStatusCode.Created;
-                return CreatedAtRoute("GetUserById", new { model.Id }, _response);
+                return Ok(_response);
             }
             catch (Exception ex)
             {

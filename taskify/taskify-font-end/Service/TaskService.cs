@@ -60,7 +60,7 @@ namespace taskify_font_end.Service
             return await _baseServices.SendAsync<T>(new APIRequest()
             {
                 ApiType = SD.ApiType.GET,
-                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/task/" + userId
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/task/user/" + userId
             });
         }
 

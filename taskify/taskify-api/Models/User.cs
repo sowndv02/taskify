@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace taskify_api.Models
 {
@@ -20,7 +21,9 @@ namespace taskify_api.Models
         public virtual List<Milestone> Milestones { get; set; } = new List<Milestone>();
         public virtual List<ProjectMedia> ProjectMedias { get; set; } = new List<ProjectMedia>();
         public virtual List<TaskMedia> TaskMedias { get; set; } = new List<TaskMedia>();
-
-
+        [NotMapped]
+        public IdentityRole? Role { get; set; }
+        [NotMapped]
+        public string? RoleId { get; set; }
     }
 }
