@@ -1,6 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<taskify_font_end.Models.DTO.UserDTO>
 @{
 }
 <div class="content-wrapper">
@@ -78,7 +76,14 @@
                                             </div>
                                         </td>
                                         <td>
-                                            @* <a asp-action="Update" asp-route-id="@item.Id" asp-controller="User" class="edit-user card-link" data-bs-toggle="modal" data-id="@item.Id" title="label_update"><i class="bx bx-edit mx-1"></i></a> *@
+                                            @if(item.IsLockedOut)
+                                            {
+                                                <button title="Unlock" type="button" data-locked="true" class="btn unlock" data-id="@item.Id"><i class="bx bxs-lock-open-alt mx-1"></i></button>
+                                            }
+                                            else
+                                            {
+                                                <button title="Lock" type="button" data-locked="false" class="btn lock" data-id="@item.Id"><i class="bx bxs-lock mx-1"></i></button>
+                                            }
                                         </td>
                                     </tr>
                                 }
@@ -96,6 +101,26 @@
     </div>
 </div>
 
+
+<!-- Modal -->
+<div class="modal fade" id="confirmModal_User" tabindex="-1" aria-labelledby="confirmModalLabel_User" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel_User">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Confirmation message will be dynamically updated -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmActionBtn">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
     <script>
         var label_update = 'Update';
         var label_delete = 'Delete';
@@ -103,8 +128,62 @@
         var label_tasks = 'Tasks';
     </script>
     @* <script src="~/js/users.js"></script> *@
-    <script>
-        $(document).ready(function () {
-            $('#table').DataTable();
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#table').DataTable();
+
+        $('.lock, .unlock').click(function () {
+            var userId = $(this).data('id');
+            var dataLocked = $(this).data('locked').toString().trim();
+            var isLockedOut = dataLocked === 'true';
+            console.log(isLockedOut)
+            console.log(dataLocked)
+            console.log(userId)
+            // Update modal message based on action
+            if (isLockedOut) {
+                $('#confirmModal_User .modal-body').html('Are you sure you want to unlock this user?');
+            } else {
+                $('#confirmModal_User .modal-body').html('Are you sure you want to lock this user?');
+            }
+
+            // Show the modal
+            $('#confirmModal_User').modal('show');
+
+            // Handle confirmation button click
+            $('#confirmActionBtn').off().click(function () {
+                $('#confirmModal').modal('hide');
+                var actionUrl = isLockedOut ? '/User/Unlock' : '/User/Lock';
+
+                // AJAX request
+                $.ajax({
+                    url: actionUrl,
+                    type: 'Get', // Use POST method for update/delete actions
+                    data: { id: userId },
+                    success: function (response) {
+                        if(response.isSuccess){
+                            toastr.success(response.message); // Display success message
+                            setTimeout(function () {
+                                location.reload(); // Reload page after 3 seconds
+                            }, 3000);
+
+                        }else{
+                            toastr.error(response.message);
+                            $('#confirmModal').modal('hide');
+                        }
+                        
+                        
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                        toastr.error('Failed to perform action.'); // Display error message
+                    }
+                });
+            });
         });
-    </script>
+    });
+</script>
+
+

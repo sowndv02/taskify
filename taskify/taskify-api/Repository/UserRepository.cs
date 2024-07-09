@@ -55,10 +55,21 @@ namespace taskify_api.Repository
 
         public async Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO)
         {
-            var user = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == loginRequestDTO.UserName.ToLower());
-
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == loginRequestDTO.UserName.ToLower());
+            if (user == null)
+            {
+                return new TokenDTO()
+                {
+                    AccessToken = "",
+                    RefreshToken = ""
+                };
+            }
+            if (user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTimeOffset.UtcNow)
+            {
+                return null;
+            }
             bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
-            if (user == null || !isValid)
+            if (!isValid)
             {
                 return new TokenDTO()
                 {
@@ -88,7 +99,8 @@ namespace taskify_api.Repository
                 LastName = registerationRequestDTO.LastName,
                 PhoneNumber = registerationRequestDTO.PhoneNumber,
                 NormalizedEmail = registerationRequestDTO.UserName,
-                PasswordHash = registerationRequestDTO.Password
+                PasswordHash = registerationRequestDTO.Password,
+                LockoutEnabled = true
             };
             try
             {
@@ -276,6 +288,43 @@ namespace taskify_api.Repository
             }
         }
 
+        public async Task<User> UnlockUser(string userId)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user != null)
+                {
+                    user.LockoutEnd = null;
+                    await _userManager.UpdateAsync(user);
+                }
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<User> LockoutUser(string userId)
+        {
+            try
+            {
+                
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user != null)
+                {
+                    user.LockoutEnd = DateTime.MaxValue;
+                    await _userManager.UpdateAsync(user);
+                }
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<User> UpdatePasswordAsync(UpdatePasswordRequestDTO updatePasswordRequestDTO)
         {
             var user = _context.Users.FirstOrDefault(x => x.UserName.ToLower() == updatePasswordRequestDTO.UserName.ToLower());
@@ -315,7 +364,9 @@ namespace taskify_api.Repository
                 LastName = user.LastName,
                 PasswordHash = password,
                 Email = user.Email,
-                NormalizedEmail = user.Email
+                NormalizedEmail = user.Email,
+                LockoutEnabled = true,
+                LockoutEnd = user.IsLockedOut ? DateTime.MaxValue : null
             };
             var result = await _userManager.CreateAsync(obj, password);
             
@@ -337,8 +388,10 @@ namespace taskify_api.Repository
         public async Task<List<User>> GetAllAsync()
         {
             var users = await _userManager.Users.ToListAsync();
+
             foreach(var user in users)
             {
+                user.IsLockedOut = await _userManager.IsLockedOutAsync(user);
                 user.Role = await GetRoleByUserId(user);
             }
              return users;

@@ -19,5 +19,6 @@ namespace taskify_font_end.Models.DTO
         public string ConfirmPassword { get; set; }
         public RoleDTO? Role { get; set; }
         public string? RoleId { get; set; }
+        public bool IsLockedOut { get; set; }
     }
 }

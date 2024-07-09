@@ -43,6 +43,29 @@ namespace taskify_font_end.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Unlock(string id)
+        {
+            var response = await _userService.UnLockUserAsync<APIResponse>(id);
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                return Json(new { isSuccess = true, message = "User unlocked successfully." });
+            }
+            return Json(new { isSuccess = false, message = "User unlocked failed." });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Lock(string id)
+        {
+            var response = await _userService.LockUserAsync<APIResponse>(id);
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                return Json(new { isSuccess = true, message = "User locked successfully." });
+            }
+            return Json(new { isSuccess = false, message = "User locked failed." });
+        }
+
+
         public async Task<IActionResult> Create()
         {
             UserCreateDTO userDTO = new UserCreateDTO();

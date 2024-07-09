@@ -20,5 +20,6 @@ namespace taskify_font_end.Models.DTO
         public string ImageUrl { get; set; }
         public string ImageLocalPathUrl { get; set; }
         public IFormFile? Image { get; set; }
+        public bool IsLockedOut { get; set; }
     }
 }

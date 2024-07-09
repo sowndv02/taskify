@@ -38,6 +38,25 @@ namespace taskify_font_end.Service
             });
         }
 
+        public async Task<T> LockUserAsync<T>(string id)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/User/lock/" + id
+            });
+        }
+
+        public async Task<T> UnLockUserAsync<T>(string id)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.GET,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/User/unlock/" + id
+            });
+        }
+
+
         public async Task<T> GetAllAsync<T>()
         {
             return await _baseServices.SendAsync<T>(new APIRequest()

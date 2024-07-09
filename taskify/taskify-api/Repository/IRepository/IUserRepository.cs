@@ -11,6 +11,8 @@ namespace taskify_api.Repository.IRepository
         Task<TokenDTO> RefreshAccessToken(TokenDTO tokenDTO);
         Task RevokeRefreshToken(TokenDTO tokenDTO);
         Task<User> GetAsync(string userId);
+        Task<User> LockoutUser(string userId);
+        Task<User> UnlockUser(string userId);
         Task<User> UpdatePasswordAsync(UpdatePasswordRequestDTO updatePasswordRequestDTO);
         Task<User> UpdateAsync(User user);
         Task<User> CreateAsync(User user, string password);

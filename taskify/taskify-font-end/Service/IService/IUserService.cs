@@ -11,7 +11,7 @@ namespace taskify_font_end.Service.IService
         Task<T> UpdateAsync<T>(UserDTO dto);
         Task<T> UploadImgAsync<T>(UserDTO dto);
         Task<T> DeleteAsync<T>(string id);
-
-
+        Task<T> LockUserAsync<T>(string id);
+        Task<T> UnLockUserAsync<T>(string id);
     }
 }

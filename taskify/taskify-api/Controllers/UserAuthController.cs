@@ -63,12 +63,20 @@ namespace taskify_api.Controllers
             }
         }
 
+
+
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequestDTO model)
         {
             var tokenDto = await _userRepository.Login(model);
-
-            if (tokenDto == null || string.IsNullOrEmpty(tokenDto.AccessToken))
+            if(tokenDto == null)
+            {
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.IsSuccess = false;
+                _response.ErrorMessages.Add("User is currently locked out.");
+                return BadRequest(_response);
+            }
+            if (string.IsNullOrEmpty(tokenDto.AccessToken))
             {
                 _response.StatusCode = HttpStatusCode.BadRequest;
                 _response.IsSuccess = false;

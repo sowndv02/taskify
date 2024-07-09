@@ -25,5 +25,7 @@ namespace taskify_api.Models
         public IdentityRole? Role { get; set; }
         [NotMapped]
         public string? RoleId { get; set; }
+        [NotMapped]
+        public bool IsLockedOut { get; set; }
     }
 }

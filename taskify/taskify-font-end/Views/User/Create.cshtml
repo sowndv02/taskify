@@ -86,6 +86,19 @@
                             <input class="form-control" type="file" id="photo" asp-for="Image">
                             <p class="text-muted mt-2">Allowed JPG or PNG.</p>
                         </div>
+
+                        <div class="col-md-6 mb-3">
+                            <div class="btn-group btn-group d-flex justify-content-center" role="group" aria-label="Basic radio toggle button group">
+
+                                <input type="radio" class="btn-check" id="user_active" asp-for="IsLockedOut" value="false" checked="">
+                                <label class="btn btn-outline-primary" for="user_active">Active</label>
+
+                                <input type="radio" class="btn-check" id="user_deactive" asp-for="IsLockedOut" value="true">
+                                <label class="btn btn-outline-primary" for="user_deactive">Deactive</label>
+
+                            </div>
+                        </div>
+
                         <div class="mt-2">
                             <button type="submit" class="btn btn-primary me-2"
                                 id="submit_btn">Create</button>

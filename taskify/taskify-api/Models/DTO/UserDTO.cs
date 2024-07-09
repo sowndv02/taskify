@@ -16,5 +16,7 @@
         public virtual List<TaskUserDTO>? TaskUsers { get; set; } = new List<TaskUserDTO>();
         public IFormFile? Image { get; set; }
         public RoleDTO? Role {  get; set; }
+        public string? RoleId {  get; set; }
+        public bool IsLockedOut { get; set; }
     }
 }

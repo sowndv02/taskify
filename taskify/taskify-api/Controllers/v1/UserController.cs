@@ -69,6 +69,58 @@ namespace taskify_api.Controllers.v1
             }
         }
 
+
+        [HttpGet("lock/{userId}")]
+        public async Task<IActionResult> LockoutUser(string userId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(userId))
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{userId} is invalid!" };
+                    return BadRequest(_response);
+                }
+                User model = await _userRepository.LockoutUser(userId);
+                _response.Result = _mapper.Map<UserDTO>(model);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+        [HttpGet("unlock/{userId}")]
+        public async Task<IActionResult> UnLockoutUser(string userId)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(userId))
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"{userId} is invalid!" };
+                    return BadRequest(_response);
+                }
+                User model = await _userRepository.UnlockUser(userId);
+                _response.Result = _mapper.Map<UserDTO>(model);
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
+
+
         [HttpPut("password/{id}", Name = "UpdatePassword")]
         public async Task<ActionResult<APIResponse>> GetPasswordByIdAsync(string id, [FromBody] UpdatePasswordRequestDTO updatePasswordRequestDTO)
         {
