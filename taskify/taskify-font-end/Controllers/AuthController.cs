@@ -60,7 +60,20 @@ namespace taskify_font_end.Controllers
             var token = authenticateResult.Properties.GetTokenValue("access_token");
             if (!string.IsNullOrEmpty(token))
             {
-                var response = await _authService.AuthenticateWithGoogle<APIResponse>(new GoogleAuthDTO() { Token = token });
+                var email = authenticateResult.Principal.FindFirst(ClaimTypes.Email)?.Value;
+                var firstName = authenticateResult.Principal.FindFirst(ClaimTypes.GivenName)?.Value;
+                var lastName = authenticateResult.Principal.FindFirst(ClaimTypes.Surname)?.Value;
+                var address = authenticateResult.Principal.FindFirst(ClaimTypes.StreetAddress)?.Value;
+
+                var googleAuthDto = new GoogleAuthDTO
+                {
+                    Email = email,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Address = address,
+                    Password = email
+                };
+                var response = await _authService.AuthenticateWithGoogle<APIResponse>(googleAuthDto);
                 if (response != null && response.IsSuccess)
                 {
                     TokenDTO model = JsonConvert.DeserializeObject<TokenDTO>(Convert.ToString(response.Result));
@@ -75,26 +88,24 @@ namespace taskify_font_end.Controllers
                     identity.AddClaim(new Claim(ClaimTypes.GivenName, jwt.Claims.FirstOrDefault(u => u.Type == "given_name").Value));
                     identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, "google"));
                     var principal = new ClaimsPrincipal(identity);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-                    _tokenProvider.SetToken(model);
-                    if (ViewBag.SelectedWorkspaceId == null || ViewBag.SelectedWorkspaceId == 0)
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
                     {
-                        List<WorkspaceDTO> workspaces = await GetAllWorkspaceByUserIdAsync(jwt.Claims.FirstOrDefault(u => u.Type == "sub").Value);
-                        if (workspaces.Count > 0)
-                        {
-                            HttpContext.Response.Cookies.Append("SelectedWorkspaceId", workspaces.FirstOrDefault().Id.ToString());
-                            return RedirectToAction("Dashboard", "Home", new { id = workspaces.FirstOrDefault().Id });
-                        }
-                        else
-                        {
-                            HttpContext.Response.Cookies.Append("SelectedWorkspaceId", "0");
-                            return RedirectToAction("Dashboard", "Home", new { id = 0 });
-                        }
+                        IsPersistent = true, // Persistent cookie
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30) // Cookie expiration set to 30 minutes
+                    });
+                    _tokenProvider.SetToken(model);
+                    List<WorkspaceDTO> workspaces = await GetAllWorkspaceByUserIdAsync(jwt.Claims.FirstOrDefault(u => u.Type == "sub").Value);
+                    if (workspaces.Count > 0)
+                    {
+                        HttpContext.Response.Cookies.Append("SelectedWorkspaceId", workspaces.FirstOrDefault().Id.ToString());
+                        return RedirectToAction("Dashboard", "Home", new { id = workspaces.FirstOrDefault().Id });
                     }
                     else
                     {
-                        return RedirectToAction("Dashboard", "Home", new { id = ViewBag.SelectedWorkspaceId });
+                        HttpContext.Response.Cookies.Append("SelectedWorkspaceId", "0");
+                        return RedirectToAction("Dashboard", "Home", new { id = 0 });
                     }
+                    
 
                 }
                 else
@@ -241,7 +252,11 @@ namespace taskify_font_end.Controllers
                     identity.AddClaim(new Claim(ClaimTypes.GivenName, jwt.Claims.FirstOrDefault(u => u.Type == "given_name").Value));
                     identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, "user"));
                     var principal = new ClaimsPrincipal(identity);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
+                    {
+                        IsPersistent = true, // Persistent cookie
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30) // Cookie expiration set to 30 minutes
+                    });
                     _tokenProvider.SetToken(model);
                     if (ViewBag.SelectedWorkspaceId == null || ViewBag.SelectedWorkspaceId == 0)
                     {

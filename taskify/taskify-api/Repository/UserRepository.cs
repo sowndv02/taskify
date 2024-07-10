@@ -9,6 +9,7 @@ using taskify_api.Data;
 using taskify_api.Models;
 using taskify_api.Models.DTO;
 using taskify_api.Repository.IRepository;
+using taskify_utility;
 
 namespace taskify_api.Repository
 {
@@ -53,7 +54,7 @@ namespace taskify_api.Repository
             return false;
         }
 
-        public async Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO)
+        public async Task<TokenDTO> Login(LoginRequestDTO loginRequestDTO, bool checkPassword = true)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == loginRequestDTO.UserName.ToLower());
             if (user == null)
@@ -68,7 +69,10 @@ namespace taskify_api.Repository
             {
                 return null;
             }
-            bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
+            bool isValid = false;
+            if (checkPassword)
+                isValid = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
+            else isValid = true;
             if (!isValid)
             {
                 return new TokenDTO()
@@ -293,8 +297,12 @@ namespace taskify_api.Repository
             try
             {
                 var user = await _userManager.FindByEmailAsync(email);
-                user.Role = await GetRoleByUserId(user);
-                return user;
+                if(user != null)
+                {
+                    user.Role = await GetRoleByUserId(user);
+                    return user;
+                }
+                return null;
             }
             catch (Exception ex)
             {
@@ -387,9 +395,16 @@ namespace taskify_api.Repository
             if (result.Succeeded)
             {
                 var roleId = user.RoleId;
-                user.Role = await _roleManager.FindByIdAsync(roleId);
+                if(roleId != null) {
+                    user.Role = await _roleManager.FindByIdAsync(roleId);
+                    await _userManager.AddToRoleAsync(obj, user.Role?.Name);
+                }
+                else
+                {
+                    await _userManager.AddToRoleAsync(obj, SD.Client);
+                }
 
-                await _userManager.AddToRoleAsync(obj, user.Role?.Name);
+                
                 return _context.Users.FirstOrDefault(u => u.UserName == user.Email);
             }
             else

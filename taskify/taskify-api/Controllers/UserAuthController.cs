@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Google.Apis.Auth;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using taskify_api.Models;
 using taskify_api.Models.DTO;
 using taskify_api.Repository.IRepository;
+using taskify_api.Utils;
 using taskify_utility;
 
 namespace taskify_api.Controllers
@@ -43,11 +45,11 @@ namespace taskify_api.Controllers
         {
             try
             {
-                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                var payload = await GoogleJsonWebSignature.ValidateAsync(token, new GoogleJsonWebSignature.ValidationSettings()
                 {
-                    Audience = new List<string>() { audience }
-                };
-                var payload = await GoogleJsonWebSignature.ValidateAsync(token, settings);
+                    Audience = new List<string>()
+                });
+
                 return payload;
             }
             catch
@@ -61,32 +63,34 @@ namespace taskify_api.Controllers
         {
             try
             {
-                var payload = await ValidateGoogleToken(googleAuthDTO.Token);
-                if (payload == null)
-                {
-                    _response.StatusCode = HttpStatusCode.BadRequest;
-                    _response.IsSuccess = false;
-                    _response.ErrorMessages = new List<string> { $"token is invalid!" };
-                    return BadRequest(_response);
-                }
+                //var payload = await ValidateGoogleToken(googleAuthDTO.Token);
+                //if (payload == null)
+                //{
+                //    _response.StatusCode = HttpStatusCode.BadRequest;
+                //    _response.IsSuccess = false;
+                //    _response.ErrorMessages = new List<string> { $"token is invalid!" };
+                //    return BadRequest(_response);
+                //}
 
-                var user = await _userRepository.GetUserByEmailAsync(payload.Email);
+                var user = await _userRepository.GetUserByEmailAsync(googleAuthDTO.Email);
                 if (user == null)
                 {
-
+                    
                     user = new User
                     {
-                        UserName = payload.Email,
-                        ImageUrl = payload.Picture,
-                        FirstName = payload.GivenName,
-                        LastName = payload.FamilyName,
-                        PasswordHash = payload.Email,
-                        Email = payload.Email,
-                        NormalizedEmail = payload.Email
+                        UserName = googleAuthDTO.Email,
+                        FirstName = googleAuthDTO.FirstName,
+                        LastName = googleAuthDTO.LastName,
+                        PasswordHash = PasswordGenerator.GeneratePassword(length: 12, requireDigit: true, requireLowercase: true, requireUppercase: true, requireNonAlphanumeric: true),
+                        Email = googleAuthDTO.Email,
+                        NormalizedEmail = googleAuthDTO.Email
                     };
-                    await _userRepository.CreateAsync(user, payload.Email);
+                    var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
+                    user.ImageUrl = baseUrl + $"/{SD.UrlImageUser}/" + SD.UrlImageAvatarDefault;
+                    user.ImageLocalPathUrl = @"wwwroot\UserImage\" + SD.UrlImageAvatarDefault;
+                    await _userRepository.CreateAsync(user, user.PasswordHash);
                 }
-                var tokenDto = await _userRepository.Login(new LoginRequestDTO() { UserName = payload.Email, Password = payload.Email });
+                var tokenDto = await _userRepository.Login(new LoginRequestDTO() { UserName = user.Email, Password = user.PasswordHash }, false);
                 if (tokenDto == null)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
@@ -237,6 +241,7 @@ namespace taskify_api.Controllers
             return BadRequest(_response);
 
         }
+
     }
 }
 

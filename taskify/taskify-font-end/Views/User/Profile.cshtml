@@ -1,6 +1,9 @@
-﻿@using taskify_utility;
+﻿@using System.Security.Claims;
+@using taskify_utility;
 @model taskify_font_end.Models.DTO.UserDTO
 @{
+    var authMethodClaim = User.FindFirst(ClaimTypes.AuthenticationMethod);
+
 }
 <div class="content-wrapper">
     @if(Model != null)

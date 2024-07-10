@@ -25,7 +25,8 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnC
 Log.Logger = new LoggerConfiguration().MinimumLevel.Debug()
     .WriteTo.File("log/taskify.txt", rollingInterval: RollingInterval.Day).CreateLogger();
 
-builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            
 builder.Services.AddResponseCaching();
 
 
