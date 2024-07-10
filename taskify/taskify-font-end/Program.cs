@@ -60,7 +60,10 @@ builder.Services.AddHttpClient<ITaskMediaService, TaskMediaService>();
 builder.Services.AddScoped<ITaskMediaService, TaskMediaService>();
 builder.Services.AddHttpClient<IRoleService, RoleService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
-
+builder.Services.AddHttpClient<IMeetingService, MeetingService>();
+builder.Services.AddScoped<IMeetingService, MeetingService>();
+builder.Services.AddHttpClient<IMeetingUserService, MeetingUserService>();
+builder.Services.AddScoped<IMeetingUserService, MeetingUserService>();
 
 
 builder.Services.AddDistributedMemoryCache();

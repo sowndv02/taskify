@@ -29,6 +29,8 @@ namespace taskify_api.Data
         public DbSet<TaskMedia> TaskMedias { get; set; }
         public DbSet<ProjectMedia> ProjectMedias { get; set; }
         public DbSet<Milestone> Milestones { get; set; }
+        public DbSet<Meeting> Meetings { get; set; }
+        public DbSet<MeetingUser> MeetingUsers { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -169,6 +171,24 @@ namespace taskify_api.Data
                 .HasForeignKey(pm => pm.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Meeting>()
+                .HasOne(m => m.Workspace)
+                .WithMany(w => w.Meetings)
+                .HasForeignKey(m => m.WorkspaceId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<MeetingUser>()
+               .HasOne(mu => mu.Meeting)
+               .WithMany(m => m.MeetingUsers)
+               .HasForeignKey(mu => mu.MeetingId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<MeetingUser>()
+                .HasOne(mu => mu.User)
+                .WithMany(u => u.MeetingUsers)
+                .HasForeignKey(mu => mu.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 var tableName = entityType.GetTableName();
@@ -177,6 +197,8 @@ namespace taskify_api.Data
                     entityType.SetTableName(tableName.Substring(6));
                 }
             }
+
+
             //SeedData(modelBuilder);
         }
 

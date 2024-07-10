@@ -275,6 +275,70 @@ namespace taskify_api.Migrations
                     b.ToTable("Colors");
                 });
 
+            modelBuilder.Entity("taskify_api.Models.Meeting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("EndDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MeetingUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RequestId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WorkspaceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.ToTable("Meetings");
+                });
+
+            modelBuilder.Entity("taskify_api.Models.MeetingUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("MeetingId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeetingId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MeetingUsers");
+                });
+
             modelBuilder.Entity("taskify_api.Models.Milestone", b =>
                 {
                     b.Property<int>("Id")
@@ -1041,6 +1105,44 @@ namespace taskify_api.Migrations
                     b.Navigation("Owner");
                 });
 
+            modelBuilder.Entity("taskify_api.Models.Meeting", b =>
+                {
+                    b.HasOne("taskify_api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("taskify_api.Models.Workspace", "Workspace")
+                        .WithMany("Meetings")
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("Workspace");
+                });
+
+            modelBuilder.Entity("taskify_api.Models.MeetingUser", b =>
+                {
+                    b.HasOne("taskify_api.Models.Meeting", "Meeting")
+                        .WithMany("MeetingUsers")
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("taskify_api.Models.User", "User")
+                        .WithMany("MeetingUsers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Meeting");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("taskify_api.Models.Milestone", b =>
                 {
                     b.HasOne("taskify_api.Models.Project", "Project")
@@ -1256,7 +1358,7 @@ namespace taskify_api.Migrations
                         .IsRequired();
 
                     b.HasOne("taskify_api.Models.Project", "Project")
-                        .WithMany("TaskModels")
+                        .WithMany("Tasks")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
@@ -1350,13 +1452,18 @@ namespace taskify_api.Migrations
                     b.Navigation("Workspace");
                 });
 
+            modelBuilder.Entity("taskify_api.Models.Meeting", b =>
+                {
+                    b.Navigation("MeetingUsers");
+                });
+
             modelBuilder.Entity("taskify_api.Models.Project", b =>
                 {
                     b.Navigation("ProjectTags");
 
                     b.Navigation("ProjectUsers");
 
-                    b.Navigation("TaskModels");
+                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("taskify_api.Models.Status", b =>
@@ -1378,6 +1485,8 @@ namespace taskify_api.Migrations
                 {
                     b.Navigation("Colors");
 
+                    b.Navigation("MeetingUsers");
+
                     b.Navigation("Milestones");
 
                     b.Navigation("Priorities");
@@ -1396,6 +1505,8 @@ namespace taskify_api.Migrations
             modelBuilder.Entity("taskify_api.Models.Workspace", b =>
                 {
                     b.Navigation("ActivityLogs");
+
+                    b.Navigation("Meetings");
 
                     b.Navigation("Notes");
 

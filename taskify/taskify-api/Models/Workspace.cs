@@ -21,5 +21,6 @@ namespace taskify_api.Models
         public virtual List<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
         public virtual List<WorkspaceUser> WorkspaceUsers { get; set; } = new List<WorkspaceUser>();
         public virtual List<Project> Projects { get; set; } = new List<Project>();
+        public virtual List<Meeting> Meetings { get; set; } = new List<Meeting>();
     }
 }

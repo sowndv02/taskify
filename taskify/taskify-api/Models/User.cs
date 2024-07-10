@@ -21,6 +21,7 @@ namespace taskify_api.Models
         public virtual List<Milestone> Milestones { get; set; } = new List<Milestone>();
         public virtual List<ProjectMedia> ProjectMedias { get; set; } = new List<ProjectMedia>();
         public virtual List<TaskMedia> TaskMedias { get; set; } = new List<TaskMedia>();
+        public virtual List<MeetingUser> MeetingUsers { get; set; } = new List<MeetingUser>();
         [NotMapped]
         public IdentityRole? Role { get; set; }
         [NotMapped]
