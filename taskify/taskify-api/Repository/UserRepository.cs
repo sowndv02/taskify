@@ -282,7 +282,21 @@ namespace taskify_api.Repository
                 user.Role = await GetRoleByUserId(user);
                 return user;
             }
-            catch(Exception ex) 
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                user.Role = await GetRoleByUserId(user);
+                return user;
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -310,7 +324,7 @@ namespace taskify_api.Repository
         {
             try
             {
-                
+
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user != null)
                 {
@@ -369,7 +383,7 @@ namespace taskify_api.Repository
                 LockoutEnd = user.IsLockedOut ? DateTime.MaxValue : null
             };
             var result = await _userManager.CreateAsync(obj, password);
-            
+
             if (result.Succeeded)
             {
                 var roleId = user.RoleId;
@@ -389,12 +403,12 @@ namespace taskify_api.Repository
         {
             var users = await _userManager.Users.ToListAsync();
 
-            foreach(var user in users)
+            foreach (var user in users)
             {
                 user.IsLockedOut = await _userManager.IsLockedOutAsync(user);
                 user.Role = await GetRoleByUserId(user);
             }
-             return users;
+            return users;
         }
         public async Task<IdentityRole> GetRoleByUserId(User user)
         {

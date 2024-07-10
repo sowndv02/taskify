@@ -6,7 +6,7 @@ namespace taskify_font_end.Service.IService
     {
         Task<T> LoginAsync<T>(LoginRequestDTO objToCreate);
         Task<T> RegisterAsync<T>(RegisterationRequestDTO objToCreate);
-
         Task<T> LogoutAsync<T>(TokenDTO obj);
+        Task<T> AuthenticateWithGoogle<T>(GoogleAuthDTO googleAuthDTO);
     }
 }

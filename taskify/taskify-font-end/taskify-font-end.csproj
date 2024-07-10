@@ -20,10 +20,14 @@
   </ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Google.Apis.Calendar.v3" Version="1.68.0.3430" />
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="6.0.28" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="6.0.28" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.35.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.28" />
 	</ItemGroup>
 
 	<ItemGroup>

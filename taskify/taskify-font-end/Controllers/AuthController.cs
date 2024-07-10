@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
 using System.Security.Claims;
 using taskify_font_end.Models;
 using taskify_font_end.Models.DTO;
 using taskify_font_end.Models.VM;
-using taskify_font_end.Service;
 using taskify_font_end.Service.IService;
 using taskify_utility;
 
@@ -24,7 +22,7 @@ namespace taskify_font_end.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly IWorkspaceUserService _workspaceUserService;
-        public AuthController(IAuthService authService, ITokenProvider tokenProvider, 
+        public AuthController(IAuthService authService, ITokenProvider tokenProvider,
             IWorkspaceService workspaceService, IUserService userService, IWorkspaceUserService workspaceUserService,
             IMapper mapper) : base(workspaceService, workspaceUserService)
         {
@@ -33,7 +31,7 @@ namespace taskify_font_end.Controllers
             _tokenProvider = tokenProvider;
             _workspaceService = workspaceService;
             _userService = userService;
-            _mapper = mapper;   
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -47,6 +45,70 @@ namespace taskify_font_end.Controllers
             return View(obj);
         }
 
+        public IActionResult LoginGoogle()
+        {
+            var authenticationProperties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleResponse") };
+            return Challenge(authenticationProperties, GoogleDefaults.AuthenticationScheme);
+        }
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var authenticateResult = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            if (!authenticateResult.Succeeded)
+                return BadRequest();
+
+            var token = authenticateResult.Properties.GetTokenValue("access_token");
+            if (!string.IsNullOrEmpty(token))
+            {
+                var response = await _authService.AuthenticateWithGoogle<APIResponse>(new GoogleAuthDTO() { Token = token });
+                if (response != null && response.IsSuccess)
+                {
+                    TokenDTO model = JsonConvert.DeserializeObject<TokenDTO>(Convert.ToString(response.Result));
+
+                    var handler = new JwtSecurityTokenHandler();
+                    var jwt = handler.ReadJwtToken(model.AccessToken);
+
+                    var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                    identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(u => u.Type == "unique_name").Value));
+                    identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == "role").Value));
+                    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, jwt.Claims.FirstOrDefault(u => u.Type == "sub").Value));
+                    identity.AddClaim(new Claim(ClaimTypes.GivenName, jwt.Claims.FirstOrDefault(u => u.Type == "given_name").Value));
+                    identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, "google"));
+                    var principal = new ClaimsPrincipal(identity);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                    _tokenProvider.SetToken(model);
+                    if (ViewBag.SelectedWorkspaceId == null || ViewBag.SelectedWorkspaceId == 0)
+                    {
+                        List<WorkspaceDTO> workspaces = await GetAllWorkspaceByUserIdAsync(jwt.Claims.FirstOrDefault(u => u.Type == "sub").Value);
+                        if (workspaces.Count > 0)
+                        {
+                            HttpContext.Response.Cookies.Append("SelectedWorkspaceId", workspaces.FirstOrDefault().Id.ToString());
+                            return RedirectToAction("Dashboard", "Home", new { id = workspaces.FirstOrDefault().Id });
+                        }
+                        else
+                        {
+                            HttpContext.Response.Cookies.Append("SelectedWorkspaceId", "0");
+                            return RedirectToAction("Dashboard", "Home", new { id = 0 });
+                        }
+                    }
+                    else
+                    {
+                        return RedirectToAction("Dashboard", "Home", new { id = ViewBag.SelectedWorkspaceId });
+                    }
+
+                }
+                else
+                {
+                    TempData["error"] = response.ErrorMessages.FirstOrDefault();
+                    return RedirectToAction("Login", "Auth");
+                }
+            }
+            else
+            {
+                TempData["error"] = "Token is null";
+                return RedirectToAction("Login", "Auth");
+            }
+        }
 
         [HttpGet]
         public IActionResult AccessDenied()
@@ -73,7 +135,7 @@ namespace taskify_font_end.Controllers
         {
             try
             {
-                if(updateDTO.Image == null)
+                if (updateDTO.Image == null)
                 {
                     TempData["error"] = "Please upload image avatar";
                     return RedirectToAction("Profile", "Auth", new { id = updateDTO.Id });
@@ -90,11 +152,12 @@ namespace taskify_font_end.Controllers
                 {
                     TempData["error"] = response.ErrorMessages[0];
                 }
-            }catch(Exception ex)
-            {
-                TempData["error"] = ex.Message; 
             }
-            return RedirectToAction("Profile", "Auth", new {id = updateDTO.Id});
+            catch (Exception ex)
+            {
+                TempData["error"] = ex.Message;
+            }
+            return RedirectToAction("Profile", "Auth", new { id = updateDTO.Id });
         }
 
         [HttpPost]
@@ -114,7 +177,7 @@ namespace taskify_font_end.Controllers
                 }
                 else
                 {
-                    
+
                     var user = await GetUserByIdAsync(updateDTO.Id);
                     UpdatePasswordRequestDTO updatePasswordRequestDTO = new UpdatePasswordRequestDTO() { Id = updateDTO.Id, NewPassword = updateDTO.NewPassword, Password = updateDTO.OldPassword, UserName = updateDTO.Email };
                     var changePasswordResult = await _userService.UpdatePasswordAsync<APIResponse>(updatePasswordRequestDTO);
@@ -133,7 +196,7 @@ namespace taskify_font_end.Controllers
                 var response = await _userService.UpdateAsync<APIResponse>(userDTO);
                 if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
                 {
-                    msg  += "Update profile successful!";
+                    msg += "Update profile successful!";
                     TempData["success"] = msg;
                 }
                 else
@@ -176,6 +239,7 @@ namespace taskify_font_end.Controllers
                     identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == "role").Value));
                     identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, jwt.Claims.FirstOrDefault(u => u.Type == "sub").Value));
                     identity.AddClaim(new Claim(ClaimTypes.GivenName, jwt.Claims.FirstOrDefault(u => u.Type == "given_name").Value));
+                    identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, "user"));
                     var principal = new ClaimsPrincipal(identity);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
                     _tokenProvider.SetToken(model);

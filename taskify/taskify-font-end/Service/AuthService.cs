@@ -36,6 +36,16 @@ namespace taskify_font_end.Service
             }, withBearer: false);
         }
 
+        public async Task<T> AuthenticateWithGoogle<T>(GoogleAuthDTO googleAuthDTO)
+        {
+            return await _baseServices.SendAsync<T>(new APIRequest()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = googleAuthDTO,
+                Url = API_URL + $"/api/{SD.CurrentAPIVersion}/UserAuth/google"
+            }, withBearer: false);
+        }
+
         public async Task<T> LogoutAsync<T>(TokenDTO obj)
         {
             return await _baseServices.SendAsync<T>(new APIRequest()

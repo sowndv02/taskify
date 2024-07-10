@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using taskify_api.Models;
@@ -16,11 +17,13 @@ namespace taskify_api.Controllers
         private readonly IUserRepository _userRepository;
         protected APIResponse _response;
         private readonly IMapper _mapper;
-        public UserAuthController(IUserRepository userRepository, IMapper mapper)
+        private string audience = string.Empty;
+        public UserAuthController(IUserRepository userRepository, IMapper mapper, IConfiguration configuration)
         {
             _mapper = mapper;
             _userRepository = userRepository;
             _response = new();
+            audience = configuration.GetValue<string>("Authentication:Google:ClientId");
         }
 
 
@@ -36,7 +39,81 @@ namespace taskify_api.Controllers
             throw new BadImageFormatException("Fake image exception.");
         }
 
+        private async Task<GoogleJsonWebSignature.Payload> ValidateGoogleToken(string token)
+        {
+            try
+            {
+                var settings = new GoogleJsonWebSignature.ValidationSettings()
+                {
+                    Audience = new List<string>() { audience }
+                };
+                var payload = await GoogleJsonWebSignature.ValidateAsync(token, settings);
+                return payload;
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
+        [HttpPost("google")]
+        public async Task<IActionResult> Google([FromBody] GoogleAuthDTO googleAuthDTO)
+        {
+            try
+            {
+                var payload = await ValidateGoogleToken(googleAuthDTO.Token);
+                if (payload == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages = new List<string> { $"token is invalid!" };
+                    return BadRequest(_response);
+                }
+
+                var user = await _userRepository.GetUserByEmailAsync(payload.Email);
+                if (user == null)
+                {
+
+                    user = new User
+                    {
+                        UserName = payload.Email,
+                        ImageUrl = payload.Picture,
+                        FirstName = payload.GivenName,
+                        LastName = payload.FamilyName,
+                        PasswordHash = payload.Email,
+                        Email = payload.Email,
+                        NormalizedEmail = payload.Email
+                    };
+                    await _userRepository.CreateAsync(user, payload.Email);
+                }
+                var tokenDto = await _userRepository.Login(new LoginRequestDTO() { UserName = payload.Email, Password = payload.Email });
+                if (tokenDto == null)
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("User is currently locked out.");
+                    return BadRequest(_response);
+                }
+                if (string.IsNullOrEmpty(tokenDto.AccessToken))
+                {
+                    _response.StatusCode = HttpStatusCode.BadRequest;
+                    _response.IsSuccess = false;
+                    _response.ErrorMessages.Add("Username or password is incorrect");
+                    return BadRequest(_response);
+                }
+                _response.StatusCode = HttpStatusCode.OK;
+                _response.IsSuccess = true;
+                _response.Result = tokenDto;
+                return Ok(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.StatusCode = HttpStatusCode.InternalServerError;
+                _response.ErrorMessages = new List<string>() { ex.ToString() };
+                return StatusCode((int)HttpStatusCode.InternalServerError, _response);
+            }
+        }
 
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserByIdAsync(string userId)
@@ -69,7 +146,7 @@ namespace taskify_api.Controllers
         public async Task<IActionResult> Login(LoginRequestDTO model)
         {
             var tokenDto = await _userRepository.Login(model);
-            if(tokenDto == null)
+            if (tokenDto == null)
             {
                 _response.StatusCode = HttpStatusCode.BadRequest;
                 _response.IsSuccess = false;

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using taskify_font_end;
 using taskify_font_end.Service;
 using taskify_font_end.Service.IService;
@@ -64,8 +65,12 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 
 builder.Services.AddDistributedMemoryCache();
 
-builder.Services.AddAuthentication(
-    CookieAuthenticationDefaults.AuthenticationScheme)
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+    })
     .AddCookie(options =>
     {
         options.Cookie.HttpOnly = true;
@@ -73,7 +78,17 @@ builder.Services.AddAuthentication(
         options.LoginPath = "/Auth/Login";
         options.AccessDeniedPath = "/Auth/AccessDenied";
         options.SlidingExpiration = true;
-    });
+    })
+    .AddGoogle(options =>
+    {
+        IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
+        options.ClientId = googleAuthNSection["ClientId"];
+        options.ClientSecret = googleAuthNSection["ClientSecret"];
+        options.SaveTokens = true;
+        options.CallbackPath = "/signin-google";
+        options.Scope.Add("https://www.googleapis.com/auth/userinfo.email");
+        options.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
+    }); ;
 
 builder.Services.AddSession(options =>
 {
