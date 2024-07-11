@@ -18,6 +18,6 @@ namespace taskify_api.Models
         [ForeignKey(nameof(UserId))]
         public User? Owner { get; set; }
         public bool IsDefault { get; set; }
-        //public List<ProjectTag> ProjectTags { get; set; } = new List<ProjectTag>();
+        public List<ProjectTag> ProjectTags { get; set; } = new List<ProjectTag>();
     }
 }

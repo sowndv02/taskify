@@ -135,17 +135,17 @@ namespace taskify_api.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
 
-            //modelBuilder.Entity<ProjectTag>()
-            //    .HasOne(pt => pt.Tag)
-            //    .WithMany(t => t.ProjectTags)
-            //    .HasForeignKey(pt => pt.TagId)
-            //    .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<ProjectTag>()
+                .HasOne(pt => pt.Tag)
+                .WithMany(t => t.ProjectTags)
+                .HasForeignKey(pt => pt.TagId)
+                .OnDelete(DeleteBehavior.NoAction);
 
-            //modelBuilder.Entity<ProjectTag>()
-            //    .HasOne(pt => pt.Project)
-            //    .WithMany(p => p.ProjectTags)
-            //    .HasForeignKey(pt => pt.ProjectId)
-            //    .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<ProjectTag>()
+                .HasOne(pt => pt.Project)
+                .WithMany(p => p.ProjectTags)
+                .HasForeignKey(pt => pt.ProjectId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Priority>()
                 .HasOne(tu => tu.User)

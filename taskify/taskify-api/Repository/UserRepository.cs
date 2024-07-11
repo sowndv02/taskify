@@ -297,7 +297,7 @@ namespace taskify_api.Repository
             try
             {
                 var user = await _userManager.FindByEmailAsync(email);
-                if(user != null)
+                if (user != null)
                 {
                     user.Role = await GetRoleByUserId(user);
                     return user;
@@ -395,16 +395,30 @@ namespace taskify_api.Repository
             if (result.Succeeded)
             {
                 var roleId = user.RoleId;
-                if(roleId != null) {
+                if (roleId != null)
+                {
                     user.Role = await _roleManager.FindByIdAsync(roleId);
-                    await _userManager.AddToRoleAsync(obj, user.Role?.Name);
+                    if (user.Role != null)
+                    {
+                        await _userManager.AddToRoleAsync(obj, user.Role?.Name);
+                    }
+                    else
+                    {
+                        if (!_roleManager.RoleExistsAsync(SD.Client).GetAwaiter().GetResult())
+                        {
+                            await _roleManager.CreateAsync(new IdentityRole(SD.Client));
+                        }
+                        await _userManager.AddToRoleAsync(obj, SD.Client);
+                    }
                 }
                 else
                 {
+                    if (!_roleManager.RoleExistsAsync(SD.Client).GetAwaiter().GetResult())
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole(SD.Client));
+                    }
                     await _userManager.AddToRoleAsync(obj, SD.Client);
                 }
-
-                
                 return _context.Users.FirstOrDefault(u => u.UserName == user.Email);
             }
             else

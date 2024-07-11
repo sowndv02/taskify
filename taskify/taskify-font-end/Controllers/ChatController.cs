@@ -4,7 +4,7 @@ namespace taskify_font_end.Controllers
 {
     public class ChatController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Chat()
         {
             return View();
         }

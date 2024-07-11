@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using taskify_api.Models;
@@ -156,7 +155,7 @@ namespace taskify_api.Controllers.v1
                     return BadRequest(_response);
                 }
                 Meeting model = _mapper.Map<Meeting>(updateDTO);
-                await _meetingRepository.UpdateAsync(model);
+                await _meetingRepository.UpdateAsync(model, "");
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);
