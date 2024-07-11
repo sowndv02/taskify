@@ -8,6 +8,7 @@ namespace taskify_api.Models.DTO
         public int Id { get; set; }
         [Required]
         public string Title { get; set; }
+        public string Token { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
         public string? RequestId { get; set; }

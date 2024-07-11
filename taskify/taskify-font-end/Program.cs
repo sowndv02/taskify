@@ -91,6 +91,8 @@ builder.Services.AddAuthentication(options =>
         options.CallbackPath = "/signin-google";
         options.Scope.Add("https://www.googleapis.com/auth/userinfo.email");
         options.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
+        options.Scope.Add("https://www.googleapis.com/auth/calendar");
+        options.Scope.Add("https://www.googleapis.com/auth/calendar.events");
     }); ;
 
 builder.Services.AddSession(options =>

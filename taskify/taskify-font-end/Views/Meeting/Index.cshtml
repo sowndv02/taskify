@@ -1,4 +1,5 @@
-﻿@* @model taskify_font_end.Models.DTO.MeetingDTO *@
+﻿@using taskify_font_end.Utils;
+@* @model taskify_font_end.Models.DTO.MeetingDTO *@
 @{
 }
 <div class="content-wrapper">
@@ -38,7 +39,10 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Title</th>
-                                <th>Preview</th>
+                                <th>Users</th>
+                                <th>Start At</th>
+                                <th>End At</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -50,20 +54,38 @@
                                     <tr>
                                         <td>@item.Id</td>
                                         <td>@item.Title</td>
-                                        <td><span class="badge bg-@item.Color?.Title">@item.Title.ToUpper()</span></td>
                                         <td>
-                                            @if (!item.IsDefault)
+                                            @if (Model.MeetingUser != null)
                                             {
-                                                <a href="javascript:void(0);" class="edit-tag card-link" data-bs-toggle="modal" data-bs-target="#edit_tag_modal" data-id="@item.Id" title="label_update"><i class="bx bx-edit mx-1"></i></a>
-                                                <button title="label_delete" type="button" class="btn delete" data-id="@item.Id" data-type="tags">
-                                                    <i class="bx bx-trash text-danger mx-1"></i>
-                                                </button>
+                                                <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                                
+                                                    @foreach (var user in Model.MeetingUsers)
+                                                    {
+                                                        <li><a asp-action="Profile" asp-controller="User" asp-route-id="@user.UserId" target="_blank"></a></li>
+                                                        <li class="avatar avatar-sm pull-up" title="Sid gor">
+                                                            <a asp-action="Profile" asp-controller="User" asp-route-id="@user.UserId" target="_blank">
+                                                                <img src="@user.User?.ImageUrl" class="rounded-circle">
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }else{
+                                                <span class="badge bg-primary">Not assigned</span>
                                             }
-                                            else
+                                        </td>
+                                        <td>@item.StartDateTime</td>
+                                        <td>@item.EndDateTime</td>
+                                        <td>
+                                            @if(DateTime.Now < item.StartDateTime)
                                             {
-                                                <span>Default Tag</span>
+                                                <span>@(TimeUtilities.CalculateTimeStatus(item.StartDateTime.Value, item.EndDateTime.Value))</span>
                                             }
-
+                                        </td>
+                                        <td>
+                                            <a href="/master-panel/meetings/edit/30" title="Update"><i class="bx bx-edit mx-1"></i></a>
+                                            <button title="Delete" type="button" class="btn delete" data-id="@item.Id" data-type="meeting" data-table="meetings_table"><i class="bx bx-trash text-danger mx-1"></i></button>
+                                            <a href="javascript:void(0);" class="duplicate" data-id="@item.Id" data-type="meeting" data-table="meetings_table" title="Duplicate"><i class="bx bx-copy text-warning mx-2"></i></a>
+                                            <a href="@item.MeetingUrl" target="_blank" title="Join"><i class="bx bx-arrow-to-right text-success mx-3"></i></a>
                                         </td>
                                     </tr>
                                 }
@@ -78,6 +100,7 @@
             </div>
         </div>
     </div>
+</div>
     <script>
         var label_update = 'Update';
         var label_delete = 'Delete';

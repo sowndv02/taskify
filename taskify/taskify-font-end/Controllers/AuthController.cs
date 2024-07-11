@@ -87,6 +87,7 @@ namespace taskify_font_end.Controllers
                     identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, jwt.Claims.FirstOrDefault(u => u.Type == "sub").Value));
                     identity.AddClaim(new Claim(ClaimTypes.GivenName, jwt.Claims.FirstOrDefault(u => u.Type == "given_name").Value));
                     identity.AddClaim(new Claim(ClaimTypes.AuthenticationMethod, "google"));
+                    identity.AddClaim(new Claim("access_token_google", token));
                     var principal = new ClaimsPrincipal(identity);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties
                     {

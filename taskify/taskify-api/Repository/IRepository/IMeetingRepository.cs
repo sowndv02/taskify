@@ -2,12 +2,8 @@
 
 namespace taskify_api.Repository.IRepository
 {
-    public interface IMeetingRepository
+    public interface IMeetingRepository : IRepository<Meeting>
     {
-        Task<Meeting> UpdateAsync(Meeting entity, string token);
-        Task<Meeting> GetAsync(string userId);
-        Task<Meeting> CreateAsync(Meeting meeting, string token);
-        Task<bool> RemoveAsync(int id);
-        Task<List<User>> GetAllAsync();
+        Task<Meeting> UpdateAsync(Meeting entity);
     }
 }

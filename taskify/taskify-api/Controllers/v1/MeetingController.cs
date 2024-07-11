@@ -13,13 +13,15 @@ namespace taskify_api.Controllers.v1
     public class MeetingController : ControllerBase
     {
         private readonly IMeetingRepository _meetingRepository;
+        private readonly IMeetingUserRepository _meetingUserRepository;
         protected APIResponse _response;
         private readonly IMapper _mapper;
-        public MeetingController(IMeetingRepository meetingRepository, IMapper mapper)
+        public MeetingController(IMeetingRepository meetingRepository, IMapper mapper, IMeetingUserRepository meetingUserRepository)
         {
             _meetingRepository = meetingRepository;
             _mapper = mapper;
             _response = new();
+            _meetingUserRepository = meetingUserRepository;
         }
 
 
@@ -54,7 +56,7 @@ namespace taskify_api.Controllers.v1
                     _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
                     return BadRequest(_response);
                 }
-                Meeting model = await _meetingRepository.GetAsync(x => x.Id == id);
+                Meeting model = await _meetingRepository.GetAsync(x => x.Id == id, true,"MeetingUsers");
                 _response.Result = _mapper.Map<MeetingDTO>(model);
                 return Ok(_response);
             }
@@ -80,6 +82,10 @@ namespace taskify_api.Controllers.v1
                     return BadRequest(_response);
                 }
                 List<Meeting> model = await _meetingRepository.GetAllAsync(x => x.WorkspaceId == id);
+                foreach(var item in model)
+                {
+                    item.MeetingUsers = await _meetingUserRepository.GetAllAsync(x => x.MeetingId == item.Id);
+                }
                 _response.Result = _mapper.Map<List<MeetingDTO>>(model);
                 return Ok(_response);
             }
@@ -105,7 +111,7 @@ namespace taskify_api.Controllers.v1
                     _response.ErrorMessages = new List<string> { $"{userId} is null or empty!" };
                     return BadRequest(_response);
                 }
-                List<Meeting> model = await _meetingRepository.GetAllAsync(x => x.OwnerId.Equals(userId));
+                List<Meeting> model = await _meetingRepository.GetAllAsync();
                 _response.Result = _mapper.Map<List<MeetingDTO>>(model);
                 return Ok(_response);
             }
@@ -123,7 +129,6 @@ namespace taskify_api.Controllers.v1
         {
             try
             {
-
                 if (createDTO == null) return BadRequest(createDTO);
                 Meeting model = _mapper.Map<Meeting>(createDTO);
                 await _meetingRepository.CreateAsync(model);
@@ -155,7 +160,7 @@ namespace taskify_api.Controllers.v1
                     return BadRequest(_response);
                 }
                 Meeting model = _mapper.Map<Meeting>(updateDTO);
-                await _meetingRepository.UpdateAsync(model, "");
+                await _meetingRepository.UpdateAsync(model);
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);

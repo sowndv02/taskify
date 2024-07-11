@@ -22,7 +22,7 @@ namespace taskify_api.Repository
             await SaveAsync();
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> filter = null, bool tracked = true, string? includeProperties = null)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> filter = null, bool tracked = true, string? includeProperties = null, string? excludeProperties = null)
         {
             IQueryable<T> query = dbset;
             if (!tracked)
@@ -32,7 +32,15 @@ namespace taskify_api.Repository
                 query.Where(filter);
             if (includeProperties != null)
             {
-                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                var includeProps = includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                if (excludeProperties != null)
+                {
+                    var excludeProps = excludeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    includeProps = includeProps.Except(excludeProps).ToList();
+                }
+
+                foreach (var includeProp in includeProps)
                 {
                     query = query.Include(includeProp);
                 }
@@ -43,7 +51,7 @@ namespace taskify_api.Repository
 
         //public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null,
         //    int pageSize = 0, int pageNumber = 1)
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null, string? excludeProperties = null)
         {
             IQueryable<T> query = dbset;
             if (filter != null)
@@ -58,11 +66,20 @@ namespace taskify_api.Repository
             //}
             if (includeProperties != null)
             {
-                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                var includeProps = includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                if (excludeProperties != null)
+                {
+                    var excludeProps = excludeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    includeProps = includeProps.Except(excludeProps).ToList();
+                }
+
+                foreach (var includeProp in includeProps)
                 {
                     query = query.Include(includeProp);
                 }
             }
+
 
             return await query.ToListAsync();
         }
