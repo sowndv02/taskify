@@ -14,14 +14,18 @@ namespace taskify_api.Controllers.v1
     {
         private readonly IMeetingRepository _meetingRepository;
         private readonly IMeetingUserRepository _meetingUserRepository;
+        private readonly IUserRepository _userRepository;
         protected APIResponse _response;
         private readonly IMapper _mapper;
-        public MeetingController(IMeetingRepository meetingRepository, IMapper mapper, IMeetingUserRepository meetingUserRepository)
+        public MeetingController(IMeetingRepository meetingRepository, IMapper mapper,
+            IMeetingUserRepository meetingUserRepository, IUserRepository userRepository)
         {
+            _userRepository = userRepository;
             _meetingRepository = meetingRepository;
             _mapper = mapper;
             _response = new();
             _meetingUserRepository = meetingUserRepository;
+            _userRepository = userRepository;
         }
 
 
@@ -56,7 +60,7 @@ namespace taskify_api.Controllers.v1
                     _response.ErrorMessages = new List<string> { $"{id} is invalid!" };
                     return BadRequest(_response);
                 }
-                Meeting model = await _meetingRepository.GetAsync(x => x.Id == id, true,"MeetingUsers");
+                Meeting model = await _meetingRepository.GetAsync(x => x.Id == id, true, "MeetingUsers");
                 _response.Result = _mapper.Map<MeetingDTO>(model);
                 return Ok(_response);
             }
@@ -82,9 +86,13 @@ namespace taskify_api.Controllers.v1
                     return BadRequest(_response);
                 }
                 List<Meeting> model = await _meetingRepository.GetAllAsync(x => x.WorkspaceId == id);
-                foreach(var item in model)
+                foreach (var item in model)
                 {
                     item.MeetingUsers = await _meetingUserRepository.GetAllAsync(x => x.MeetingId == item.Id);
+                    foreach (var user in item.MeetingUsers)
+                    {
+                        user.User = await _userRepository.GetAsync(user.UserId);
+                    }
                 }
                 _response.Result = _mapper.Map<List<MeetingDTO>>(model);
                 return Ok(_response);

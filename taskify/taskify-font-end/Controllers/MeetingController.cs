@@ -7,14 +7,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using taskify_font_end.Models;
 using taskify_font_end.Models.DTO;
-using taskify_font_end.Service;
 using taskify_font_end.Service.IService;
+using taskify_utility;
 
 namespace taskify_font_end.Controllers
 {
@@ -88,9 +87,9 @@ namespace taskify_font_end.Controllers
         public async Task<IActionResult> Create()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-            if(userId == null )
+            if (userId == null)
             {
-                return RedirectToAction("AccessDenied", "Auth");   
+                return RedirectToAction("AccessDenied", "Auth");
             }
             var accessToken = User.Claims.FirstOrDefault(c => c.Type == "access_token_google")?.Value;
             if (string.IsNullOrEmpty(accessToken))
@@ -100,7 +99,7 @@ namespace taskify_font_end.Controllers
 
             ViewBag.users = await GetUsersByWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
             MeetingDTO meeting = new MeetingDTO();
-            return View(meeting);  
+            return View(meeting);
         }
 
         [HttpPost]
@@ -149,19 +148,18 @@ namespace taskify_font_end.Controllers
                 {
                     attendees.Add(new EventAttendee { Email = email });
                 }
-                var systemTimeZone = "Asia/Ho_Chi_Minh";
                 var newEvent = new Event()
                 {
                     Summary = obj.Title,
                     Start = new EventDateTime()
                     {
                         DateTime = obj.StartDateTime,
-                        TimeZone = systemTimeZone,
+                        TimeZone = SD.TimeZone,
                     },
                     End = new EventDateTime()
                     {
                         DateTime = obj.EndDateTime,
-                        TimeZone = systemTimeZone,
+                        TimeZone = SD.TimeZone,
                     },
                     Attendees = attendees,
                     ConferenceData = new ConferenceData()
@@ -175,7 +173,7 @@ namespace taskify_font_end.Controllers
                 var request = service.Events.Insert(newEvent, "primary");
                 request.ConferenceDataVersion = 1;
                 obj.RequestId = newEvent.ConferenceData.CreateRequest.RequestId;
-                
+
                 var createdEvent = await request.ExecuteAsync();
                 obj.MeetingUrl = createdEvent.ConferenceData.EntryPoints[0].Uri;
                 APIResponse result = await _meetingService.CreateAsync<APIResponse>(obj);

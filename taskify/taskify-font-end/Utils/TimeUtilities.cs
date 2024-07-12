@@ -4,7 +4,7 @@
     {
         public static string CalculateTimeStatus(DateTime startDateTime, DateTime endDateTime)
         {
-            var currentDateTime = DateTime.UtcNow;
+            var currentDateTime = DateTime.Now;
 
             if (currentDateTime < startDateTime)
             {

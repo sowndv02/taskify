@@ -1,5 +1,5 @@
 ﻿@using taskify_font_end.Utils;
-@* @model taskify_font_end.Models.DTO.MeetingDTO *@
+@model List<taskify_font_end.Models.DTO.MeetingDTO>
 @{
 }
 <div class="content-wrapper">
@@ -55,11 +55,11 @@
                                         <td>@item.Id</td>
                                         <td>@item.Title</td>
                                         <td>
-                                            @if (Model.MeetingUser != null)
+                                            @if (item.MeetingUsers != null)
                                             {
                                                 <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                                                
-                                                    @foreach (var user in Model.MeetingUsers)
+
+                                                    @foreach (var user in item.MeetingUsers)
                                                     {
                                                         <li><a asp-action="Profile" asp-controller="User" asp-route-id="@user.UserId" target="_blank"></a></li>
                                                         <li class="avatar avatar-sm pull-up" title="Sid gor">
@@ -76,23 +76,23 @@
                                         <td>@item.StartDateTime</td>
                                         <td>@item.EndDateTime</td>
                                         <td>
-                                            @if(DateTime.Now < item.StartDateTime)
-                                            {
-                                                <span>@(TimeUtilities.CalculateTimeStatus(item.StartDateTime.Value, item.EndDateTime.Value))</span>
-                                            }
+                                            <span>@(TimeUtilities.CalculateTimeStatus(item.StartDateTime, item.EndDateTime))</span>
                                         </td>
                                         <td>
-                                            <a href="/master-panel/meetings/edit/30" title="Update"><i class="bx bx-edit mx-1"></i></a>
+                                            <a asp-action="Update" asp-controller="Meeting" asp-route-id="@item.Id" title="Update"><i class="bx bx-edit mx-1"></i></a>
                                             <button title="Delete" type="button" class="btn delete" data-id="@item.Id" data-type="meeting" data-table="meetings_table"><i class="bx bx-trash text-danger mx-1"></i></button>
                                             <a href="javascript:void(0);" class="duplicate" data-id="@item.Id" data-type="meeting" data-table="meetings_table" title="Duplicate"><i class="bx bx-copy text-warning mx-2"></i></a>
-                                            <a href="@item.MeetingUrl" target="_blank" title="Join"><i class="bx bx-arrow-to-right text-success mx-3"></i></a>
+                                            @if(item.StartDate <= DateTime.Now && item.EndDate > DateTime.Now)
+                                            {
+                                                <a href="@item.MeetingUrl" target="_blank" title="Join"><i class="bx bx-arrow-to-right text-success mx-3"></i></a>
+                                            }
                                         </td>
                                     </tr>
                                 }
                             }
                             else
                             {
-                                <p>Don't have any tag'</p>
+                                <p>Don't have any meeting'</p>
                             }
                         </tbody>
                     </table>
@@ -113,3 +113,6 @@
             $('#table').DataTable();
         });
     </script>
+
+
+
