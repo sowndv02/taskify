@@ -221,7 +221,8 @@ namespace taskify_api.Controllers
             else
             {
                 _response.IsSuccess = false;
-                _response.Result = "Invalid Input";
+                _response.StatusCode = HttpStatusCode.BadRequest;
+                _response.ErrorMessages.Add("Error while refresh token");
                 return BadRequest(_response);
             }
         }

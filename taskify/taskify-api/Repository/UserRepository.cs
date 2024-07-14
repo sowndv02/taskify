@@ -131,7 +131,7 @@ namespace taskify_api.Repository
         {
             var roles = await _userManager.GetRolesAsync(user);
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(secretKey);
+            var key = Encoding.UTF8.GetBytes(secretKey);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -144,7 +144,7 @@ namespace taskify_api.Repository
                     new Claim(JwtRegisteredClaimNames.GivenName, user.ImageUrl),
                     new Claim(JwtRegisteredClaimNames.Aud, "sonwdv02.com")
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(1),
+                Expires = DateTime.UtcNow.AddMinutes(30),
                 Issuer = "https://taskify-sondv.com",
                 Audience = "https://test-taskify-api.com",
                 SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
