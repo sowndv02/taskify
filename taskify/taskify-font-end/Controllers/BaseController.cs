@@ -40,7 +40,6 @@ namespace taskify_font_end.Controllers
             }
             await next();
         }
-
         private async Task<List<WorkspaceDTO>> GetWorkspaceByUserIdAsync(string userId)
         {
             var response = await _workspaceService.GetByUserIdAsync<APIResponse>(userId);
@@ -59,14 +58,12 @@ namespace taskify_font_end.Controllers
             }
             return workspaces;
         }
-
         private async Task<List<WorkspaceDTO>> GetListWorkspaceContainsUser(string userId)
         {
             var workspaces = await GetWorkspaces();
             var workspaceHaveUser = await GetListWorkspacesContainsUser(userId);
             return workspaces.Where(p => workspaceHaveUser.Any(pu => pu.Id == p.Id)).ToList();
         }
-
         private async Task<List<WorkspaceDTO>> GetWorkspaces()
         {
             var response = await _workspaceService.GetAllAsync<APIResponse>();
@@ -77,7 +74,6 @@ namespace taskify_font_end.Controllers
             }
             return list;
         }
-
         private async Task<List<WorkspaceDTO>> GetListWorkspacesContainsUser(string userId)
         {
             var response = await _workspaceUserService.GetByUserIdAsync<APIResponse>(userId);

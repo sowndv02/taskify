@@ -29,6 +29,10 @@
         <div class="card">
             <div class="card-body">
                 <form asp-action="Update" asp-controller="Meeting" class="form-submit-event" method="POST">
+                    <input asp-for="OwnerId" type="hidden" />
+                    <input asp-for="WorkspaceId" type="hidden" />
+                    <input asp-for="RequestId" type="hidden" />
+                    <input asp-for="MeetingUrl" type="hidden" />
                     <div class="row">
                         <div class="mb-3">
                             <label for="title" class="form-label">

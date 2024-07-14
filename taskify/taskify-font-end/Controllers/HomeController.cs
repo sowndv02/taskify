@@ -53,8 +53,6 @@ namespace taskify_font_end.Controllers
         {
             return View();
         }
-
-
         public async Task<IActionResult> DashboardAsync(int? id)
         {
             if(id != null && id != 0)
@@ -143,7 +141,6 @@ namespace taskify_font_end.Controllers
             }
             return View(null);
         }
-
         private async Task<List<PriorityDTO>> GetPrioritiesByUserIdAsync(string userId)
         {
             var response = await _priorityService.GetByUserIdAsync<APIResponse>(userId);
@@ -158,18 +155,15 @@ namespace taskify_font_end.Controllers
 
             return list;
         }
-
         public IActionResult Privacy()
         {
             return View();
         }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
         private async Task<List<WorkspaceDTO>> GetWorkspaceByUserIdAsync(string userId)
         {
             var response = await _workspaceService.GetByUserIdAsync<APIResponse>(userId);
@@ -188,7 +182,6 @@ namespace taskify_font_end.Controllers
             }
             return workspaces;
         }
-
         private async Task<List<TodoDTO>> GetTodoByUserIdAndWorksplaceIdAsync(string userId, int workspaceId)
         {
             var response = await _todoService.GetByUserIdAndWorkspaceIdAsync<APIResponse>(userId, workspaceId);
@@ -202,9 +195,6 @@ namespace taskify_font_end.Controllers
             }
             return list;
         }
-
-
-
         private async Task<List<ProjectDTO>> GetProjectByUserIdAndWorkspaceIdAsync(string userId, int workspaceId)
         {
             var response = await _projectService.GetByUserIdAndWorkspaceIdAsync<APIResponse>(userId, workspaceId);
@@ -248,7 +238,6 @@ namespace taskify_font_end.Controllers
             
             return list;
         }
-
         private async Task<List<StatusDTO>> GetStatusesByUserIdAsync(string userId)
         {
             var response = await _statusService.GetByUserIdAsync<APIResponse>(userId);
@@ -260,7 +249,6 @@ namespace taskify_font_end.Controllers
 
             return list;
         }
-
         private async Task<List<StatusDTO>> GetTaskByProjectIdAndUserIdAsync(string userId, int projectId)
         {
             var response = await _statusService.GetByUserIdAsync<APIResponse>(userId);
@@ -288,7 +276,6 @@ namespace taskify_font_end.Controllers
 
             return list;
         }
-
         private async Task<List<TaskDTO>> GetTaskByProjectIdAndStatusId(int projectId, int id)
         {
             var response = await _taskService.GetByStatusIdAndProjectIdAsync<APIResponse>(projectId, id);
@@ -321,7 +308,6 @@ namespace taskify_font_end.Controllers
             }
             return list;
         }
-
         private async Task<StatusDTO> GetStatusById(int id)
         {
             var response = await _statusService.GetAsync<APIResponse>(id);
@@ -338,14 +324,12 @@ namespace taskify_font_end.Controllers
             var projectsHaveUser = await GetListProjectContainsUser(userId, workspaceId);
             return projects.Where(p => projectsHaveUser.Any(pu => pu.Id == p.Id)).ToList();
         }
-
         private async Task<List<WorkspaceDTO>> GetListWorkspaceContainsUser(string userId)
         {
             var workspaces = await GetWorkspaces();
             var workspaceHaveUser = await GetListWorkspacesContainsUser(userId);
             return workspaces.Where(p => workspaceHaveUser.Any(pu => pu.Id == p.Id)).ToList();
         }
-
         private async Task<List<WorkspaceDTO>> GetWorkspaces()
         {
             var response = await _workspaceService.GetAllAsync<APIResponse>();
@@ -356,7 +340,6 @@ namespace taskify_font_end.Controllers
             }
             return list;
         }
-
         private async Task<List<ProjectDTO>> GetProjectInWorkspace(int workspaceId)
         {
             var response = await _projectService.GetByWorkspaceIdAsync<APIResponse>(workspaceId);
@@ -380,7 +363,6 @@ namespace taskify_font_end.Controllers
             }
             return list;
         }
-
         private async Task<List<ProjectDTO>> GetListProjectContainsUser(string userId, int workspaceId)
         {
             var response = await _projectUserService.GetByUserIdAsync<APIResponse>(userId);
@@ -396,8 +378,6 @@ namespace taskify_font_end.Controllers
             }
             return projects;
         }
-
-
         private async Task<List<WorkspaceDTO>> GetListWorkspacesContainsUser(string userId)
         {
             var response = await _workspaceUserService.GetByUserIdAsync<APIResponse>(userId);
@@ -430,32 +410,6 @@ namespace taskify_font_end.Controllers
                 {
                     obj.WorkspaceUsers = JsonConvert.DeserializeObject<List<WorkspaceUserDTO>>(Convert.ToString(resWorkspaceUsers.Result));
                     obj.WorkspaceUserIds = obj.WorkspaceUsers.Select(x => x.UserId).ToList();
-                }
-            }
-
-            return obj;
-        }
-
-        private async Task<ProjectDTO> GetProjectByIdAsync(int id)
-        {
-            var response = await _projectService.GetAsync<APIResponse>(id);
-            ProjectDTO obj = new();
-            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
-            {
-                obj = JsonConvert.DeserializeObject<ProjectDTO>(Convert.ToString(response.Result));
-            }
-
-            if (obj.Id != 0)
-            {
-                var resProjectUsers = await _projectUserService.GetAsync<APIResponse>(obj.Id);
-                if (resProjectUsers != null && resProjectUsers.IsSuccess && resProjectUsers.ErrorMessages.Count == 0)
-                {
-                    obj.ProjectUsers = JsonConvert.DeserializeObject<List<ProjectUserDTO>>(Convert.ToString(resProjectUsers.Result));
-                    foreach (var user in obj.ProjectUsers)
-                    {
-                        user.User = await GetUserByIdAsync(user.UserId);
-                    }
-                    obj.ProjectUserIds = obj.ProjectUsers.Select(x => x.UserId).ToList();
                 }
             }
 

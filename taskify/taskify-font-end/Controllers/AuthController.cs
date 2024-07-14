@@ -44,7 +44,6 @@ namespace taskify_font_end.Controllers
             };
             return View(obj);
         }
-
         public IActionResult LoginGoogle()
         {
             var authenticationProperties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleResponse") };
@@ -121,14 +120,11 @@ namespace taskify_font_end.Controllers
                 return RedirectToAction("Login", "Auth");
             }
         }
-
         [HttpGet]
         public IActionResult AccessDenied()
         {
             return View();
         }
-
-
         [HttpGet]
         public async Task<IActionResult> ProfileAsync(string id)
         {
@@ -141,7 +137,6 @@ namespace taskify_font_end.Controllers
             var obj = _mapper.Map<UserUpdateDTO>(user);
             return View(obj);
         }
-
         [HttpPost]
         public async Task<IActionResult> UploadImg(UserUpdateDTO updateDTO)
         {
@@ -171,7 +166,6 @@ namespace taskify_font_end.Controllers
             }
             return RedirectToAction("Profile", "Auth", new { id = updateDTO.Id });
         }
-
         [HttpPost]
         public async Task<IActionResult> UpdateProfileAsync(UserUpdateDTO updateDTO)
         {
@@ -223,15 +217,11 @@ namespace taskify_font_end.Controllers
 
             return RedirectToAction("Profile", "Auth", new { id = updateDTO.Id });
         }
-
-
         [HttpGet]
         public IActionResult ForgotPassword()
         {
             return View();
         }
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(AuthVM obj)
@@ -293,14 +283,11 @@ namespace taskify_font_end.Controllers
             }
             return View(obj);
         }
-
-
         [HttpGet]
         public IActionResult Register()
         {
             return RedirectToAction("Login", "Auth");
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(AuthVM obj)
@@ -330,7 +317,6 @@ namespace taskify_font_end.Controllers
             }
             return RedirectToAction("Login");
         }
-
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
@@ -354,8 +340,6 @@ namespace taskify_font_end.Controllers
             }
             return workspaces;
         }
-
-
         private async Task<UserDTO> GetUserByIdAsync(string userId)
         {
             var response = await _userService.GetAsync<APIResponse>(userId);
@@ -366,7 +350,6 @@ namespace taskify_font_end.Controllers
             }
             return user;
         }
-
         private void CopyAttributes(UserDTO source, UserUpdateDTO destination)
         {
             destination.Id = source.Id;

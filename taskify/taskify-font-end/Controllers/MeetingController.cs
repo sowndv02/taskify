@@ -12,6 +12,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using taskify_font_end.Models;
 using taskify_font_end.Models.DTO;
+using taskify_font_end.Service;
 using taskify_font_end.Service.IService;
 using taskify_utility;
 
@@ -59,7 +60,6 @@ namespace taskify_font_end.Controllers
             List<MeetingDTO> list = await GetMeetingByWorkspaceIdAsync(ViewBag.selectedWorkspaceId);
             return View(list);
         }
-
         public async Task<IActionResult> Update(int id)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -75,15 +75,14 @@ namespace taskify_font_end.Controllers
 
             MeetingDTO meeting = await GetMeetingByIdAsync(id);
 
-            //StartDate = StartDateTime.Date;
-            //StartTime = DateTime.Today.Add(StartDateTime.TimeOfDay);
-            //EndDate = EndDateTime.Date;
-            //EndTime = DateTime.Today.Add(EndDateTime.TimeOfDay);
-
+            meeting.StartDate = meeting.StartDateTime.Date;
+            meeting.StartTime = DateTime.Today.Add(meeting.StartDateTime.TimeOfDay);
+            meeting.EndDate = meeting.EndDateTime.Date;
+            meeting.EndTime = DateTime.Today.Add(meeting.EndDateTime.TimeOfDay);
+            meeting.MeetingUserIds = meeting.MeetingUsers.Select(u => u.UserId).ToList();
             ViewBag.users = await GetUsersByWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
-            return View();
+            return View(meeting);
         }
-
         public async Task<IActionResult> Create()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -101,7 +100,6 @@ namespace taskify_font_end.Controllers
             MeetingDTO meeting = new MeetingDTO();
             return View(meeting);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAsync(MeetingDTO obj)
@@ -200,14 +198,11 @@ namespace taskify_font_end.Controllers
             }
             return View(obj);
         }
-
         public IActionResult LoginGoogle()
         {
             var authenticationProperties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleResponse") };
             return Challenge(authenticationProperties, GoogleDefaults.AuthenticationScheme);
         }
-
-
         public async Task<IActionResult> GoogleResponse()
         {
             var authenticateResult = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -276,9 +271,146 @@ namespace taskify_font_end.Controllers
                 return RedirectToAction("Create", "Meeting");
             }
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateAsync([FromBody] MeetingDTO obj)
+        {
+            var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId) || !obj.OwnerId.Equals(userId))
+            {
+                return RedirectToAction("AccessDenied", "Auth");
+            }
+            List<UserDTO> users = await GetUsersByWorkspaceIdAsync(userId, ViewBag.selectedWorkspaceId);
+            ViewBag.users = users;
 
+            if (ViewBag.selectedWorkspaceId == null || ViewBag.selectedWorkspaceId == 0)
+            {
+                TempData["error"] = "You don't have any workspaces! Please create a workspace first!";
+                return RedirectToAction("Create", "Workspace");
+            }
+            obj.WorkspaceId = ViewBag.selectedWorkspaceId;
 
+            var accessToken = User.Claims.FirstOrDefault(c => c.Type == "access_token_google")?.Value;
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                return RedirectToAction("LoginGoogle", "Meeting");
+            }
 
+            var credential = GoogleCredential.FromAccessToken(accessToken);
+
+            var service = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = obj.Title,
+            });
+
+            MeetingDTO existingMeeting = await GetMeetingByIdAsync(obj.Id);
+            APIResponse result = await _meetingService.UpdateAsync<APIResponse>(obj);
+            if (result != null && result.IsSuccess && result.ErrorMessages.Count == 0)
+            {
+                var meeting = JsonConvert.DeserializeObject<MeetingDTO>(Convert.ToString(result.Result));
+                if (obj.MeetingUserIds != null && obj.MeetingUserIds.Count > 0)
+                    await UpdateMeetingUsers(obj.MeetingUserIds, existingMeeting.MeetingUsers.Select(x => x.UserId).ToList(), obj.Id);
+                TempData["success"] = "Update meeting successfully";
+
+                var emails = users.Where(user => obj.MeetingUserIds.Contains(user.Id))
+                          .Select(user => user.Email)
+                          .ToList();
+                var attendees = new List<EventAttendee>();
+                foreach (var email in emails)
+                {
+                    attendees.Add(new EventAttendee { Email = email });
+                }
+                var updatedEvent = new Event()
+                {
+                    Summary = obj.Title,
+                    Start = new EventDateTime()
+                    {
+                        DateTime = obj.StartDateTime,
+                        TimeZone = SD.TimeZone,
+                    },
+                    End = new EventDateTime()
+                    {
+                        DateTime = obj.EndDateTime,
+                        TimeZone = SD.TimeZone,
+                    },
+                    Attendees = attendees
+                };
+
+                var updateRequest = service.Events.Update(updatedEvent, "primary", obj.RequestId);
+                updateRequest.ConferenceDataVersion = 1;
+
+                var updatedEventResult = await updateRequest.ExecuteAsync();
+
+                return RedirectToAction("Update", "Meeting", new { id = obj.Id });
+            }
+            
+            return View(obj);
+        }
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            var accessToken = User.Claims.FirstOrDefault(c => c.Type == "access_token_google")?.Value;
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                return RedirectToAction("LoginGoogle", "Meeting");
+            }
+            if (id <= 0)
+            {
+                return Json(new { error = true, message = "Invalid ID" });
+            }
+            try
+            {
+                bool resultDeleteMeetingUser = await DeleteMeetingUserByMeetingId(id);
+                if (!resultDeleteMeetingUser) return Json(new { error = true, message = "Internal server have error!" });
+                MeetingDTO existingMeeting = await GetMeetingByIdAsync(id);
+                bool isDelete = await DeleteMeeting(existingMeeting.RequestId, accessToken);
+                APIResponse result = await _meetingUserService.DeleteAsync<APIResponse>(id);
+                
+                if (result != null && result.IsSuccess && result.ErrorMessages.Count == 0 || !isDelete)
+                    return Json(new { error = false, message = "Meeting deleted successfully" });
+                else
+                    return Json(new { error = true, message = result?.ErrorMessages?.FirstOrDefault() ?? "An error occurred while deleting the meeting" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = true, message = "An error occurred: " + ex.Message });
+            }
+        }
+        private async Task<bool> DeleteMeetingUserByMeetingId(int projectId)
+        {
+            var meetingUsers = await GetMeetingUserByMeetingId(projectId);
+            foreach (var user in meetingUsers)
+            {
+                var result = await _meetingUserService.DeleteAsync<APIResponse>(user.Id);
+                if (result == null || !result.IsSuccess || result.ErrorMessages.Count != 0)
+                    return false;
+            }
+            return true;
+        }
+        private async Task<List<MeetingDTO>> GetMeetingUserByMeetingId(int id)
+        {
+            var response = await _meetingUserService.GetByMeetingIdAsync<APIResponse>(id);
+            List<MeetingDTO> list = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                list = JsonConvert.DeserializeObject<List<MeetingDTO>>(Convert.ToString(response.Result));
+            }
+            return list;
+        }
+        public async Task<bool> DeleteMeeting(string eventId, string accessToken)
+        {
+            var credential = GoogleCredential.FromAccessToken(accessToken);
+
+            var service = new CalendarService(new BaseClientService.Initializer()
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = "MyWebApp-GoogleMeetIntegration",
+            });
+
+            await service.Events.Delete("primary", eventId).ExecuteAsync();
+
+            return true;
+        }
         private async Task<List<UserDTO>> GetUsersByWorkspaceIdAsync(string userId, int workspaceId)
         {
             var response = await _workspaceUserService.GetByWorkspaceIdAsync<APIResponse>(workspaceId);
@@ -297,7 +429,6 @@ namespace taskify_font_end.Controllers
                 TempData["warning"] = "No users are available.";
             return users;
         }
-
         private async Task<bool> AddUserToMeeting(List<string> userIds, int meetingId)
         {
             try
@@ -321,7 +452,6 @@ namespace taskify_font_end.Controllers
                 return false;
             }
         }
-
         private async Task<MeetingDTO> GetMeetingByIdAsync(int id)
         {
             var response = await _meetingService.GetAsync<APIResponse>(id);
@@ -332,7 +462,6 @@ namespace taskify_font_end.Controllers
             }
             return obj;
         }
-
         private async Task<List<MeetingDTO>> GetMeetingByWorkspaceIdAsync(int id)
         {
             var response = await _meetingService.GetByWorkspaceIdAsync<APIResponse>(id);
@@ -349,6 +478,41 @@ namespace taskify_font_end.Controllers
             }
             return list;
         }
+        private async Task<bool> UpdateMeetingUsers(List<string> userIdsNew, List<string> userIdsOld, int id)
+        {
+            try
+            {
 
+                var usersToAdd = userIdsNew.Except(userIdsOld).ToList();
+                var usersToRemove = userIdsOld.Except(userIdsNew).ToList();
+
+                foreach (var userId in usersToAdd)
+                {
+                    var response = await _meetingUserService.CreateAsync<APIResponse>(new MeetingUserDTO { MeetingId = id, UserId = userId });
+                    if (response == null && response.IsSuccess && response.ErrorMessages.Count == 0)
+                    {
+                        TempData["error"] = response.ErrorMessages.FirstOrDefault();
+                        return false;
+                    }
+
+                }
+                foreach (var userId in usersToRemove)
+                {
+                    var response = await _meetingUserService.DeleteByMeetingAndUserAsync<APIResponse>(id, userId);
+                    if (response == null && response.IsSuccess && response.ErrorMessages.Count == 0)
+                    {
+                        TempData["error"] = response.ErrorMessages.FirstOrDefault();
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = $"Internal Server Error! {ex.Message}";
+                return false;
+            }
+        }
     }
 }

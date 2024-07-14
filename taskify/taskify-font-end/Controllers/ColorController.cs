@@ -61,7 +61,6 @@ namespace taskify_font_end.Controllers
                 return RedirectToAction("Dashboard", "Home");
             }
         }
-
         public async Task<IActionResult> ListAsync()
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -69,7 +68,6 @@ namespace taskify_font_end.Controllers
             List<ColorDTO> list = await GetColorssByUserIdAsync(userId);
             return Json(list);
         }
-
         public async Task<IActionResult> Get(int id)
         {
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
@@ -77,7 +75,6 @@ namespace taskify_font_end.Controllers
             ColorDTO obj = await GetColorById(id);
             return Json(obj);
         }
-
         [HttpPost]
         public async Task<IActionResult> CreateAsync(ColorDTO colorDTO)
         {
@@ -109,7 +106,6 @@ namespace taskify_font_end.Controllers
             }
             return RedirectToAction("Index", "Color");
         }
-
         [HttpDelete]
         public async Task<IActionResult> DeleteAsync(int id)
         {
@@ -156,7 +152,6 @@ namespace taskify_font_end.Controllers
                 return Json(new { error = true, message = "An error occurred: " + ex.Message });
             }
         }
-
         [HttpPost]
         public async Task<IActionResult> UpdateAsync(ColorDTO colorDTO)
         {
@@ -188,8 +183,6 @@ namespace taskify_font_end.Controllers
             }
             return RedirectToAction("Index", "Color");
         }
-
-
         private async Task<List<NoteDTO>> GetNoteByColorId(int id)
         {
             var response = await _noteService.GetByColorIdAsync<APIResponse>(id);
@@ -200,7 +193,6 @@ namespace taskify_font_end.Controllers
             }
             return list;
         }
-
         private async Task<List<ColorDTO>> GetColorssByUserIdAsync(string userId)
         {
             var response = await _colorService.GetByUserIdAsync<APIResponse>(userId);
@@ -215,7 +207,6 @@ namespace taskify_font_end.Controllers
 
             return list;
         }
-
         private async Task<ColorDTO> GetColorById(int id)
         {
             var response = await _colorService.GetAsync<APIResponse>(id);
@@ -230,8 +221,6 @@ namespace taskify_font_end.Controllers
 
             return obj;
         }
-
-
         private async Task<List<PriorityDTO>> GetPriorityByColorId(int id)
         {
             var response = await _priorityService.GetByColorIdAsync<APIResponse>(id);
@@ -242,7 +231,6 @@ namespace taskify_font_end.Controllers
             }
             return list;
         }
-
         private async Task<List<StatusDTO>> GetStatusByColorId(int id)
         {
             var response = await _statusService.GetByColorIdAsync<APIResponse>(id);
@@ -253,7 +241,6 @@ namespace taskify_font_end.Controllers
             }
             return list;
         }
-
         private async Task<List<TagDTO>> GetTagByColorId(int id)
         {
             var response = await _tagService.GetByColorIdAsync<APIResponse>(id);
