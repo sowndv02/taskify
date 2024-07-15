@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using taskify_font_end;
-using taskify_font_end.Middlewares;
 using taskify_font_end.Service;
 using taskify_font_end.Service.IService;
 
@@ -13,7 +12,6 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 // Common DI
 builder.Services.AddScoped<IBaseServices, BaseServices>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
-builder.Services.AddHttpClient<ITokenProvider, TokenProvider>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -119,7 +117,9 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
-app.UseTokenValidation();
+
+
+//app.UseTokenValidation();
 
 
 

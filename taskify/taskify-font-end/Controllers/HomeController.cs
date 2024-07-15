@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using taskify_font_end.Models;
 using taskify_font_end.Models.DTO;
-using taskify_font_end.Service;
 using taskify_font_end.Service.IService;
 
 namespace taskify_font_end.Controllers
@@ -27,13 +22,13 @@ namespace taskify_font_end.Controllers
         private readonly IWorkspaceUserService _workspaceUserService;
         private readonly ITodoService _todoService;
         private readonly IMapper _mapper;
-        public HomeController(IWorkspaceService workspaceService, IMapper mapper, 
-            IProjectService projectService, IProjectUserService projectUserService, 
-            IUserService userService, ITaskService taskService, 
-            ITaskUserService taskUserService, 
+        public HomeController(IWorkspaceService workspaceService, IMapper mapper,
+            IProjectService projectService, IProjectUserService projectUserService,
+            IUserService userService, ITaskService taskService,
+            ITaskUserService taskUserService,
             ITodoService todoService,
             IPriorityService priorityService,
-            IStatusService statusService, 
+            IStatusService statusService,
             IWorkspaceUserService workspaceUserService) : base(workspaceService, workspaceUserService)
         {
             _workspaceUserService = workspaceUserService;
@@ -55,12 +50,12 @@ namespace taskify_font_end.Controllers
         }
         public async Task<IActionResult> DashboardAsync(int? id)
         {
-            if(id != null && id != 0)
+            if (id != null && id != 0)
             {
                 HttpContext.Response.Cookies.Append("SelectedWorkspaceId", id.ToString());
                 ViewBag.SelectedWorkspaceId = id;
             }
-                
+
             var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
             {
@@ -107,7 +102,7 @@ namespace taskify_font_end.Controllers
                     return View(null);
                 }
                 var workspace = workspaces.FirstOrDefault(x => x.Id == ViewBag.SelectedWorkspaceId);
-                if(workspace != null)
+                if (workspace != null)
                 {
                     var projects = await GetProjectByUserIdAndWorkspaceIdAsync(userId, workspace.Id);
                     var statuses = await GetStatusesByUserIdAsync(userId);
@@ -213,7 +208,7 @@ namespace taskify_font_end.Controllers
                               .OrderByDescending(x => x.CreatedDate)
                               .ThenByDescending(x => x.UpdatedDate)
                               .ToList();
-                foreach(var item in list) 
+                foreach (var item in list)
                 {
 
                     var resUser = await _projectUserService.GetByProjectIdAsync<APIResponse>(item.Id);
@@ -228,14 +223,14 @@ namespace taskify_font_end.Controllers
                     }
 
                     var statuses = await GetTaskByProjectIdAndUserIdAsync(userId, item.Id);
-                    foreach(var stat in statuses)
+                    foreach (var stat in statuses)
                     {
                         item.Tasks.AddRange(stat.Tasks);
                     }
                     item.Tasks.OrderByDescending(x => x.CreatedDate).ThenByDescending(x => x.UpdatedDate);
                 }
             }
-            
+
             return list;
         }
         private async Task<List<StatusDTO>> GetStatusesByUserIdAsync(string userId)
@@ -347,7 +342,7 @@ namespace taskify_font_end.Controllers
             if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
             {
                 list = JsonConvert.DeserializeObject<List<ProjectDTO>>(Convert.ToString(response.Result));
-                foreach(var item in list)
+                foreach (var item in list)
                 {
                     var resProjectUsers = await _projectUserService.GetAsync<APIResponse>(item.Id);
                     if (resProjectUsers != null && resProjectUsers.IsSuccess && resProjectUsers.ErrorMessages.Count == 0)
@@ -371,7 +366,7 @@ namespace taskify_font_end.Controllers
             if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
             {
                 list = JsonConvert.DeserializeObject<List<ProjectUserDTO>>(Convert.ToString(response.Result));
-                foreach(var item in list) 
+                foreach (var item in list)
                 {
                     projects.Add(await GetProjectByIdAsync(item.ProjectId));
                 }
@@ -424,6 +419,32 @@ namespace taskify_font_end.Controllers
                 user = JsonConvert.DeserializeObject<UserDTO>(Convert.ToString(response.Result));
             }
             return user;
+        }
+
+        private async Task<ProjectDTO> GetProjectByIdAsync(int id)
+        {
+            var response = await _projectService.GetAsync<APIResponse>(id);
+            ProjectDTO obj = new();
+            if (response != null && response.IsSuccess && response.ErrorMessages.Count == 0)
+            {
+                obj = JsonConvert.DeserializeObject<ProjectDTO>(Convert.ToString(response.Result));
+            }
+
+            if (obj.Id != 0)
+            {
+                var resProjectUsers = await _projectUserService.GetAsync<APIResponse>(obj.Id);
+                if (resProjectUsers != null && resProjectUsers.IsSuccess && resProjectUsers.ErrorMessages.Count == 0)
+                {
+                    obj.ProjectUsers = JsonConvert.DeserializeObject<List<ProjectUserDTO>>(Convert.ToString(resProjectUsers.Result));
+                    foreach (var user in obj.ProjectUsers)
+                    {
+                        user.User = await GetUserByIdAsync(user.UserId);
+                    }
+                    obj.ProjectUserIds = obj.ProjectUsers.Select(x => x.UserId).ToList();
+                }
+            }
+
+            return obj;
         }
     }
 }

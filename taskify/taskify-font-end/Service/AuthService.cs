@@ -15,7 +15,10 @@ namespace taskify_font_end.Service
             _baseServices = baseServices;
             _clientFactory = clientFactory;
             API_URL = configuration.GetValue<string>("ServiceUrls:TaskifyAPI");
+
         }
+
+
         public async Task<T> LoginAsync<T>(LoginRequestDTO obj)
         {
             return await _baseServices.SendAsync<T>(new APIRequest()

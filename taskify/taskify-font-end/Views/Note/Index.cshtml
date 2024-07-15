@@ -1,6 +1,8 @@
-﻿@model List<taskify_font_end.Models.DTO.NoteDTO>
+﻿@using System.Security.Claims;
+@model List<taskify_font_end.Models.DTO.NoteDTO>
 @{
     var baseUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.PathBase}";
+    var userId = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 }
 
 @functions {
@@ -55,21 +57,22 @@
                         <div class="col-md-4 sticky-note">
                             <div class="sticky-content sticky-note-bg-@item.Color?.Title @textColorClass" style="background: @item.Color?.ColorCode">
                                 <div class="text-end">
-
+                                    
                                     <a href="javascript:void(0);" class="btn btn-primary btn-xs edit-note"
                                        data-url="@baseUrl/Note/Get/@item.Id"
                                        data-id='@item.Id' data-bs-toggle="tooltip" data-bs-placement="left"
                                        data-bs-original-title="Update">
                                         <i class="bx bx-edit"></i>
                                     </a>
-
-                                    <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
-                                       data-id='@item.Id' data-type='note' data-reload='true'
-                                       data-bs-toggle="tooltip" data-bs-placement="left"
-                                       data-bs-original-title="Delete">
-                                        <i class="bx bx-trash"></i>
-                                    </a>
-
+                                    @if (userId.Equals(item.UserId))
+                                    {
+                                        <a href="javascript:void(0);" class="btn btn-danger btn-xs mx-1 delete"
+                                           data-id='@item.Id' data-type='note' data-reload='true'
+                                           data-bs-toggle="tooltip" data-bs-placement="left"
+                                           data-bs-original-title="Delete">
+                                            <i class="bx bx-trash"></i>
+                                        </a>
+                                    }
                                 </div>
                                 <h4 class="@textColorClass">@item.Title</h4>
                                 <p class="@textColorClass">@item.Description</p>
